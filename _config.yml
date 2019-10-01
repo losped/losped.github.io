@@ -79,5 +79,7 @@ theme: landscape
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/losped/losped.github.io.git
-  branch: master
+  repo: 
+    coding: git@e.coding.net:losped/Hexo_Zephyr.git,master
+    gitHub: https://github.com/losped/losped.github.io.git,master
+  ## branch: master
