@@ -2,7 +2,7 @@
 title: Python遇到的一些问题
 date: 2019-10-02 14:13:17
 tags: Py
-category: Py
+categories: Py
 ---
 
 ### 1.**str**和**repr**的区别

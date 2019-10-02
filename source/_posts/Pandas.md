@@ -2,7 +2,7 @@
 title: Pandas
 date: 2019-10-02 14:13:02
 tags: Py
-category: Py
+categories: Py
 ---
 
 
@@ -75,22 +75,22 @@ import numpy as np
 data=DataFrame([{"id":0,"name":'lxh',"age":20,"cp":'lm'},{"id":1,"name":'xiao',"age":40,"cp":'ly'},{"id":2,"name":'hua',"age":4,"cp":'yry'},{"id":3,"name":'be',"age":70,"cp":'old'}])
 data1=DataFrame([{"id":100,"name":'lxh','cs':10},{"id":101,"name":'xiao','cs':40},{"id":102,"name":'hua2','cs':50}])
 data2=DataFrame([{"id":0,"name":'lxh','cs':10},{"id":101,"name":'xiao','cs':40},{"id":102,"name":'hua2','cs':50}])
- 
+
 print "单个列名做为内链接的连接键\r\n",merge(data,data1,on="name",suffixes=('_a','_b'))
 print "多列名做为内链接的连接键\r\n",merge(data,data2,on=("name","id"))
 print '不指定on则以两个DataFrame的列名交集做为连接键\r\n',merge(data,data2) #这里使用了id与name
- 
+
 #使用右边的DataFrame的行索引做为连接键
 ##设置行索引名称
 indexed_data1=data1.set_index("name")
 print "使用右边的DataFrame的行索引做为连接键\r\n",merge(data,indexed_data1,left_on='name',right_index=True)
- 
- 
+
+
 print '左外连接\r\n',merge(data,data1,on="name",how="left",suffixes=('_a','_b'))
 print '左外连接1\r\n',merge(data1,data,on="name",how="left")
 print '右外连接\r\n',merge(data,data1,on="name",how="right")
 data3=DataFrame([{"mid":0,"mname":'lxh','cs':10},{"mid":101,"mname":'xiao','cs':40},{"mid":102,"mname":'hua2','cs':50}])
- 
+
 #当左右两个DataFrame的列名不同，当又想做为连接键时可以使用left_on与right_on来指定连接键
 print "使用left_on与right_on来指定列名字不同的连接键\r\n",merge(data,data3,left_on=["name","id"],right_on=["mname","mid"])
 ```
@@ -101,10 +101,10 @@ print "使用left_on与right_on来指定列名字不同的连接键\r\n",merge(d
 ```
 #coding=utf-8
 from pandas import Series,DataFrame,merge
- 
+
 data=DataFrame([{"id":0,"name":'lxh',"age":20,"cp":'lm'},{"id":1,"name":'xiao',"age":40,"cp":'ly'},{"id":2,"name":'hua',"age":4,"cp":'yry'},{"id":3,"name":'be',"age":70,"cp":'old'}],index=['a','b','c','d'])
 data1=DataFrame([{"sex":0},{"sex":1},{"sex":2}],index=['a','b','e'])
- 
+
 print '使用默认的左连接\r\n',data.join(data1)  #这里可以看出自动屏蔽了data中没有的index=e 那一行的数据
 print '使用右连接\r\n',data.join(data1,how="right") #这里出自动屏蔽了data1中没有index=c,d的那行数据；等价于data1.join(data)
 print '使用内连接\r\n',data.join(data1,how='inner')
@@ -118,7 +118,7 @@ concat方法相当于数据库中的全连接(UNION ALL),可以指定按某个�
 ```
 #coding=utf-8
 from pandas import Series,DataFrame,concat
- 
+
 df1 = DataFrame({'city': ['Chicago', 'San Francisco', 'New York City'], 'rank': range(1, 4)})
 df2 = DataFrame({'city': ['Chicago', 'Boston', 'Los Angeles'], 'rank': [1, 4, 5]})
 print '按轴进行内连接\r\n',concat([df1,df2],join="inner",axis=1)
@@ -137,4 +137,3 @@ print '去重后\r\n',concat([df1,df2],ignore_index=True).drop_duplicates()
 ```
    df = df[(df['appID'].isin([278,382]))&(df['appPlatform'].isin([2]))]
 ```
-
