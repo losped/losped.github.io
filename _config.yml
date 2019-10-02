@@ -8,7 +8,7 @@ subtitle: just the way you like!
 description:
 keywords:
 author: Zephyr
-language: en
+language: zh-cn
 timezone:
 
 # URL
@@ -73,7 +73,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: yilia
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
@@ -83,3 +83,23 @@ deploy:
     coding: git@e.coding.net:losped/Hexo_Zephyr.git,master
     gitHub: https://github.com/losped/losped.github.io.git,master
   ## branch: master
+
+
+jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: false
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
