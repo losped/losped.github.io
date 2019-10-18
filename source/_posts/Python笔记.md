@@ -1,5 +1,5 @@
 ---
-title: Python遇到的一些问题
+title: Python笔记
 date: 2019-10-02 14:13:17
 tags: Py
 categories: Py
