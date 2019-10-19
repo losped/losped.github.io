@@ -18,9 +18,9 @@ MVP的全称是Model、View、Presenter，将整个应用分为三层。
 
 **Presenter层**：逻辑控制层，充当中间人的角色，用来隔离View层和model层，该层是通过从View层剥离控制逻辑部分而形成，主要负责View层和model层的控制和交互。例如**接受View层的网络数据的加载请求**，并分发给model处理，同时监听model层的处理结果，最终将其反馈给View层从而实现界面的刷新
 
-**model层**封装各种数据来源，例如**远程网络数据，本地数据库数据**等，对Presenter层提供简单易用的接口
+**model层** 封装各种数据来源，例如**远程网络数据，本地数据库数据**等，对Presenter层提供简单易用的接口
 
-![Contract](images/借Kotlin探索MVP、RxJava/Contract.jpg)
+![Contract](/images/借Kotlin探索MVP、RxJava/Contract.jpg)
 
 Presenter层和View层以及model层的交互都是基于接口实现的，这有助于对Presenter进行单元测试，同时由于是面向接口编程，只需要事先定义好接口，每一层的实现都可以交由不同的开发人员并行实现，最终再一起连调，都能明显的加快某一功能的开发进度。虽然使用MVP模式会加大代码量，但分层更清晰合理，利于维护和扩展。
 
@@ -82,7 +82,7 @@ interface Presenter : IPresenter {
 
 ```
 
-![Presenter](images/借Kotlin探索MVP、RxJava/Presenter.jpg)
+![Presenter](/images/借Kotlin探索MVP、RxJava/Presenter.jpg)
 
 ## MVP运用
 
@@ -954,7 +954,7 @@ abstract class Derived : Base() {
 
 ```
 
-![abtract](images/借Kotlin探索MVP、RxJava/abtract.jpg)
+![abtract](/images/借Kotlin探索MVP、RxJava/abtract.jpg)
 
 #### 接口
 

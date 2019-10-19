@@ -8,8 +8,8 @@ categories: IDE
 
 Gradle跟Ant类似 是一个构建工具，它是用来帮助我们构建app的，构建包括编译、打包等过程。在Gradle中，构建一个Project需要执行一系列Task，一个apk文件的构建包含以下Task：**Java源码编译、资源文件编译、Lint检查、打包以生成最终的apk文件等等**。
 IDEA创建的Gradle项目与AS创建的略有不同，前者将脚本及项目的Gradle配置写在同一个gradle.build中，后者则是分开成一个脚本gradle.build和多个模块gradle.build。
-![as.png](images/Gradle/as.png)
-![idea.png](images/Gradle/idea.png)
+![as](/images/Gradle/as.jpg)
+![idea](/images/Gradle/idea.jpg)
 
 导入的插件核心工作有两个：一是定义Task；而是执行Task。这些插件中定义了构建Project中的一系列Task，并且负责执行相应的Task。一般"com.android.application"整个插件中定义了如下4个顶级任务：
 assemble: 构建项目的输出（apk）

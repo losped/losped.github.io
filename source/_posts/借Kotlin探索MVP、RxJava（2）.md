@@ -16,11 +16,11 @@ categories: Android
 
 **比如**：
 
-![Exception](images/借Kotlin探索MVP、RxJava/Exception.jpg)
+![Exception](/images/借Kotlin探索MVP、RxJava/Exception.jpg)
 
 ，输出结果：
 
-![Exception1](images/借Kotlin探索MVP、RxJava/Exception1.jpg)
+![Exception1](/images/借Kotlin探索MVP、RxJava/Exception1.jpg)
 
 ## 高阶函数
 #### 局部函数
@@ -200,9 +200,9 @@ println(a)
 ```
 #### kotlin 中::class 、class.java、javaClass、javaClass.kotlin区别
 
-![class](images/借Kotlin探索MVP、RxJava/class.jpg)
+![class](/images/借Kotlin探索MVP、RxJava/class.jpg)
 
-![class1](images/借Kotlin探索MVP、RxJava/class1.jpg)
+![class1](/images/借Kotlin探索MVP、RxJava/class1.jpg)
 
 #### 集合函数
 **filter和forEach**

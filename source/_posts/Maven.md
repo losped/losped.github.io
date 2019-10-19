@@ -8,10 +8,10 @@ categories: IDE
 
 ##### 创建Maven模块
 1.选择archetype进行创建
-![123.jpg](images/Maven/123.jpg)
+![123.jpg](/images/Maven/123.jpg)
 2.添加属性
 archetypeCatalog -> internal
-![456.jpg](images/Maven/456.jpg)
+![456.jpg](/images/Maven/456.jpg)
 
 maven的pom.xml：
 <packaging>war</packaging>  用于部署  
@@ -27,7 +27,7 @@ Maven deploy:完成了项目编译、单元测试、打包功能，同时把打�
 **pom聚合工程的部署方法**
 先打包父项目ps-parent: Maven install
 再打包子项目ps-clientebase和ps-clientebase: Maven install
-![image.jpg](images/Maven/pom.jpg)
+![image.jpg](/images/Maven/pom.jpg)
 
 ps-parent的pom.xml添加插件
 ```
