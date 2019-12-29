@@ -23,7 +23,7 @@ categories: JW
 </beans>
 ```
 
-##web.xml
+## web.xml
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -87,7 +87,7 @@ String userName = new String(request.getParamter("userName").getBytes("ISO8859-1
 ```
 
 
-##Spring mvc框架结构
+## Spring mvc框架结构
 ![mvc](/images/探索SSM（三）-Spring MVC/mvc.jpg)
 
 说明：在springmvc的各个组件中，处理器映射器、处理器适配器、视图解析器称为springmvc的三大组件。
@@ -161,7 +161,7 @@ public ModelAndView queryItemList() {
 }
 ```
 
-##参数绑定
+## 参数绑定
 **6.1.6. 默认支持的参数类型**
 HttpServletRequest：通过request对象获取请求信息
 HttpServletResponse：通过response处理响应信息
@@ -550,7 +550,7 @@ springmvc.xml添加配置（常规）
 </bean>
 ```
 
-##异常处理器
+## 异常处理器
 6.2. 自定义异常类
 ```
 public class MyException extends Exception {
@@ -620,7 +620,7 @@ public class CustomHandleException implements HandlerExceptionResolver {
 id="customHandleException" 	class="cn.itcast.ssm.exception.CustomHandleException"/>
 ```
 
-##拦截器
+## 拦截器
 
 配置拦截器实现HandlerInterceptor接口
 ```
@@ -716,7 +716,7 @@ springmvc.xml配置拦截器
 ```
 
 
-##上传图片
+## 上传图片
 在tomcat上配置图片虚拟目录，在tomcat下conf/server.xml中添加：
 <Context docBase="D:\develop\upload\temp" path="/pic" reloadable="false"/>
 访问http://localhost:8080/pic即可访问D:\develop\upload\temp下的图片。
@@ -772,7 +772,7 @@ public String updateItemById(Item item, MultipartFile pictureFile) throws Except
 }
 ```
 
-##参数-Json数据交互
+## 参数-Json数据交互
 
 @RequestBody
 将读到的**Json数据**转换为**java对象**并绑定到Controller方法的参数上。
@@ -808,7 +808,7 @@ springmvc.xml添加json转换器配置
   </bean>
 ```
 
-##RESTful风格
+## RESTful风格
 即利用**url**获取数据
 ```
 /**

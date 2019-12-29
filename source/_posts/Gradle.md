@@ -204,7 +204,7 @@ dependencies {  //指定当前模块的依赖（implementation为Gradle3.x版本
 }
 ```
 
-#####gradle版本和gradle插件版本
+##### gradle版本和gradle插件版本
 gradle插件版本：build.gradle文件
 ```
 buildscript {

@@ -36,7 +36,7 @@ fastboot flashing unlock_critical
  a. adb reboot recovery，进入 recovery 模式（在bootloader中也可通过上下选择进入）
  b. adb sideload xxx/ota_file.zip
 
- 3. ROOT
+3. ROOT
 如果安装的不是第三方自带ROOT的Rom，可通过TWRP+Magisk获取ROOT。目前的情况Android 10不能挂载/system和/，也许TWRP后续版本会修复此问题。
 (1) [下载TWRP](https://twrp.me/Devices/)
 TWRP其实就是一个第三方的Recovery。进去输入设备-选择版本, 下载版本对应的img文件和zip文件，一般下载最新的版本。例如：twrp-3.3.0-0-sailfish.img和twrp-pixel-installer-sailfish-3.3.0-0.zip。

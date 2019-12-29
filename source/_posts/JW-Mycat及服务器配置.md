@@ -6,7 +6,7 @@ categories: JW
 ---
 
 
-#####数据库分片
+##### 数据库分片
 指通过某种特定的条件，将我们存放在同一个数据库中的数据分散存放到多个数据库（主机）上面，以达到分散单台设备负载的效果。
 两种切分模式
 （1）一种是按照不同的表（或者Schema）来切分到不同的数据库（主机）之上，这种切可以称之为数据的垂直（纵向）切分
@@ -15,7 +15,7 @@ categories: JW
 （2）另外一种则是根据表中的数据的逻辑关系，将同一个表中的数据按照某种条件拆分到多台数据库（主机）上面，这种切分称之为数据的水平（横向）切分。
 ![burst1](/images/JW-Mycat及服务器配置/burst1.jpg)
 
-##Mycat
+## Mycat
 数据库中间件产品支持mysql集群，或者mariadb cluster，提供高可用性及数据分片集群。你可以像使用mysql一样使用mycat。对于开发人员来说根本感觉不到mycat的存在。支持Oracle，Mysql，SQL SERVER，MongoDB等数据库。
 
 ![mycat](/images/JW-Mycat及服务器配置/mycat.jpg)
@@ -24,7 +24,7 @@ categories: JW
 分片节点(dataNode)：数据切分后，一个大表被分到不同的分片数据库上面，每个表分片所在的数据库就是分片节点。
 节点主机(dataHost) ：数据切分后，每个分片节点（dataNode）不一定都会独占一台机器，同一机器上面可以有多个分片数据库，这样一个或多个分片节点（dataNode）所在的机器就是节点主机（dataHost）,为了规避单节点主机并发数限制，尽量将读写压力高的分片节点（dataNode）均衡的放在不同的节点主机（dataHost）。
 
-#####安装
+##### 安装
 安装环境
 1、jdk：要求jdk必须是1.7及以上版本
 2、Mysql：推荐mysql是5.5以上版本
@@ -32,13 +32,13 @@ categories: JW
 Mycat的官方网站：[http://www.mycat.org.cn/](http://www.mycat.org.cn/)
 下载地址：[https://github.com/MyCATApache/Mycat-download](https://github.com/MyCATApache/Mycat-download)
 
-#####启动
+##### 启动
 启动：./mycat start
 停止：./mycat stop
 mycat 支持的命令{ console | start | stop | restart | status | dump }
 Mycat的默认端口号为：8066
 
-#####配置schema.xml
+##### 配置schema.xml
 schema配置文件管理着MyCat的逻辑库、表、分片规则、DataNode以及DataSource
 schema 标签用于定义MyCat实例中的逻辑库
 Table 标签定义了MyCat中的逻辑表
@@ -84,7 +84,7 @@ schema.xml
 </mycat:schema>
 ```
 
-#####配置server.xml
+##### 配置server.xml
 server.xml几乎保存了所有mycat需要的系统配置信息。最常用的是在此配置用户名、密码及权限。
 ```
 <user name="test">
@@ -95,7 +95,7 @@ server.xml几乎保存了所有mycat需要的系统配置信息。最常用的�
 
 ```
 
-#####配置rule.xml
+##### 配置rule.xml
 我们可以灵活的对表使用不同的分片算法，或者对表使用相同的算法但具体的参数不同。这个文件里面主要有tableRule和function这两个标签。
 
 分片规则“auto-sharding-long”：
@@ -107,7 +107,7 @@ Datanode3：10000001~15000000
 [Err] 1064 - can't find any valid datanode :TB_ITEM -> ID -> 15000001
 此时需要添加节点了。
 
-#####配置读写分离
+##### 配置读写分离
 
 ![mycat1](/images/JW-Mycat及服务器配置/mycat1.jpg)
 主从配置需要注意的地方
@@ -208,7 +208,7 @@ switchType 目前有三种选择：
 其他配置...
 
 
-##参考某项目服务器配置搭建
+## 参考某项目服务器配置搭建
 **服务器配置**
 理想配置
 ![server](/images/JW-Mycat及服务器配置/server.jpg)

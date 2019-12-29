@@ -125,7 +125,7 @@ CustomerService customerService = (CustomerService) applicationContext .getBean(
 @PreDestroy :相当于 destroy-method
 
 
-##AOP（applicationContext-trans.xml）
+## AOP（applicationContext-trans.xml）
 
 底层代理机制 :
  Spring 的 AOP 的底层用到两种代理机制：
