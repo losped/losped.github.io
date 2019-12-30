@@ -154,7 +154,7 @@ Android8.0 以上:
 
 
 ##### 六. 源码目录
-![目录结构](/image/Android源码编译/make1.png)
+![目录结构](/images/Android源码编译/make1.png)
 - abi: applicationbinary interface, 生成libgabi++.so相关库文件
 - art: google在4.4后加入的Dalvik进行时
 - bionic: Android的C库文件

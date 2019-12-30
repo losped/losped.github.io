@@ -70,7 +70,7 @@ public final class ViewRootImpl implements ViewParent,
 ```
 
 ## 3. window 获得焦点
-![window_focus](/images/Android InputMethod/window_focus.jpg)
+![window_focus](/images/AndroidInputMethod/window_focus.jpg)
 ```
 // WindowManagerService.java
    boolean updateFocusedWindowLocked(int mode, boolean updateInputWindows) {
@@ -260,7 +260,7 @@ public final class ViewRootImpl implements ViewParent,
 ```
 
 ## 4.程序变更焦点，程序获得焦点变更事件
-![change_focus](/images/Android InputMethod/change_focus.jpg)
+![change_focus](/images/AndroidInputMethod/change_focus.jpg)
 ```
 // ViewRootImpl.java
     public void windowFocusChanged(boolean hasFocus, boolean inTouchMode) {
@@ -327,7 +327,7 @@ public final class ViewRootImpl implements ViewParent,
 
 ## 一.1 焦点View向IMMS请求绑定输入法
 **6.1 之后的流程**
-![request_input](/images/Android InputMethod/request_input.jpg)
+![request_input](/images/AndroidInputMethod/request_input.jpg)
 ```
 // ViewGroup.java
     @Override
@@ -700,7 +700,7 @@ public final class ViewRootImpl implements ViewParent,
 ```
 
 ## 一.2 IMMS处理view绑定输入法事件
-![request_input2](/images/Android InputMethod/request_input2.jpg)
+![request_input2](/images/AndroidInputMethod/request_input2.jpg)
 ```
 // InputMethodManagerService.java
     @Override
@@ -1221,7 +1221,7 @@ public final class ViewRootImpl implements ViewParent,
 
 ## 二. 显示输入法
 **6.2 onPostWindowFocus() 之后的流程**
- ![show_focus](/images/Android InputMethod/show_focus.jpg)
+ ![show_focus](/images/AndroidInputMethod/show_focus.jpg)
  ```
  // InputMethodManager.java
     /**
@@ -1680,7 +1680,7 @@ public final class ViewRootImpl implements ViewParent,
 
 ## 5. 用户单击输入框显示输入法
 http://blog.csdn.net/huangyabin001/article/details/28435093 中 作者从 InputEventReceiver.dispatchInputEvent()开始分析的，本文从 TextView.onTouchEvent()开始写。
- ![click](/images/Android InputMethod/click.png)
+ ![click](/images/AndroidInputMethod/click.png)
  ```
  // TextView.java
      @Override
