@@ -182,8 +182,32 @@ Android8.0 以上:
 - system: 底层文件系统库、应用及组件
 - vendor: 厂商定制代码
 
+##### 七. 导入Android Studio
+1. 与编译不同，编译是为了生成img系统镜像。导入Android Studio需要的是.iml和.ipr等文件，
+相当于项目配置文件。
+```
+source build/envsetup.sh  #准备编译环境，生成out文件
+lunch aosp_arm64-eng #适应arm64架构
+make idegen -j4
+development/tools/idegen/idegen.sh
+```
+在Android studio中File - open - 打开android/android.ipr即可导入项目
+
+2. 修改as的vm内存值(建议)
+- as 2.2以前,打开IDEA_HOME/bin/studio64.vmoptions,修改-Xms和-Xmx的值
+- as 2.2之后,需要help-Edit Custom VM option,修改-Xms和-Xmx的值（同修改IDEA_HOME/studio64.vmoptions）
+```
+# custom Android Studio VM options, see http://tools.android.com/tech-docs/configuration  
+-Xmx2048m  
+-XX:ReservedCodeCacheSize=240m
+```
+
+3. 优化android.iml文件
+- 搜索关键字"orderEntry"，我一般会将所有带有这个关键字的标签项全部删除
+- 搜索”excludeFolder“关键字，将我们不需要看的代码Exclude掉
 
 
 
 版权声明：本文部分转载自CSDN博主「薛瑄」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
 原文链接：https://blog.csdn.net/xx326664162/article/details/86354616
+参考链接：https://blog.csdn.net/turtlejj/article/details/83857897
