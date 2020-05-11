@@ -9,11 +9,17 @@ categories: Android
 # RxJava2
 本文仅作个人笔记总结使用。目前接触到的程度限于基本使用，更丰富的类型还需查阅文档运用。
 
+**发射者：Observable，Flowable**
+**接收者：Observer，Subscriber**
+**发射参数：ObservableEmitter等**
+**接收参数：Disposable，Consumer等**
+
+**CompositeDisposable：将Disposable统一管理**
+添加订阅：CompositeDisposable().add(Disposable)
+清空订阅：CompositeDisposable().clear()
+
+
 ### Observable的简单示例
-**ObservableEmmiter**和**Disposable**
-取消订阅：
-CompositeDisposable().add(Disposable)
-CompositeDisposable().clear
 ```
 Observable.create(new ObservableOnSubscribe<Integer>() { // 第一步：初始化Observable
             @Override
