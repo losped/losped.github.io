@@ -60,10 +60,41 @@ CMake 是一个跨平台的安装（编译）工具，相比与传统 Android.mk
 # cmake最低支持版本
 cmake_minimum_required(VERSION 3.4.1)
 
+# 库名
+# project(FaceImageAndroid)
+
+# 得到一个完整文件名中的特定部分赋予 SRC_DIR。ABSOLUTE 表示完整路径
+# get_filename_component(SRC_DIR  ${CMAKE_SOURCE_DIR}/..  ABSOLUTE)
+# get_filename_component(ANDROID_NDK_EXPECTED_PATH "d:/ahello.c"   ABSOLUTE) #原封不动取目录或包含路径的文件 如果不填写路径会自动 添加上自己项目路径,也就是CMAKE_CURRENT_LIST_DIR和它拼接
+# get_filename_component(ANDROID_NDK_EXPECTED_PATH "d:/ahello.c"   NAME) #取文件名,不包含路径
+# get_filename_component(ANDROID_NDK_EXPECTED_PATH "d:/ahello.c"   EXT) #取扩展名
+# get_filename_component(ANDROID_NDK_EXPECTED_PATH "d:/ahello.c"   REALPATH) #和ABSOLUTE 一样，
+# get_filename_component(ANDROID_NDK_EXPECTED_PATH "d:/ahello.c"   PATH) #只保留路径
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
+
+# 判断编译器类型,如果是gcc编译器,则在编译选项中加入c++11支持
+# if(CMAKE_COMPILER_IS_GNUCXX)
+#     set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+#     message(STATUS "optional:-std=c++11")
+# endif(CMAKE_COMPILER_IS_GNUCXX)
+
+# 添加Flag
+# if (ANDROID_ABI MATCHES "^armeabi-v7a$")
+#     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfloat-abi=softfp -mfpu=neon")
+# elseif(ANDROID_ABI MATCHES "^arm64-v8a")
+#     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -ftree-vectorize")
+# endif()
+#
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSTANDALONE_DEMO_LIB \
+#                     -std=c++11 -fno-exceptions -fno-rtti -O2 -Wno-narrowing \
+#                     -fPIE")
+# set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} \
+#                               -Wl,--allow-multiple-definition \
+#                               -Wl,--whole-archive -fPIE -v")
 
 # 把当前工程目录下的 src 目录下的所有 .cpp 和 .c 文件赋值给 SRC_LIST（遍历子文件夹）
 # AUX_SOURCE_DIRECTORY(${PROJECT_SOURCE_DIR}/src SRC_LIST)
@@ -73,8 +104,27 @@ cmake_minimum_required(VERSION 3.4.1)
 
 # 指定本工程中静态库.so生成的位置，即 build/lib;（AS默认存储在app\build\intermediates\cmake下）
 # ADD_SUBDIRECTORY(lib)
-# 指定输出 .so 动态库的目录位置（AS默认存储在app\build\intermediates\cmake下）
+# 定义变量LIBRARY_OUTPUT_PATH，指定输出 .so 动态库的目录位置（AS默认存储在app\build\intermediates\cmake下）
 # SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
+
+# 定义文件SOURCES
+set(SOURCES)
+file(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/*.cpp ${CMAKE_SOURCE_DIR}/*.c)
+
+# 定义集合LIBS
+# 链接NDK内部库 jnigraphics (包含bitmap处理)和log，下载并存储在本地NDK或SDK的NDK-bundle中（参考bitmap.h）
+# AS引入NDK有以下两种方式：
+# 1. 使用sdk中的ndk bundle构建
+# 2. 使用本地的NDK构建，需输入路径
+# list(APPEND LIBS
+#         jnigraphics
+#         log
+#         )
+# 添加态链接库
+# target_link_libraries(
+#         native-lib
+#         ${LIBS})
 
 # 指定生成动态库
 add_library( # Sets the name of the library. cmake系统会自动为你生成 libXXX.so/libXXX.a
@@ -113,7 +163,7 @@ set_target_properties( mp3lame
 # 显式定义并赋值变量CMAKE_CXX_FLAGS
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
-# 指定.h头文件目录
+# 指定本地.h头文件目录
 include_directories(src/main/cpp)
 include_directories(src/main/cpp/include)
 
@@ -145,6 +195,58 @@ INSTALL (FILES hello.h DESTINATION include/hello)
 ![cmake](/images/NKD-Cmake与Android.mk/cmake.png)
 
 
+附Gradle的NDK配置
+```
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.vegen.facedetection"
+        minSdkVersion 15
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11 -frtti -fexceptions"
+                abiFilters 'armeabi-v7a'
+                arguments "-DANDROID_STL=gnustl_static"
+            }
+            ndk {
+                abiFilters 'armeabi-v7a'
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+```
 
 
 参考链接：
