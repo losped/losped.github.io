@@ -19,7 +19,7 @@ clean: 清除项目的输出
 当我们执行一个任务时，会自动执行它所依赖的任务。比如，执行assemble任务会执行assembleDebug任务和assembleRelease任务，这是因为一个Android项目至少要有debug和release这两个版本的输出。
 
 下面举个基本的实例，具体的lint代码检查、dexOptions构建速度、productFlavors分支切换等参数以后再慢慢研究。
-Project.Gradle
+build.gradle(Project)
 ```
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply from: "config.gradle"
@@ -56,7 +56,7 @@ task clean(type: Delete) {  //定义task命令
 }
 ```
 
-app.Gradle
+build.gradle(:app)
 ```
 //加载用于构建Android项目的插件
 apply plugin: 'com.android.application'
@@ -64,6 +64,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'  //扩展插件
+
+// 配置全局变量，调用时为rootProject.ext.configOne
+ext{
+    configOne = [isRealy:true]
+}
+def configOne = rootProject.ext.configOne
+if(configOne.isRealy){}
 
 android {
 //加载用于构建Android项目的插件
@@ -156,6 +163,7 @@ dependencies {  //指定当前模块的依赖（implementation为Gradle3.x版本
     implementation fileTree(include: ['*.jar'], dir: 'libs')  //导入本地jar
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    // exclude group和module：意为在该包的support-annotations模块排除掉com.android.support这个包，解决重复依赖问题
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
@@ -229,3 +237,6 @@ zipStoreBase=GRADLE_USER_HOME
 zipStorePath=wrapper/dists
 distributionUrl=https\://services.gradle.org/distributions/gradle-4.6-all.zip
 ```
+
+版本不对应会时常出现报错、sync失败
+gradle插件版本和gradle版本对应可参照官网：https://developer.android.google.cn/studio/releases/gradle-plugin.html#updating-plugin
