@@ -11,7 +11,7 @@ categories: Android
 
 ##### 关于@hide注解
 简单来说编程工具（AndroidStudio等）是引用SDK中的android.jar，这个包里没有hide和internal相关的类、属性和方法的，它是个删减版。当app开发完成装到手机上或虚拟里运行时，引用的却是framework.jar，这个包是完整版。举个形象的例子，我们在开发app时，编译环境只给了我们一个碗让我们去盛饭但是没有筷子，只有当app运行时，运行环境才会给我们一双筷子，这时我们才能吃饭。
-也就是说hide只作用于编译期，在运行期它是没有作用的，所以才能通过反谢去调用hide方法。
+也就是说hide只作用于编译期，在运行期它是没有作用的，所以才能通过反射去调用hide方法。android.jar绝大部分是来自frameworks/base/core/java精简而成，一般我们学习frameworks源码就是先从这个包开始。
 
 ##### 获取源码
 **方法一** 在SDK Manager中下载源码，一般存放于SDK根目录下 \sdk\sources\android-xx。但经对比, 这种方式获取的源码依然有大部分的缺失。
