@@ -8,21 +8,21 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Android-Framework层-总成（1） | Zephyr</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="背景之前framework层源码开了个小坑还没怎么去填它，现在定个目标有空的话要每天学习一点。一直点方法容易云里雾里，碰到未解明模块先了解功能后标记，下次学到再细看。自己总结了以下三个步骤，减少一些阻力 扫一遍先看接口结构-方法功能-实现类 先看视频或文章解析√ 按目的性去读 比如: Act生命周期   Frameworks目录解释 Binder结构Frameworks源码模块间常用到多进程通信，">
+  <meta name="description" content="背景之前framework层源码开了个小坑还没怎么去填它，现在定个目标有空的话要每天学习一点。一直点方法容易云里雾里，碰到未解明模块先了解功能后标记，下次学到再细看。自己总结了以下三个步骤，减少一些阻力1.扫一遍先看接口结构-方法功能-实现类2.先看视频或文章解析√3.按目的性去读 比如: Act生命周期  Frameworks目录解释 Binder结构Frameworks源码模块间常用到多进程通">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android-Framework层-总成（1）">
 <meta property="og:url" content="http://yoursite.com/2020/09/15/Android-Framework层-总成（1）/index.html">
 <meta property="og:site_name" content="Zephyr">
-<meta property="og:description" content="背景之前framework层源码开了个小坑还没怎么去填它，现在定个目标有空的话要每天学习一点。一直点方法容易云里雾里，碰到未解明模块先了解功能后标记，下次学到再细看。自己总结了以下三个步骤，减少一些阻力 扫一遍先看接口结构-方法功能-实现类 先看视频或文章解析√ 按目的性去读 比如: Act生命周期   Frameworks目录解释 Binder结构Frameworks源码模块间常用到多进程通信，">
+<meta property="og:description" content="背景之前framework层源码开了个小坑还没怎么去填它，现在定个目标有空的话要每天学习一点。一直点方法容易云里雾里，碰到未解明模块先了解功能后标记，下次学到再细看。自己总结了以下三个步骤，减少一些阻力1.扫一遍先看接口结构-方法功能-实现类2.先看视频或文章解析√3.按目的性去读 比如: Act生命周期  Frameworks目录解释 Binder结构Frameworks源码模块间常用到多进程通">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="http://yoursite.com/images/Android-Framework%E5%B1%82-%E6%80%BB%E6%88%90%EF%BC%881%EF%BC%89/Android%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg">
 <meta property="og:image" content="http://yoursite.com/images/Android-Framework%E5%B1%82-%E6%80%BB%E6%88%90%EF%BC%881%EF%BC%89/Frameworks%E7%9B%AE%E5%BD%95%E8%A7%A3%E9%87%8A1.png">
 <meta property="og:image" content="http://yoursite.com/images/Android-Framework%E5%B1%82-%E6%80%BB%E6%88%90%EF%BC%881%EF%BC%89/Frameworks%E7%9B%AE%E5%BD%95%E8%A7%A3%E9%87%8A2.png">
-<meta property="og:updated_time" content="2020-09-15T09:11:33.257Z">
+<meta property="og:updated_time" content="2021-04-19T07:57:37.269Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android-Framework层-总成（1）">
-<meta name="twitter:description" content="背景之前framework层源码开了个小坑还没怎么去填它，现在定个目标有空的话要每天学习一点。一直点方法容易云里雾里，碰到未解明模块先了解功能后标记，下次学到再细看。自己总结了以下三个步骤，减少一些阻力 扫一遍先看接口结构-方法功能-实现类 先看视频或文章解析√ 按目的性去读 比如: Act生命周期   Frameworks目录解释 Binder结构Frameworks源码模块间常用到多进程通信，">
+<meta name="twitter:description" content="背景之前framework层源码开了个小坑还没怎么去填它，现在定个目标有空的话要每天学习一点。一直点方法容易云里雾里，碰到未解明模块先了解功能后标记，下次学到再细看。自己总结了以下三个步骤，减少一些阻力1.扫一遍先看接口结构-方法功能-实现类2.先看视频或文章解析√3.按目的性去读 比如: Act生命周期  Frameworks目录解释 Binder结构Frameworks源码模块间常用到多进程通">
 <meta name="twitter:image" content="http://yoursite.com/images/Android-Framework%E5%B1%82-%E6%80%BB%E6%88%90%EF%BC%881%EF%BC%89/Android%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Zephyr" type="application/atom+xml">
@@ -169,11 +169,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h5 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h5><pre><code>之前framework层源码开了个小坑还没怎么去填它，现在定个目标有空的话要每天学习一点。一直点方法容易云里雾里，碰到未解明模块先了解功能后标记，下次学到再细看。自己总结了以下三个步骤，减少一些阻力</code></pre><ol>
-<li>扫一遍先看接口结构-方法功能-实现类</li>
-<li>先看视频或文章解析√</li>
-<li>按目的性去读 比如: Act生命周期</li>
-</ol>
+        <h5 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h5><p>之前framework层源码开了个小坑还没怎么去填它，现在定个目标有空的话要每天学习一点。一直点方法容易云里雾里，碰到未解明模块先了解功能后标记，下次学到再细看。自己总结了以下三个步骤，减少一些阻力<br>1.扫一遍先看接口结构-方法功能-实现类<br>2.先看视频或文章解析√<br>3.按目的性去读 比如: Act生命周期</p>
 <p><img src="/images/Android-Framework%E5%B1%82-%E6%80%BB%E6%88%90%EF%BC%881%EF%BC%89/Android%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg" alt="Android架构图"></p>
 <h5 id="Frameworks目录解释"><a href="#Frameworks目录解释" class="headerlink" title="Frameworks目录解释"></a>Frameworks目录解释</h5><p><img src="/images/Android-Framework%E5%B1%82-%E6%80%BB%E6%88%90%EF%BC%881%EF%BC%89/Frameworks%E7%9B%AE%E5%BD%95%E8%A7%A3%E9%87%8A1.png" alt="Frameworks目录解释1"><br><img src="/images/Android-Framework%E5%B1%82-%E6%80%BB%E6%88%90%EF%BC%881%EF%BC%89/Frameworks%E7%9B%AE%E5%BD%95%E8%A7%A3%E9%87%8A2.png" alt="Frameworks目录解释2"></p>
 <h5 id="Binder结构"><a href="#Binder结构" class="headerlink" title="Binder结构"></a>Binder结构</h5><p>Frameworks源码模块间常用到多进程通信，一般使用Binder通信。结构与使用AIDL时系统生成的java文件实现相同, 以ApplicationThread为例,架构如下:</p>

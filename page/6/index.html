@@ -142,6 +142,322 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-JW-Nginx" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/08/JW-Nginx/">JW-Nginx</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/08/JW-Nginx/" class="archive-article-date">
+  	<time datetime="2019-04-08T09:17:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Nginx (engine x) 是一个高性能支持高并发的HTTP和反向代理服务。<br>应用场景：<br>1、http服务器。可以独立提供http服务。可以做网页静态服务器。<br>2、虚拟主机。可实现一台服务器虚拟出多个网站。<br>3、反向代理，负载均衡。多台服务器集群使用nginx做反向代理，是多台服务器负载均衡，不会因为某台服务器负载过高宕机而某台服务器闲置的情况。</p>
+<p><strong>配置虚拟主机</strong><br>nginx配置文件位于nginx目录下的conf文件夹下<br><img src="/images/Nginx/Nginx.jpg" alt="Nginx"></p>
+<p>server{}块每 部分就代表每一个web站点<br>根据端口区分：固定域名为loaclhost<br><img src="/images/Nginx/Nginx1.jpg" alt="Nginx1"><br>根据域名区分：默认端口80，修改hosts文件同一IP对应不同域名<br><img src="/images/Nginx/Nginx2.jpg" alt="Nginx2"><br><img src="/images/Nginx/Nginx3.jpg" alt="Nginx3"></p>
+<p><strong>反向代理</strong>（相对于服务端，接收请求分配到响应服务器）<br><img src="/images/Nginx/Nginx4.jpg" alt="Nginx4"></p>
+<p>正向代理（相对于客户端）<br><img src="/images/Nginx/Nginx5.jpg" alt="Nginx5"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">upstream sina&#123;</span><br><span class="line">   server 192.168.25.158:8080  #同一服务器不同端口 tomcat上部署</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  www.sina.com.cn;</span><br><span class="line"></span><br><span class="line">    #charset koi8-r;</span><br><span class="line"></span><br><span class="line">    #access_log  logs/host.access.log  main;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass   http://sina</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">upstream sohu&#123;</span><br><span class="line">    server 192.168.25.158:8081  #同一服务器不同端口 xtomcat上部署</span><br><span class="line"> &#125;</span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  www.sohu.com;</span><br><span class="line"></span><br><span class="line">    #charset koi8-r;</span><br><span class="line"></span><br><span class="line">    #access_log  logs/host.access.log  main;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass   http://sohu</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>负载均衡</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">upstream sohu&#123;</span><br><span class="line">    server 192.168.25.158:8081           #tomcat上部署</span><br><span class="line">    server 192.168.25.158:8082 weight=2  #如果一个服务由多条服务器提供，实现负载均衡。weight越高，权重分配的请求越多</span><br><span class="line"> &#125;</span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  www.sohu.com;</span><br><span class="line"></span><br><span class="line">    #charset koi8-r;</span><br><span class="line"></span><br><span class="line">    #access_log  logs/host.access.log  main;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass   http://sohu</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Nginx实现高可用</strong><br><img src="/images/Nginx/Nginx6.jpg" alt="Nginx6"></p>
+<p>Keepalived+Nginx实现主备<br><img src="/images/Nginx/Nginx7.jpg" alt="Nginx7"></p>
+<p>VIP虚拟IP动态地指定主备服务器<br><img src="/images/Nginx/Nginx8.jpg" alt="Nginx8"></p>
+<p>其他更高并发、高可用服务 ：LVS、F5</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">JW</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/JW//" class="article-tag-list-link color3">JW</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/08/JW-Nginx/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-逆向工程PageHelper实现分页" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/04/逆向工程PageHelper实现分页/">逆向工程PageHelper实现分页</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/04/逆向工程PageHelper实现分页/" class="archive-article-date">
+  	<time datetime="2019-04-04T08:09:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>PageHelper是Mybatis的一个分页插件</strong></p>
+<p>第一步：把PageHelper依赖的jar包添加到工程中。<br>第二步：在Mybatis配置xml中配置拦截器插件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;plugins&gt;</span><br><span class="line">    &lt;!-- com.github.pagehelper为PageHelper类所在包名 --&gt;</span><br><span class="line">    &lt;plugin interceptor=&quot;com.github.pagehelper.PageHelper&quot;&gt;</span><br><span class="line">        &lt;!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库--&gt;        </span><br><span class="line">        &lt;property name=&quot;dialect&quot; value=&quot;mysql&quot;/&gt;</span><br><span class="line">    &lt;/plugin&gt;</span><br><span class="line">&lt;/plugins&gt;</span><br></pre></td></tr></table></figure>
+
+<p>第三步：在代码中使用<br>1、设置分页信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    //获取第1页，10条内容，默认查询总数count</span><br><span class="line">    PageHelper.startPage(1, 10);</span><br><span class="line"></span><br><span class="line">    //紧跟着的第一个select方法会被分页</span><br><span class="line">List&lt;Country&gt; list = countryMapper.selectIf(1);</span><br></pre></td></tr></table></figure>
+
+<p>2、取分页信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//分页后，实际返回的结果list类型是Page&lt;E&gt;，如果想取出分页信息，需要强制转换为Page&lt;E&gt;，</span><br><span class="line">Page&lt;Country&gt; listCountry = (Page&lt;Country&gt;)list;</span><br><span class="line">listCountry.getTotal();</span><br></pre></td></tr></table></figure>
+
+<p>3、取分页信息的第二种方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//获取第1页，10条内容，默认查询总数count</span><br><span class="line">PageHelper.startPage(1, 10);</span><br><span class="line">List&lt;Country&gt; list = countryMapper.selectAll();</span><br><span class="line">//用PageInfo对结果进行包装</span><br><span class="line">PageInfo page = new PageInfo(list);</span><br><span class="line">//测试PageInfo全部属性</span><br><span class="line">//PageInfo包含了非常全面的分页属性</span><br><span class="line">assertEquals(1, page.getPageNum());</span><br><span class="line">assertEquals(10, page.getPageSize());</span><br><span class="line">assertEquals(1, page.getStartRow());</span><br><span class="line">assertEquals(10, page.getEndRow());</span><br><span class="line">assertEquals(183, page.getTotal());</span><br><span class="line">assertEquals(19, page.getPages());</span><br><span class="line">assertEquals(1, page.getFirstPage());</span><br><span class="line">assertEquals(8, page.getLastPage());</span><br><span class="line">assertEquals(true, page.isFirstPage());</span><br><span class="line">assertEquals(false, page.isLastPage());</span><br><span class="line">assertEquals(false, page.isHasPreviousPage());</span><br><span class="line">assertEquals(true, page.isHasNextPage());</span><br></pre></td></tr></table></figure>
+
+<p>示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">	public void testPageHelper() throws Exception &#123;</span><br><span class="line">		//初始化spring容器</span><br><span class="line">		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;classpath:spring/applicationContext-*.xml&quot;);</span><br><span class="line">		//获得Mapper的代理对象</span><br><span class="line">		TbItemMapper itemMapper = applicationContext.getBean(TbItemMapper.class);</span><br><span class="line">		//设置分页信息</span><br><span class="line">		PageHelper.startPage(1, 30);</span><br><span class="line">		//执行查询</span><br><span class="line">		TbItemExample example = new TbItemExample();</span><br><span class="line">		List&lt;TbItem&gt; list = itemMapper.selectByExample(example);</span><br><span class="line">		//取分页信息</span><br><span class="line">		PageInfo&lt;TbItem&gt; pageInfo = new PageInfo&lt;&gt;(list);</span><br><span class="line">		System.out.println(pageInfo.getTotal());</span><br><span class="line">		System.out.println(pageInfo.getPages());</span><br><span class="line">		System.out.println(pageInfo.getPageNum());</span><br><span class="line">		System.out.println(pageInfo.getPageSize());</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">JW</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/JW//" class="article-tag-list-link color3">JW</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/04/逆向工程PageHelper实现分页/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-JW-远程调用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/04/JW-远程调用/">JW-远程调用</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/04/JW-远程调用/" class="archive-article-date">
+  	<time datetime="2019-04-04T06:56:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1.WebService：基于SOAP,远程调用技术。使用xml形式。</p>
+<p>2.接口形式Resful：Http+Json。使用Json形式。</p>
+<p>3.Spring Cloud和Dubbo等</p>
+<h5 id="Dubbo"><a href="#Dubbo" class="headerlink" title="Dubbo"></a>Dubbo</h5><p>Dubbo基于RPC协议，直接使用socket通信。用于分布式远程调用的服务管理。<br><img src="/images/JW-%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/Dubbo.jpg" alt="Dubbo"></p>
+<p>节点角色说明：<br>•    Provider: 暴露服务的服务提供方。<br>•    Consumer: 调用远程服务的服务消费方。<br>•    Registry: 服务注册与发现的注册中心。<br>•    Monitor: 统计服务的调用次调和调用时间的监控中心。<br>•    Container: 服务运行容器。<br>调用关系说明：<br>•    0. 服务容器负责启动，加载，运行服务提供者。<br>•    1. 服务提供者在启动时，向注册中心注册自己提供的服务。<br>•    2. 服务消费者在启动时，向注册中心订阅自己所需的服务。<br>•    3. 注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。<br>•    4. 服务消费者，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。<br>•    5. 服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。</p>
+<p><strong>配置方法</strong><br>单一工程中spring的配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=&quot;xxxService&quot; class=&quot;com.xxx.XxxServiceImpl&quot; /&gt;</span><br><span class="line">&lt;bean id=&quot;xxxAction&quot; class=&quot;com.xxx.XxxAction&quot;&gt;</span><br><span class="line">&lt;property name=&quot;xxxService&quot; ref=&quot;xxxService&quot; /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+<p>远程服务：<br>在本地服务的基础上，只需做简单配置，即可完成远程化：</p>
+<p>将上面的local.xml配置拆分成两份，将服务定义部分放在服务提供方remote-provider.xml，将服务引用部分放在服务消费方remote-consumer.xml。<br>并在提供方增加暴露服务配置<a href="dubbo:service" target="_blank" rel="noopener">dubbo:service</a>，在消费方增加引用服务配置<a href="dubbo:reference" target="_blank" rel="noopener">dubbo:reference</a>。<br>发布服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 和本地服务一样实现远程服务 --&gt;</span><br><span class="line">&lt;bean id=&quot;xxxService&quot; class=&quot;com.xxx.XxxServiceImpl&quot; /&gt;</span><br><span class="line">&lt;!-- 增加暴露远程服务配置 --&gt;</span><br><span class="line">&lt;dubbo:service interface=&quot;com.xxx.XxxService&quot; ref=&quot;xxxService&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+<p>调用服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 增加引用远程服务配置 --&gt;</span><br><span class="line">&lt;dubbo:reference id=&quot;xxxService&quot; interface=&quot;com.xxx.XxxService&quot; /&gt;</span><br><span class="line">&lt;!-- 和本地服务一样使用远程服务 --&gt;</span><br><span class="line">&lt;bean id=&quot;xxxAction&quot; class=&quot;com.xxx.XxxAction&quot;&gt;</span><br><span class="line">&lt;property name=&quot;xxxService&quot; ref=&quot;xxxService&quot; /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>监控中心</strong><br>需要安装tomcat，然后部署监控中心即可。部署在tomcat，启动tomcat即可。<br>1、部署监控中心：<br>[root@localhost ~]# cp dubbo-admin-2.5.4.war apache-tomcat-7.0.47/webapps/dubbo-admin.war<br>2、启动tomcat<br>3、访问<a href="http://192.168.25.167:8080/dubbo-admin/" target="_blank" rel="noopener">http://192.168.25.167:8080/dubbo-admin/</a><br>用户名：root<br>密码：root<br>如果监控中心和注册中心在同一台服务器上，可以不需要任何配置。<br>如果不在同一台服务器，需要修改配置文件：<br>/root/apache-tomcat-7.0.47/webapps/dubbo-admin/WEB-INF/dubbo.properties<br><img src="/images/JW-%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/Dubbo1.jpg" alt="Dubbo1"></p>
+<h5 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h5><p>注册中心负责服务地址的注册与查找，相当于目录服务，服务提供者和消费者只在启动时与注册中心交互，注册中心不转发请求，压力较小。一般可用Redis、Zookeeper等作为注册中心。<br>Zookeeper是Apacahe Hadoop的子项目，是一个树型的目录服务，支持变更推送，适合作为Dubbo服务的注册中心。</p>
+<p>Zookeeper安装<br>第一步：安装jdk<br>第二步：把zookeeper的压缩包上传到linux系统。<br>第三步：解压缩压缩包<br>tar -zxvf zookeeper-3.4.6.tar.gz<br>第四步：进入zookeeper-3.4.6目录，创建data文件夹。<br>第五步：把zoo_sample.cfg改名为zoo.cfg<br>[root@localhost conf]# mv zoo_sample.cfg zoo.cfg<br>第六步：修改data属性：dataDir=/root/zookeeper-3.4.6/data<br>第七步：启动zookeeper<br>[root@localhost bin]# ./zkServer.sh start<br>关闭：[root@localhost bin]# ./zkServer.sh stop<br>查看状态：[root@localhost bin]# ./zkServer.sh status<br>注意：需要关闭防火墙。<br>service iptables stop<br>永久关闭修改配置开机不启动防火墙：<br>chkconfig iptables off<br>如果不能成功启动zookeeper，需要删除data目录下的zookeeper_server.pid文件。</p>
+<p>#####配置举例<br><strong>拆分表现层和服务层</strong><br>1）将表现层工程独立出来：<br>e3-manager-web<br>2）将原来的e3-manager改为如下结构<br>e3-manager<br> |–e3-manager-dao<br> |–e3-manager-interface<br> |–e3-manager-pojo<br> |–e3-manager-service（打包方式改为war）</p>
+<p><strong>服务层工程</strong><br>第一步：把e3-manager的pom文件中删除e3-manager-web模块。<br>第二步：把e3-manager-web文件夹移动到e3-manager同一级目录。<br>第三步：e3-manager-service的pom文件修改打包方式<br><packaging>war</packaging><br>第四步：在e3-manager-service工程中添加web.xml文件<br>第五步：把e3-manager-web的配置文件复制到e3-manager-service中。<br>删除springmvc.xml<br>第六步：web.xml 中只配置spring容器。删除前端控制器<br>第七步：发布服务<br>1、在e3-manager-Service工程中添加dubbo依赖的jar包。pom.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- dubbo相关 --&gt;</span><br><span class="line">	&lt;dependency&gt;</span><br><span class="line">		&lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">		&lt;artifactId&gt;dubbo&lt;/artifactId&gt;</span><br><span class="line">		&lt;exclusions&gt;</span><br><span class="line">			&lt;exclusion&gt;</span><br><span class="line">				&lt;groupId&gt;org.springframework&lt;/groupId&gt;</span><br><span class="line">				&lt;artifactId&gt;spring&lt;/artifactId&gt;</span><br><span class="line">			&lt;/exclusion&gt;</span><br><span class="line">			&lt;exclusion&gt;</span><br><span class="line">				&lt;groupId&gt;org.jboss.netty&lt;/groupId&gt;</span><br><span class="line">				&lt;artifactId&gt;netty&lt;/artifactId&gt;</span><br><span class="line">			&lt;/exclusion&gt;</span><br><span class="line">		&lt;/exclusions&gt;</span><br><span class="line">	&lt;/dependency&gt;</span><br><span class="line">	&lt;dependency&gt;</span><br><span class="line">		&lt;groupId&gt;org.apache.zookeeper&lt;/groupId&gt;</span><br><span class="line">		&lt;artifactId&gt;zookeeper&lt;/artifactId&gt;</span><br><span class="line">	&lt;/dependency&gt;</span><br><span class="line">	&lt;dependency&gt;</span><br><span class="line">		&lt;groupId&gt;com.github.sgroschupf&lt;/groupId&gt;</span><br><span class="line">		&lt;artifactId&gt;zkclient&lt;/artifactId&gt;</span><br><span class="line">	&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<p>2、在spring的配置文件中添加dubbo的约束，然后使用dubbo:service发布服务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;</span><br><span class="line">xmlns:context=&quot;http://www.springframework.org/schema/context&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;</span><br><span class="line">xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;</span><br><span class="line">xmlns:dubbo=&quot;http://code.alibabatech.com/schema/dubbo&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd</span><br><span class="line">http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd</span><br><span class="line">http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd</span><br><span class="line">http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd</span><br><span class="line">http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd&quot;&gt;</span><br><span class="line">&lt;context:component-scan base-package=&quot;cn.e3mall.service&quot;&gt;&lt;/context:component-scan&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 使用dubbo发布服务 --&gt;</span><br><span class="line">&lt;!-- 提供方应用信息，用于计算依赖关系 --&gt;</span><br><span class="line">&lt;dubbo:application name=&quot;e3-manager&quot; /&gt;</span><br><span class="line">&lt;dubbo:registry protocol=&quot;zookeeper&quot;</span><br><span class="line">	address=&quot;192.168.25.154:2181,192.168.25.154:2182,192.168.25.154:2183&quot; /&gt;</span><br><span class="line">&lt;!-- 用dubbo协议在20880端口暴露服务 --&gt;</span><br><span class="line">&lt;dubbo:protocol name=&quot;dubbo&quot; port=&quot;20880&quot; /&gt;</span><br><span class="line">&lt;!-- 声明需要暴露的服务接口 --&gt;</span><br><span class="line">&lt;dubbo:service interface=&quot;cn.e3mall.service.ItemService&quot; ref=&quot;itemServiceImpl&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>表现层工程</strong><br>改造e3-manager-web工程。<br>第一步：删除mybatis、和spring的配置文件。只保留springmvc.xml<br>第二步：修改e3-manager-web的pom文件，<br>1、修改parent为e3-parent<br>2、添加spring和springmvc的jar包的依赖<br>3、删除e3-mangager-service的依赖<br>4、添加dubbo的依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- dubbo相关 --&gt;</span><br><span class="line">	&lt;dependency&gt;</span><br><span class="line">		&lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">		&lt;artifactId&gt;dubbo&lt;/artifactId&gt;</span><br><span class="line">		&lt;exclusions&gt;</span><br><span class="line">			&lt;exclusion&gt;</span><br><span class="line">				&lt;groupId&gt;org.springframework&lt;/groupId&gt;</span><br><span class="line">				&lt;artifactId&gt;spring&lt;/artifactId&gt;</span><br><span class="line">			&lt;/exclusion&gt;</span><br><span class="line">			&lt;exclusion&gt;</span><br><span class="line">				&lt;groupId&gt;org.jboss.netty&lt;/groupId&gt;</span><br><span class="line">				&lt;artifactId&gt;netty&lt;/artifactId&gt;</span><br><span class="line">			&lt;/exclusion&gt;</span><br><span class="line">		&lt;/exclusions&gt;</span><br><span class="line">	&lt;/dependency&gt;</span><br><span class="line">	&lt;dependency&gt;</span><br><span class="line">		&lt;groupId&gt;org.apache.zookeeper&lt;/groupId&gt;</span><br><span class="line">		&lt;artifactId&gt;zookeeper&lt;/artifactId&gt;</span><br><span class="line">	&lt;/dependency&gt;</span><br><span class="line">	&lt;dependency&gt;</span><br><span class="line">		&lt;groupId&gt;com.github.sgroschupf&lt;/groupId&gt;</span><br><span class="line">		&lt;artifactId&gt;zkclient&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<p>5、e3-mangager-web添加对e3-manager-Interface的依赖。<br>第三步：修改springmvc.xml，在springmvc的配置文件中添加服务的引用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;</span><br><span class="line">xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;</span><br><span class="line">xmlns:context=&quot;http://www.springframework.org/schema/context&quot;</span><br><span class="line">xmlns:dubbo=&quot;http://code.alibabatech.com/schema/dubbo&quot;</span><br><span class="line">xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;</span><br><span class="line">xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd</span><br><span class="line">			http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd</span><br><span class="line">			http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd</span><br><span class="line">			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;context:component-scan base-package=&quot;cn.e3mall.controller&quot; /&gt;</span><br><span class="line">&lt;mvc:annotation-driven /&gt;</span><br><span class="line">&lt;bean</span><br><span class="line">	class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;</span><br><span class="line">	&lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/jsp/&quot; /&gt;</span><br><span class="line">	&lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot; /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 引用dubbo服务 --&gt;</span><br><span class="line">&lt;dubbo:application name=&quot;e3-manager-web&quot;/&gt;</span><br><span class="line">&lt;dubbo:registry protocol=&quot;zookeeper&quot; address=&quot;192.168.25.154:2181,192.168.25.154:2182,192.168.25.154:2183&quot;/&gt;</span><br><span class="line">&lt;dubbo:reference interface=&quot;cn.e3mall.service.ItemService&quot; id=&quot;itemService&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure>
+
+<p>第四步：在e3-manager-web工程中添加tomcat插件配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;build&gt;</span><br><span class="line">	&lt;plugins&gt;</span><br><span class="line">		&lt;!-- 配置Tomcat插件 --&gt;</span><br><span class="line">		&lt;plugin&gt;</span><br><span class="line">			&lt;groupId&gt;org.apache.tomcat.maven&lt;/groupId&gt;</span><br><span class="line">			&lt;artifactId&gt;tomcat7-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">			&lt;configuration&gt;</span><br><span class="line">				&lt;path&gt;/&lt;/path&gt;</span><br><span class="line">				&lt;port&gt;8081&lt;/port&gt;</span><br><span class="line">			&lt;/configuration&gt;</span><br><span class="line">		&lt;/plugin&gt;</span><br><span class="line">	&lt;/plugins&gt;</span><br><span class="line">&lt;/build&gt;</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">JW</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/JW//" class="article-tag-list-link color3">JW</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/04/JW-远程调用/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ImageView" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -583,7 +899,7 @@
 <p>getBean操作</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">WebApplicationContext applicationContext = WebApplicationContextUtils. getWebApplicationContext (ServletActionContext. getServletContext());</span><br><span class="line">CustomerService customerService = (CustomerService) applicationContext .getBean( &quot;customerService&quot; );</span><br></pre></td></tr></table></figure>
 
-<h2 id="3-5-5-applicationContext-service-xml"><a href="#3-5-5-applicationContext-service-xml" class="headerlink" title="3.5.5. applicationContext-service.xml"></a>3.5.5. applicationContext-service.xml</h2><p><strong>配置注解扫描</strong></p>
+<h2 id="applicationContext-service-xml"><a href="#applicationContext-service-xml" class="headerlink" title="applicationContext-service.xml"></a>applicationContext-service.xml</h2><p><strong>配置注解扫描</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;! -- Spring 的注解开发 :组件扫描 (类上注解 : 可以直接使用属性注入的解 可以直接使用属性注入的解 ) -- &gt;</span><br><span class="line">&lt;context:component -scan base -package=&quot;com.itheima.spring.demo1&quot;/&gt;</span><br></pre></td></tr></table></figure>
 
 <p><strong>引入外部属性文件</strong></p>
@@ -888,8 +1204,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>全文检索技术分析</strong></p>
-<p><strong>使用Lucene实现</strong><br>单独使用Lucene实现站内搜索需要开发的工作量较大，主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。</p>
+        <h5 id="全文检索技术分析"><a href="#全文检索技术分析" class="headerlink" title="全文检索技术分析"></a>全文检索技术分析</h5><p><strong>使用Lucene实现</strong><br>单独使用Lucene实现站内搜索需要开发的工作量较大，主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。</p>
 <p><strong>使用solr实现</strong><br>基于Solr实现站内搜索扩展性较好并且可以减少程序员的工作量，因为Solr提供了较为完备的搜索引擎解决方案，因此在门户、论坛等系统中常用此方案。</p>
 <h5 id="Solr"><a href="#Solr" class="headerlink" title="Solr"></a>Solr</h5><p>采用Java开发，它是基于Lucene的全文搜索服务器。Solr提供了比Lucene更为丰富的查询语言，同时实现了可配置、可扩展，并对索引、搜索性能进行了优化。<br>Solr可以独立运行在Jetty、Tomcat等这些<strong>Servlet容器</strong>中<br>实现方法：用 POST 方法向 Solr 服务器发送一个描述 Field 及其内容的 XML 文档，Solr根据xml文档添加、删除、更新索引 。Solr 搜索只需要发送 HTTP GET 请求，然后对 Solr 返回Xml、json等格式的查询结果进行解析，组织页面布局。<br>Solr不提供构建UI的功能，Solr提供了一个管理界面，通过管理界面可以查询Solr的配置和运行情况。</p>
 <p><strong>4.1    Solr的下载</strong><br>从Solr官方网站（<a href="http://lucene.apache.org/solr/" target="_blank" rel="noopener">http://lucene.apache.org/solr/</a> ）下载Solr4.10.3，根据Solr的运行环境，Linux下需要下载lucene-4.10.3.tgz，windows下需要下载lucene-4.10.3.zip。<br>Solr使用指南可参考：<a href="https://wiki.apache.org/solr/FrontPage。" target="_blank" rel="noopener">https://wiki.apache.org/solr/FrontPage。</a></p>
@@ -920,9 +1235,11 @@
 <p>第七步：启动tomcat</p>
 <p>第八步：访问<a href="http://localhost:8080/solr/" target="_blank" rel="noopener">http://localhost:8080/solr/</a></p>
 <p><strong>4.6.    配置中文分析器</strong></p>
-<h3 id="1-1-1-Schema-xml"><a href="#1-1-1-Schema-xml" class="headerlink" title="1.1.1. Schema.xml"></a>1.1.1. Schema.xml</h3><p>schema.xml，在SolrCore的conf目录下，它是Solr数据表配置文件，它定义了加入索引的数据的数据类型的。主要包括FieldTypes、Fields和其他的一些缺省设置。</p>
+<p><strong>1.1.1. Schema.xml</strong></p>
+<p>schema.xml，在SolrCore的conf目录下，它是Solr数据表配置文件，它定义了加入索引的数据的数据类型的。主要包括FieldTypes、Fields和其他的一些缺省设置。</p>
 <p><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr6.jpg" alt="Solr6"></p>
-<h4 id="1-1-1-1-FieldType域类型定义"><a href="#1-1-1-1-FieldType域类型定义" class="headerlink" title="1.1.1.1 FieldType域类型定义"></a>1.1.1.1 FieldType域类型定义</h4><p>下边“text_general”是Solr默认提供的FieldType，通过它说明FieldType定义的内容：</p>
+<p><strong>1.1.1.1 FieldType</strong></p>
+<p>下边“text_general”是Solr默认提供的FieldType，通过它说明FieldType定义的内容：</p>
 <p><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr7.jpg" alt="Solr7"></p>
 <p>FieldType子结点包括：name,class,positionIncrementGap等一些参数：</p>
 <p>name：是这个FieldType的名称</p>
@@ -931,7 +1248,8 @@
 <p>在FieldType定义的时候最重要的就是定义这个类型的数据在建立索引和进行查询的时候要使用的分析器analyzer,包括分词和过滤</p>
 <p>索引分析器中：使用solr.StandardTokenizerFactory标准分词器，solr.StopFilterFactory停用词过滤器，solr.LowerCaseFilterFactory小写过滤器。</p>
 <p>搜索分析器中：使用solr.StandardTokenizerFactory标准分词器，solr.StopFilterFactory停用词过滤器，这里还用到了solr.SynonymFilterFactory同义词过滤器。</p>
-<h4 id="1-1-1-2-Field定义"><a href="#1-1-1-2-Field定义" class="headerlink" title="1.1.1.2 Field定义"></a>1.1.1.2 Field定义</h4><p>在fields结点内定义具体的Field，filed定义包括name,type（为之前定义过的各种FieldType）,indexed（是否被索引）,stored（是否被储存），multiValued（是否存储多个值）等属性。</p>
+<p><strong>1.1.1.2 Field定义</strong></p>
+<p>在fields结点内定义具体的Field，filed定义包括name,type（为之前定义过的各种FieldType）,indexed（是否被索引）,stored（是否被储存），multiValued（是否存储多个值）等属性。</p>
 <p>如下：</p>
 <field name="name" type="text_general" indexed="true" stored="true">
 
@@ -939,12 +1257,14 @@
 
 <p>multiValued：该Field如果要存储多个值时设置为true，solr允许一个Field存储多个值，比如存储一个用户的好友id（多个），商品的图片（多个，大图和小图），通过使用solr查询要看出返回给客户端是数组：</p>
 <p><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr8.jpg" alt="Solr8"></p>
-<h4 id="1-1-1-3-uniqueKey"><a href="#1-1-1-3-uniqueKey" class="headerlink" title="1.1.1.3 uniqueKey"></a>1.1.1.3 uniqueKey</h4><p>Solr中默认定义唯一主键key为id域，如下：</p>
+<p><strong>1.1.1.3 uniqueKey</strong></p>
+<p>Solr中默认定义唯一主键key为id域，如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uniqueKey&gt;id&lt;/uniqueKey&gt;</span><br></pre></td></tr></table></figure>
 
 <p>Solr在删除、更新索引时使用id域进行判断，也可以自定义唯一主键。</p>
 <p>注意在创建索引时必须指定唯一约束。</p>
-<h4 id="1-1-1-4-copyField复制域"><a href="#1-1-1-4-copyField复制域" class="headerlink" title="1.1.1.4 copyField复制域"></a>1.1.1.4 copyField复制域</h4><p>copyField复制域，可以将多个Field复制到一个Field中，以便进行统一的检索：</p>
+<p><strong>1.1.1.4 copyField复制域</strong></p>
+<p>copyField复制域，可以将多个Field复制到一个Field中，以便进行统一的检索：</p>
 <p>比如，输入关键字搜索title标题内容content，</p>
 <p>定义title、content、text的域：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;field name=&quot;title&quot; type=&quot;text_general&quot; indexed=&quot;true&quot; stored=&quot;true&quot; multiValued=&quot;true&quot;&gt;</span><br><span class="line">&lt;field name=&quot;content&quot; type=&quot;text_general&quot; indexed=&quot;false&quot; stored=&quot;true&quot; multiValued=&quot;true&quot;&gt;</span><br><span class="line">&lt;field name=&quot;text&quot; type=&quot;text_general&quot; indexed=&quot;true&quot; stored=&quot;false&quot; multiValued=&quot;true&quot;&gt;</span><br></pre></td></tr></table></figure>
@@ -952,14 +1272,16 @@
 <p>根据关键字只搜索text域的内容就相当于搜索title和content，将title和content复制到text中，如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;copyField source=&quot;title&quot; dest=&quot;text&quot;&gt;</span><br><span class="line">&lt;copyField source=&quot;author&quot; dest=&quot;text&quot;&gt;</span><br><span class="line">&lt;copyField source=&quot;description&quot; dest=&quot;text&quot;&gt;</span><br><span class="line">&lt;copyField source=&quot;keywords&quot; dest=&quot;text&quot;&gt;</span><br><span class="line">&lt;copyField source=&quot;content&quot; dest=&quot;text&quot;&gt;</span><br></pre></td></tr></table></figure>
 
-<h4 id="1-1-1-6-dynamicField（动态字段）"><a href="#1-1-1-6-dynamicField（动态字段）" class="headerlink" title="1.1.1.6 dynamicField（动态字段）"></a>1.1.1.6 dynamicField（动态字段）</h4><p>动态字段就是不用指定具体的名称，只要定义字段名称的规则，例如定义一个 dynamicField，name 为*_i，定义它的type为text，那么在使用这个字段的时候，任何以_i结尾的字段都被认为是符合这个定义的，例如：name_i，gender_i，school_i等。</p>
+<p><strong>1.1.1.6 dynamicField（动态字段）</strong></p>
+<p>动态字段就是不用指定具体的名称，只要定义字段名称的规则，例如定义一个 dynamicField，name 为*_i，定义它的type为text，那么在使用这个字段的时候，任何以_i结尾的字段都被认为是符合这个定义的，例如：name_i，gender_i，school_i等。</p>
 <p>自定义Field名为：product_title_t，“product_title_t”和scheam.xml中的dynamicField规则匹配成功，如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;dynamicField name=&quot;*_t&quot; type=&quot;text_general&quot; indexed=&quot;true&quot; stored=&quot;true&quot;&gt;</span><br></pre></td></tr></table></figure>
 
 <p>“product_title_t”是以“_t”结尾。</p>
 <p>创建索引：<br><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr9.jpg" alt="Solr9"></p>
 <p>搜索索引：<br><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr10.jpg" alt="Solr10"></p>
-<h3 id="1-1-1-7-安装中文分词器"><a href="#1-1-1-7-安装中文分词器" class="headerlink" title="1.1.1.7 安装中文分词器"></a>1.1.1.7 安装中文分词器</h3><p>使用IKAnalyzer中文分析器。<br>第一步：把IKAnalyzer2012FF_u1.jar添加到solr/WEB-INF/lib目录下。<br>第二步：复制IKAnalyzer的配置文件和自定义词典和停用词词典到solr的classpath下。<br>第三步：在schema.xml中添加一个自定义的fieldType，使用中文分析器。</p>
+<p><strong>1.1.1.7 安装中文分词器</strong></p>
+<p>使用IKAnalyzer中文分析器。<br>第一步：把IKAnalyzer2012FF_u1.jar添加到solr/WEB-INF/lib目录下。<br>第二步：复制IKAnalyzer的配置文件和自定义词典和停用词词典到solr的classpath下。<br>第三步：在schema.xml中添加一个自定义的fieldType，使用中文分析器。</p>
 <!-- IKAnalyzer-->
  <fieldtype name="text_ik" class="solr.TextField">
  <analyzer class="org.wltea.analyzer.lucene.IKAnalyzer">
@@ -972,7 +1294,8 @@
 
 <p>第五步：重启tomcat</p>
 <p>测试：<br><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr11.jpg" alt="Solr11"></p>
-<h2 id="1-2-设置业务系统Field"><a href="#1-2-设置业务系统Field" class="headerlink" title="1.2. 设置业务系统Field"></a>1.2. 设置业务系统Field</h2><p>如果不使用Solr提供的Field可以针对具体的业务需要自定义一套Field，如下是商品信息Field：</p>
+<p><strong>1.2. 设置业务系统Field</strong></p>
+<p>如果不使用Solr提供的Field可以针对具体的业务需要自定义一套Field，如下是商品信息Field：</p>
 <!--product-->
  <field name="product_name" type="text_ik" indexed="true" stored="true">
  <field name="product_price" type="float" indexed="true" stored="true">
@@ -1236,442 +1559,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/02/12/Java实现全文检索-Solr后台管理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java实现全文检索-Lucene" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/12/Java实现全文检索-Lucene/">Java实现全文检索-Lucene</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/12/Java实现全文检索-Lucene/" class="archive-article-date">
-  	<time datetime="2019-02-12T06:55:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="1-1-数据分类"><a href="#1-1-数据分类" class="headerlink" title="1.1.    数据分类"></a>1.1.    数据分类</h5><p>结构化数据：指具有固定格式或有限长度的数据，如数据库，元数据等。<br>非结构化数据：指不定长或无固定格式的数据，如邮件，word文档等磁盘上的文件</p>
-<h5 id="1-2-非结构化数据查询方法"><a href="#1-2-非结构化数据查询方法" class="headerlink" title="1.2.    非结构化数据查询方法"></a>1.2.    非结构化数据查询方法</h5><p>将非结构化数据中的一部分信息提取出来，重新组织，使其变得有一定结构，然后对此有一定结构的数据进行搜索，从而达到搜索相对较快的目的。这部分从非结构化数据中提取出的然后重新组织的信息，我们称之索引。<br>例如：字典。字典的拼音表和部首检字表就相当于字典的索引，对每一个字的解释是非结构化的，如果字典没有音节表和部首检字表，在茫茫辞海中找一个字只能顺序扫描。然而字的某些信息可以提取出来进行结构化处理，比如读音，就比较结构化，分声母和韵母，分别只有几种可以一一列举，于是将读音拿出来按一定的顺序排列，每一项读音都指向此字的详细解释的页数。我们搜索时按结构化的拼音搜到读音，然后按其指向的页数，便可找到我们的非结构化数据——也即对字的解释。<br><strong>这种先建立索引，再对索引进行搜索的过程就叫全文检索(Full-text Search)。</strong><br>虽然创建索引的过程也是非常耗时的，但是索引一旦创建就可以多次使用，全文检索主要处理的是查询，所以耗时间创建索引是值得的。</p>
-<h5 id="2-1-可以使用Lucene实现全文检索"><a href="#2-1-可以使用Lucene实现全文检索" class="headerlink" title="2.1.    可以使用Lucene实现全文检索"></a>2.1.    可以使用Lucene实现全文检索</h5><p><strong>2.2.1.    获取原始文档</strong><br>Lucene不提供信息采集的类库，需要自己编写一个爬虫程序实现信息采集，也可以通过一些开源软件实现信息采集，如下：</p>
-<p> Nutch（<a href="http://lucene.apache.org/nutch" target="_blank" rel="noopener">http://lucene.apache.org/nutch</a>）, Nutch是apache的一个子项目，包括大规模爬虫工具，能够抓取和分辨web网站数据。</p>
-<p> jsoup（<a href="http://jsoup.org/" target="_blank" rel="noopener">http://jsoup.org/</a> ），jsoup 是一款Java 的HTML解析器，可直接解析某个URL地址、HTML文本内容。它提供了一套非常省力的API，可通过DOM，CSS以及类似于jQuery的操作方法来取出和操作数据。</p>
-<p> heritrix（<a href="http://sourceforge.net/projects/archive-crawler/files/），Heritrix" target="_blank" rel="noopener">http://sourceforge.net/projects/archive-crawler/files/），Heritrix</a> 是一个由 java 开发的、开源的网络爬虫，用户可以使用它来从网上抓取想要的资源。其最出色之处在于它良好的可扩展性，方便用户实现自己的抓取逻辑。</p>
-<p>本案例我们要获取磁盘上文件的内容，可以通过文件流来读取文本文件的内容，对于pdf、doc、xls等文件可通过第三方提供的解析工具读取文件内容，比如Apache POI读取doc和xls的文件内容。</p>
-<p><strong>2.2.2.    创建文档对象</strong><br>在索引前需要将原始内容创建成<strong>文档（Document）</strong>，文档中包括一个一个的<strong>域（Field）</strong>，域中存储内容。<br>注意：每个Document可以有多个Field，不同的Document可以有不同的Field，同一个Document可以有相同的Field（域名和域值都相同）<br>每个文档都有一个唯一的编号，就是文档id。</p>
-<p>此例子中<br><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Lucene/Lucene.jpg" alt="Lucene"></p>
-<p><strong>2.2.3.    分析文档</strong><br>需要再对域中的内容进行分析，分析的过程是经过对原始文档提取单词、将字母转为小写、去除标点符号、去除停用词等过程生成最终的语汇单元，可以将语汇单元理解为一个一个的单词。</p>
-<p>比如下边的文档经过分析如下：<br>原文档内容：<br>Lucene is a Java full-text search engine. Lucene is not a complete<br>application, but rather a code library and API that can easily be used<br>to add search capabilities to applications.<br>分析后得到的语汇单元：<br>lucene、java、full、search、engine。。。。</p>
-<p>每个单词叫做一个<strong>Term</strong>，不同的域中拆分出来的相同的单词是不同的term。term中包含两部分一部分是文档的域名，另一部分是单词的内容。<br>例如：文件名中包含apache和文件内容中包含的apache是不同的term。</p>
-<p><strong>2.2.4.    创建索引</strong><br>对所有文档分析得出的语汇单元进行索引，索引的目的是为了搜索<br>注意：创建索引是对语汇单元索引，通过词语找文档，这种索引的结构叫<strong>倒排索引结构</strong>。<br>传统方法是根据文件找到该文件的内容，在文件内容中匹配搜索关键字，这种方法是顺序扫描方法，数据量大、搜索慢。</p>
-<p><strong>2.2.5.    查询索引</strong><br>用户输入查询关键字执行搜索之前需要先构建一个查询对象，查询对象中可以指定查询要搜索的Field文档域、查询关键字等，查询对象会生成具体的查询语法，<br>例如：<br>语法 “fileName:lucene”表示要搜索Field域的内容为“lucene”的文档<br>搜索过程就是在索引上查找域为fileName，并且关键字为Lucene的term，并根据term找到文档id列表。</p>
-<h5 id="3-1-Lucene应用"><a href="#3-1-Lucene应用" class="headerlink" title="3.1.    Lucene应用"></a>3.1.    Lucene应用</h5><p><strong>3.1.1.    功能一：创建索引库</strong></p>
-<p><strong>3.1.2.    Field域的属性</strong></p>
-<p><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Lucene/Lucene1.jpg" alt="Lucene1"></p>
-<p>代码实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//创建索引</span><br><span class="line">	@Test</span><br><span class="line">	public void createIndex() throws Exception &#123;</span><br><span class="line"></span><br><span class="line">		//指定索引库存放的路径</span><br><span class="line">		//D:\temp\0108\index</span><br><span class="line">		Directory directory = FSDirectory.open(new File(&quot;D:\\temp\\0108\\index&quot;));</span><br><span class="line">		//索引库还可以存放到内存中</span><br><span class="line">		//Directory directory = new RAMDirectory();</span><br><span class="line">		//创建一个标准分析器</span><br><span class="line">		Analyzer analyzer = new StandardAnalyzer();</span><br><span class="line">		//创建indexwriterCofig对象</span><br><span class="line">		//第一个参数： Lucene的版本信息，可以选择对应的lucene版本也可以使用LATEST</span><br><span class="line">		//第二根参数：分析器对象</span><br><span class="line">		IndexWriterConfig config = new IndexWriterConfig(Version.LATEST, analyzer);</span><br><span class="line">		//创建indexwriter对象</span><br><span class="line">		IndexWriter indexWriter = new IndexWriter(directory, config);</span><br><span class="line">		//原始文档的路径D:\传智播客\01.课程\04.lucene\01.参考资料\searchsource</span><br><span class="line">		File dir = new File(&quot;D:\\传智播客\\01.课程\\04.lucene\\01.参考资料\\searchsource&quot;);</span><br><span class="line">		for (File f : dir.listFiles()) &#123;</span><br><span class="line">			//文件名</span><br><span class="line">			String fileName = f.getName();</span><br><span class="line">			//文件内容</span><br><span class="line">			String fileContent = FileUtils.readFileToString(f);</span><br><span class="line">			//文件路径</span><br><span class="line">			String filePath = f.getPath();</span><br><span class="line">			//文件的大小</span><br><span class="line">			long fileSize  = FileUtils.sizeOf(f);</span><br><span class="line">			//创建文件名域</span><br><span class="line">			//第一个参数：域的名称</span><br><span class="line">			//第二个参数：域的内容</span><br><span class="line">			//第三个参数：是否存储</span><br><span class="line">			Field fileNameField = new TextField(&quot;filename&quot;, fileName, Store.YES);</span><br><span class="line">			//文件内容域</span><br><span class="line">			Field fileContentField = new TextField(&quot;content&quot;, fileContent, Store.YES);</span><br><span class="line">			//文件路径域（不分析、不索引、只存储）</span><br><span class="line">			Field filePathField = new StoredField(&quot;path&quot;, filePath);</span><br><span class="line">			//文件大小域</span><br><span class="line">			Field fileSizeField = new LongField(&quot;size&quot;, fileSize, Store.YES);</span><br><span class="line"></span><br><span class="line">			//创建document对象</span><br><span class="line">			Document document = new Document();</span><br><span class="line">			document.add(fileNameField);</span><br><span class="line">			document.add(fileContentField);</span><br><span class="line">			document.add(filePathField);</span><br><span class="line">			document.add(fileSizeField);</span><br><span class="line">			//创建索引，并写入索引库</span><br><span class="line">			indexWriter.addDocument(document);</span><br><span class="line">		&#125;</span><br><span class="line">		//关闭indexwriter</span><br><span class="line">		indexWriter.close();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>3.2.1.    功能二：查询索引</strong><br><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Lucene/Lucene2.jpg" alt="Lucene2"></p>
-<p>代码实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//查询索引库</span><br><span class="line">	@Test</span><br><span class="line">	public void searchIndex() throws Exception &#123;</span><br><span class="line">		//指定索引库存放的路径</span><br><span class="line">		//D:\temp\0108\index</span><br><span class="line">		Directory directory = FSDirectory.open(new File(&quot;D:\\temp\\0108\\index&quot;));</span><br><span class="line">		//创建indexReader对象</span><br><span class="line">		IndexReader indexReader = DirectoryReader.open(directory);</span><br><span class="line">		//创建indexsearcher对象</span><br><span class="line">		IndexSearcher indexSearcher = new IndexSearcher(indexReader);</span><br><span class="line">		//创建查询</span><br><span class="line">		Query query = new TermQuery(new Term(&quot;filename&quot;, &quot;apache&quot;));</span><br><span class="line">		//执行查询</span><br><span class="line">		//第一个参数是查询对象，第二个参数是查询结果返回的最大值</span><br><span class="line">		TopDocs topDocs = indexSearcher.search(query, 10);</span><br><span class="line">		//查询结果的总条数</span><br><span class="line">		System.out.println(&quot;查询结果的总条数：&quot;+ topDocs.totalHits);</span><br><span class="line">		//遍历查询结果</span><br><span class="line">		//topDocs.scoreDocs存储了document对象的id</span><br><span class="line">		for (ScoreDoc scoreDoc : topDocs.scoreDocs) &#123;</span><br><span class="line">			//scoreDoc.doc属性就是document对象的id</span><br><span class="line">			//根据document的id找到document对象</span><br><span class="line">			Document document = indexSearcher.doc(scoreDoc.doc);</span><br><span class="line">			System.out.println(document.get(&quot;filename&quot;));</span><br><span class="line">			//System.out.println(document.get(&quot;content&quot;));</span><br><span class="line">			System.out.println(document.get(&quot;path&quot;));</span><br><span class="line">			System.out.println(document.get(&quot;size&quot;));</span><br><span class="line">		&#125;</span><br><span class="line">		//关闭indexreader对象</span><br><span class="line">		indexReader.close();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>3.3    功能三：分析器</strong></p>
-<p><strong>3.3.1常规分析器的分词效果</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">//查看标准分析器的分词效果</span><br><span class="line">	public void testTokenStream() throws Exception &#123;</span><br><span class="line">		//创建一个标准分析器对象</span><br><span class="line">		Analyzer analyzer = new StandardAnalyzer();</span><br><span class="line">		//获得tokenStream对象</span><br><span class="line">		//第一个参数：域名，可以随便给一个</span><br><span class="line">		//第二个参数：要分析的文本内容</span><br><span class="line">		TokenStream tokenStream = analyzer.tokenStream(&quot;test&quot;, &quot;The Spring Framework provides a comprehensive programming and configuration model.&quot;);</span><br><span class="line">		//添加一个引用，可以获得每个关键词</span><br><span class="line">		CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);</span><br><span class="line">		//添加一个偏移量的引用，记录了关键词的开始位置以及结束位置</span><br><span class="line">		OffsetAttribute offsetAttribute = tokenStream.addAttribute(OffsetAttribute.class);</span><br><span class="line">		//将指针调整到列表的头部</span><br><span class="line">		tokenStream.reset();</span><br><span class="line">		//遍历关键词列表，通过incrementToken方法判断列表是否结束</span><br><span class="line">		while(tokenStream.incrementToken()) &#123;</span><br><span class="line">			//关键词的起始位置</span><br><span class="line">			System.out.println(&quot;start-&gt;&quot; + offsetAttribute.startOffset());</span><br><span class="line">			//取关键词</span><br><span class="line">			System.out.println(charTermAttribute);</span><br><span class="line">			//结束位置</span><br><span class="line">			System.out.println(&quot;end-&gt;&quot; + offsetAttribute.endOffset());</span><br><span class="line">		&#125;</span><br><span class="line">		tokenStream.close();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>3.3.2    中文分析器</strong></p>
-<p>Lucene自带中文分词器<br>    StandardAnalyzer：<br>单字分词：就是按照中文一个字一个字地进行分词。如：“我爱中国”，<br>效果：“我”、“爱”、“中”、“国”。<br>    CJKAnalyzer：<br>二分法分词：按两个字进行切分。如：“我是中国人”，效果：“我是”、“是中”、“中国”“国人”。</p>
-<p>上边两个分词器无法满足需求。<br>    SmartChineseAnalyzer：<br>对中文支持较好，但扩展性差，扩展词库，禁用词库和同义词库等不好处理</p>
-<p>第三方中文分析器<br>· paoding： 庖丁解牛最新版在 <a href="https://code.google.com/p/paoding/" target="_blank" rel="noopener">https://code.google.com/p/paoding/</a> 中最多支持Lucene 3.0，且最新提交的代码在 2008-06-03，在svn中最新也是2010年提交，已经过时，不予考虑。</p>
-<p>· mmseg4j：最新版已从 <a href="https://code.google.com/p/mmseg4j/" target="_blank" rel="noopener">https://code.google.com/p/mmseg4j/</a> 移至 <a href="https://github.com/chenlb/mmseg4j-solr" target="_blank" rel="noopener">https://github.com/chenlb/mmseg4j-solr</a>，支持Lucene 4.10，且在github中最新提交代码是2014年6月，从09年～14年一共有：18个版本，也就是一年几乎有3个大小版本，有较大的活跃度，用了mmseg算法。</p>
-<p>· IK-analyzer： 最新版在<a href="https://code.google.com/p/ik-analyzer/上，支持Lucene" target="_blank" rel="noopener">https://code.google.com/p/ik-analyzer/上，支持Lucene</a> 4.10从2006年12月推出1.0版开始， IKAnalyzer已经推出了4个大版本。最初，它是以开源项目Luence为应用主体的，结合词典分词和文法分析算法的中文分词组件。从3.0版本开 始，IK发展为面向Java的公用分词组件，独立于Lucene项目，同时提供了对Lucene的默认优化实现。在2012版本中，IK实现了简单的分词 歧义排除算法，标志着IK分词器从单纯的词典分词向模拟语义分词衍化。 但是也就是2012年12月后没有在更新。</p>
-<p>· ansj_seg：最新版本在 <a href="https://github.com/NLPchina/ansj_seg" target="_blank" rel="noopener">https://github.com/NLPchina/ansj_seg</a> tags仅有1.1版本，从2012年到2014年更新了大小6次，但是作者本人在2014年10月10日说明：“可能我以后没有精力来维护ansj_seg了”，现在由”nlp_china”管理。2014年11月有更新。并未说明是否支持Lucene，是一个由CRF（条件随机场）算法所做的分词算法。</p>
-<p>· imdict-chinese-analyzer：最新版在 <a href="https://code.google.com/p/imdict-chinese-analyzer/" target="_blank" rel="noopener">https://code.google.com/p/imdict-chinese-analyzer/</a> ， 最新更新也在2009年5月，下载源码，不支持Lucene 4.10 。是利用HMM（隐马尔科夫链）算法。</p>
-<p>· Jcseg：最新版本在git.oschina.net/lionsoul/jcseg，支持Lucene 4.10，作者有较高的活跃度。利用mmseg算法。</p>
-<p><strong>3.3.3    Analyzer使用时机</strong></p>
-<ol>
-<li>索引时使用Analyzer：对文档域内容进行分析，需要经过Analyzer分析器处理生成语汇单元（Token）。</li>
-<li>搜索时使用Analyzer：对搜索关键字进行分析、分词处理，使用分析后每个词语进行搜索<br>注意：搜索使用的分析器要和索引使用的分析器一致。</li>
-</ol>
-<p><strong>3.4    功能四：索引库的维护</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//添加索引</span><br><span class="line">	@Test</span><br><span class="line">	public void addDocument() throws Exception &#123;</span><br><span class="line">		//索引库存放路径</span><br><span class="line">		Directory directory = FSDirectory.open(new File(&quot;D:\\temp\\0108\\index&quot;));</span><br><span class="line"></span><br><span class="line">		IndexWriterConfig config = new IndexWriterConfig(Version.LATEST, new IKAnalyzer());</span><br><span class="line">		//创建一个indexwriter对象</span><br><span class="line">		IndexWriter indexWriter = new IndexWriter(directory, config);</span><br><span class="line">		//创建一个Document对象</span><br><span class="line">		Document document = new Document();</span><br><span class="line">		//向document对象中添加域。</span><br><span class="line">		//不同的document可以有不同的域，同一个document可以有相同的域。</span><br><span class="line">		document.add(new TextField(&quot;filename&quot;, &quot;新添加的文档&quot;, Store.YES));</span><br><span class="line">		document.add(new TextField(&quot;content&quot;, &quot;新添加的文档的内容&quot;, Store.NO));</span><br><span class="line">		document.add(new TextField(&quot;content&quot;, &quot;新添加的文档的内容第二个content&quot;, Store.YES));</span><br><span class="line">		document.add(new TextField(&quot;content1&quot;, &quot;新添加的文档的内容要能看到&quot;, Store.YES));</span><br><span class="line">		//添加文档到索引库</span><br><span class="line">		indexWriter.addDocument(document);</span><br><span class="line">		//关闭indexwriter</span><br><span class="line">		indexWriter.close();</span><br><span class="line"></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p>3.4.1.    索引库的添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//添加索引</span><br><span class="line">	@Test</span><br><span class="line">	public void addDocument() throws Exception &#123;</span><br><span class="line">		//索引库存放路径</span><br><span class="line">		Directory directory = FSDirectory.open(new File(&quot;D:\\temp\\0108\\index&quot;));</span><br><span class="line"></span><br><span class="line">		IndexWriterConfig config = new IndexWriterConfig(Version.LATEST, new IKAnalyzer());</span><br><span class="line">		//创建一个indexwriter对象</span><br><span class="line">		IndexWriter indexWriter = new IndexWriter(directory, config);</span><br><span class="line">		//创建一个Document对象</span><br><span class="line">		Document document = new Document();</span><br><span class="line">		//向document对象中添加域。</span><br><span class="line">		//不同的document可以有不同的域，同一个document可以有相同的域。</span><br><span class="line">		document.add(new TextField(&quot;filename&quot;, &quot;新添加的文档&quot;, Store.YES));</span><br><span class="line">		document.add(new TextField(&quot;content&quot;, &quot;新添加的文档的内容&quot;, Store.NO));</span><br><span class="line">		document.add(new TextField(&quot;content&quot;, &quot;新添加的文档的内容第二个content&quot;, Store.YES));</span><br><span class="line">		document.add(new TextField(&quot;content1&quot;, &quot;新添加的文档的内容要能看到&quot;, Store.YES));</span><br><span class="line">		//添加文档到索引库</span><br><span class="line">		indexWriter.addDocument(document);</span><br><span class="line">		//关闭indexwriter</span><br><span class="line">		indexWriter.close();</span><br><span class="line"></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p>3.4.3.    索引库的删除</p>
-<ol>
-<li><p>删除全部</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//删除全部索引</span><br><span class="line">	@Test</span><br><span class="line">	public void deleteAllIndex() throws Exception &#123;</span><br><span class="line">		IndexWriter indexWriter = getIndexWriter();</span><br><span class="line">		//删除全部索引</span><br><span class="line">		indexWriter.deleteAll();</span><br><span class="line">		//关闭indexwriter</span><br><span class="line">		indexWriter.close();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>指定查询条件删除</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//根据查询条件删除索引</span><br><span class="line">	@Test</span><br><span class="line">	public void deleteIndexByQuery() throws Exception &#123;</span><br><span class="line">		IndexWriter indexWriter = getIndexWriter();</span><br><span class="line">		//创建一个查询条件</span><br><span class="line">		Query query = new TermQuery(new Term(&quot;filename&quot;, &quot;apache&quot;));</span><br><span class="line">		//根据查询条件删除</span><br><span class="line">		indexWriter.deleteDocuments(query);</span><br><span class="line">		//关闭indexwriter</span><br><span class="line">		indexWriter.close();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>索引库的修改</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//修改索引库</span><br><span class="line">	@Test</span><br><span class="line">	public void updateIndex() throws Exception &#123;</span><br><span class="line">		IndexWriter indexWriter = getIndexWriter();</span><br><span class="line">		//创建一个Document对象</span><br><span class="line">		Document document = new Document();</span><br><span class="line">		//向document对象中添加域。</span><br><span class="line">		//不同的document可以有不同的域，同一个document可以有相同的域。</span><br><span class="line">		document.add(new TextField(&quot;filename&quot;, &quot;要更新的文档&quot;, Store.YES));</span><br><span class="line">		document.add(new TextField(&quot;content&quot;, &quot;2013年11月18日 - Lucene 简介 Lucene 是一个基于 Java 的全文信息检索工具包,它不是一个完整的搜索应用程序,而是为你的应用程序提供索引和搜索功能。&quot;, Store.YES));</span><br><span class="line">		indexWriter.updateDocument(new Term(&quot;content&quot;, &quot;java&quot;), document);</span><br><span class="line">		//关闭indexWriter</span><br><span class="line">		indexWriter.close();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<p><strong>3.5.1    Lucene索引库查询</strong></p>
-<p>可通过两种方法创建查询对象：<br>    <strong>1）使用Lucene提供Query子类</strong><br>    Query是一个抽象类，lucene提供了很多查询对象，比如TermQuery项精确查询，NumericRangeQuery数字范围查询等。<br>    如下代码：<br>    Query query = new TermQuery(new Term(“name”, “lucene”));<br>    <strong>2）使用QueryParse解析查询表达式</strong><br>    QueryParse会将用户输入的查询表达式解析成Query对象实例。<br>    如下代码：<br>    QueryParser queryParser = new QueryParser(“name”, new IKAnalyzer());<br>        Query query = queryParser.parse(“name:lucene”);</p>
-<p>3.5.2.    使用query的子类查询<br>①MatchAllDocsQuery</p>
-<p>使用MatchAllDocsQuery查询索引目录中的所有文档</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">	public void testMatchAllDocsQuery() throws Exception &#123;</span><br><span class="line">		IndexSearcher indexSearcher = getIndexSearcher();</span><br><span class="line">		//创建查询条件</span><br><span class="line">		Query query = new MatchAllDocsQuery();</span><br><span class="line">		//执行查询</span><br><span class="line">		printResult(query, indexSearcher);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p>②TermQuery</p>
-<p>TermQuery，通过项查询，TermQuery不使用分析器所以建议匹配不分词的Field域查询，比如订单号、分类ID号等。<br>指定要查询的域和要查询的关键词。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//使用Termquery查询</span><br><span class="line">	@Test</span><br><span class="line">	public void testTermQuery() throws Exception &#123;</span><br><span class="line">		IndexSearcher indexSearcher = getIndexSearcher();</span><br><span class="line">		//创建查询对象</span><br><span class="line">		Query query = new TermQuery(new Term(&quot;content&quot;, &quot;lucene&quot;));</span><br><span class="line">		//执行查询</span><br><span class="line">		TopDocs topDocs = indexSearcher.search(query, 10);</span><br><span class="line">		//共查询到的document个数</span><br><span class="line">		System.out.println(&quot;查询结果总数量：&quot; + topDocs.totalHits);</span><br><span class="line">		//遍历查询结果</span><br><span class="line">		for (ScoreDoc scoreDoc : topDocs.scoreDocs) &#123;</span><br><span class="line">			Document document = indexSearcher.doc(scoreDoc.doc);</span><br><span class="line">			System.out.println(document.get(&quot;filename&quot;));</span><br><span class="line">			//System.out.println(document.get(&quot;content&quot;));</span><br><span class="line">			System.out.println(document.get(&quot;path&quot;));</span><br><span class="line">			System.out.println(document.get(&quot;size&quot;));</span><br><span class="line">		&#125;</span><br><span class="line">		//关闭indexreader</span><br><span class="line">		indexSearcher.getIndexReader().close();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p>③NumericRangeQuery</p>
-<p>可以根据数值范围查询。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//数值范围查询</span><br><span class="line">	@Test</span><br><span class="line">	public void testNumericRangeQuery() throws Exception &#123;</span><br><span class="line">		IndexSearcher indexSearcher = getIndexSearcher();</span><br><span class="line">		//创建查询</span><br><span class="line">		//参数：</span><br><span class="line">		//1.域名</span><br><span class="line">		//2.最小值</span><br><span class="line">		//3.最大值</span><br><span class="line">		//4.是否包含最小值</span><br><span class="line">		//5.是否包含最大值</span><br><span class="line">		Query query = NumericRangeQuery.newLongRange(&quot;size&quot;, 1l, 1000l, true, true);</span><br><span class="line">		//执行查询</span><br><span class="line">		printResult(query, indexSearcher);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p>④BooleanQuery<br>可以组合查询条件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//组合条件查询</span><br><span class="line">	@Test</span><br><span class="line">	public void testBooleanQuery() throws Exception &#123;</span><br><span class="line">		IndexSearcher indexSearcher = getIndexSearcher();</span><br><span class="line">		//创建一个布尔查询对象</span><br><span class="line">		BooleanQuery query = new BooleanQuery();</span><br><span class="line">		//创建第一个查询条件</span><br><span class="line">		Query query1 = new TermQuery(new Term(&quot;filename&quot;, &quot;apache&quot;));</span><br><span class="line">		Query query2 = new TermQuery(new Term(&quot;content&quot;, &quot;apache&quot;));</span><br><span class="line">		//组合查询条件</span><br><span class="line">		query.add(query1, Occur.MUST);</span><br><span class="line">		query.add(query2, Occur.MUST);</span><br><span class="line">		//执行查询</span><br><span class="line">		printResult(query, indexSearcher);</span><br><span class="line">	&#125;</span><br><span class="line">//Occur.MUST：必须满足此条件，相当于and</span><br><span class="line">//Occur.SHOULD：应该满足，但是不满足也可以，相当于or</span><br><span class="line">//Occur.MUST_NOT：必须不满足。相当于not</span><br></pre></td></tr></table></figure>
-
-<p>3.5.3.    使用queryparser查询<br>通过QueryParser也可以创建Query，QueryParser提供一个Parse方法，此方法可以直接根据查询语法来查询。Query对象执行的查询语法可通过System.out.println(query);查询。<br>需要使用到分析器。建议创建索引时使用的分析器和查询索引时使用的分析器要一致。</p>
-<p>程序实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">	public void testQueryParser() throws Exception &#123;</span><br><span class="line">		IndexSearcher indexSearcher = getIndexSearcher();</span><br><span class="line">		//创建queryparser对象</span><br><span class="line">		//第一个参数默认搜索的域</span><br><span class="line">		//第二个参数就是分析器对象</span><br><span class="line">		QueryParser queryParser = new QueryParser(&quot;content&quot;, new IKAnalyzer());</span><br><span class="line">		Query query = queryParser.parse(&quot;Lucene是java开发的&quot;);</span><br><span class="line">		//执行查询</span><br><span class="line">		printResult(query, indexSearcher);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>查询语法</strong><br>1、基础的查询语法，关键词查询：</p>
-<p>域名+“：”+搜索的关键字</p>
-<p>例如：content:java</p>
-<p>2、范围查询</p>
-<p>域名+“:”+[最小值 TO 最大值]</p>
-<p>例如：size:[1 TO 1000]</p>
-<p>范围查询在lucene中支持数值类型，不支持字符串类型。在solr中支持字符串类型。</p>
-<p>3、组合条件查询</p>
-<p>1）+条件1 +条件2：两个条件之间是并且的关系and</p>
-<p>例如：+filename:apache +content:apache</p>
-<p>2）+条件1 条件2：必须满足第一个条件，应该满足第二个条件</p>
-<p>例如：+filename:apache content:apache</p>
-<p>3）条件1 条件2：两个条件满足其一即可。</p>
-<p>例如：filename:apache content:apache</p>
-<p>4）-条件1 条件2：必须不满足条件1，要满足条件2</p>
-<p>例如：-filename:apache content:apache</p>
-<p>Occur.MUST 查询条件必须满足，相当于and   →  +（加号）<br>Occur.SHOULD 查询条件可选，相当于or  →  空（不用符号）<br>Occur.MUST_NOT 查询条件不能满足，相当于not非  →  -（减号）</p>
-<p>第二种写法：</p>
-<p>条件1 AND 条件2</p>
-<p>条件1 OR 条件2</p>
-<p>条件1 NOT 条件2</p>
-<p><strong>MultiFieldQueryParser</strong><br>可以指定多个默认搜索域</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">	public void testMultiFiledQueryParser() throws Exception &#123;</span><br><span class="line">		IndexSearcher indexSearcher = getIndexSearcher();</span><br><span class="line">		//可以指定默认搜索的域是多个</span><br><span class="line">		String[] fields = &#123;&quot;filename&quot;, &quot;content&quot;&#125;;</span><br><span class="line">		//创建一个MulitFiledQueryParser对象</span><br><span class="line">		MultiFieldQueryParser queryParser = new MultiFieldQueryParser(fields, new IKAnalyzer());</span><br><span class="line">		Query query = queryParser.parse(&quot;java AND apache&quot;);</span><br><span class="line">		System.out.println(query);</span><br><span class="line">		//执行查询</span><br><span class="line">		printResult(query, indexSearcher);</span><br><span class="line"></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p>e.g. 本文仅供个人笔记使用，借鉴部分网上资料。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">JW</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/JW//" class="article-tag-list-link color3">JW</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/12/Java实现全文检索-Lucene/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-借Kotlin探索MVP、RxJava（3）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/31/借Kotlin探索MVP、RxJava（3）/">借Kotlin探索MVP、RxJava（3）</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/31/借Kotlin探索MVP、RxJava（3）/" class="archive-article-date">
-  	<time datetime="2018-10-31T10:02:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="RxJava2"><a href="#RxJava2" class="headerlink" title="RxJava2"></a>RxJava2</h1><p>本文仅作个人笔记总结使用。目前接触到的程度限于基本使用，更丰富的类型还需查阅文档运用。</p>
-<p><strong>发射者：Observable，Flowable</strong><br><strong>接收者：Observer，Subscriber</strong><br><strong>发射参数：ObservableEmitter等</strong><br><strong>接收参数：Disposable，Consumer等</strong></p>
-<p><strong>CompositeDisposable：将Disposable统一管理</strong><br>添加订阅：CompositeDisposable().add(Disposable)<br>清空订阅：CompositeDisposable().clear()</p>
-<h3 id="Observable的简单示例"><a href="#Observable的简单示例" class="headerlink" title="Observable的简单示例"></a>Observable的简单示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">Observable.create(new ObservableOnSubscribe&lt;Integer&gt;() &#123; // 第一步：初始化Observable</span><br><span class="line">            @Override</span><br><span class="line">            public void subscribe(@NonNull ObservableEmitter&lt;Integer&gt; e) throws Exception &#123;</span><br><span class="line">                Log.e(TAG, &quot;Observable emit 1&quot; + &quot;\n&quot;);</span><br><span class="line">                e.onNext(1);</span><br><span class="line">                Log.e(TAG, &quot;Observable emit 2&quot; + &quot;\n&quot;);</span><br><span class="line">                e.onNext(2);</span><br><span class="line">                Log.e(TAG, &quot;Observable emit 3&quot; + &quot;\n&quot;);</span><br><span class="line">                e.onNext(3);</span><br><span class="line">                e.onComplete();</span><br><span class="line">                Log.e(TAG, &quot;Observable emit 4&quot; + &quot;\n&quot; );</span><br><span class="line">                e.onNext(4);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).subscribe(new Observer&lt;Integer&gt;() &#123; // 第三步：订阅</span><br><span class="line"></span><br><span class="line">            // 第二步：初始化Observer</span><br><span class="line">            private int i;</span><br><span class="line">            private Disposable mDisposable;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onSubscribe(@NonNull Disposable d) &#123;      </span><br><span class="line">                mDisposable = d;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onNext(@NonNull Integer integer) &#123;</span><br><span class="line">                i++;</span><br><span class="line">                if (i == 2) &#123;</span><br><span class="line">                    // 在RxJava 2.x 中，新增的Disposable可以做到切断的操作，让Observer观察者不再接收上游事件</span><br><span class="line">                    mDisposable.dispose();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onError(@NonNull Throwable e) &#123;</span><br><span class="line">                Log.e(TAG, &quot;onError : value : &quot; + e.getMessage() + &quot;\n&quot; );</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onComplete() &#123;</span><br><span class="line">                Log.e(TAG, &quot;onComplete&quot; + &quot;\n&quot; );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
-
-<p>进行相应的简化订阅，只不过传入对象改为了 <strong>Consumer</strong>。Consumer 即消费者，用于接收单个值，BiConsumer 则是接收两个值，Function 用于变换对象，Predicate 用于判断</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">val disposable = homeModel.requestHomeData(num)</span><br><span class="line">        .flatMap(&#123; homeBean -&gt;</span><br><span class="line"></span><br><span class="line">            Log.i(&quot;TAG&quot;,&quot;HomeBean格式2：&quot; + homeBean.toString())</span><br><span class="line"></span><br><span class="line">            //过滤掉 Banner2(包含广告,等不需要的 Type), 具体查看接口分析</span><br><span class="line">            val bannerItemList = homeBean.issueList[0].itemList</span><br><span class="line"></span><br><span class="line">            //Losped :filter过滤集合</span><br><span class="line">            bannerItemList.filter &#123; item -&gt;</span><br><span class="line">                item.type==&quot;banner2&quot;|| item.type==&quot;horizontalScrollCard&quot;</span><br><span class="line">            &#125;.forEach&#123; item -&gt;</span><br><span class="line">                //移除 item</span><br><span class="line">                bannerItemList.remove(item)</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Log.i(&quot;TAG&quot;,&quot;HomeBean格式3：&quot; + homeBean.issueList[0].itemList.size)</span><br><span class="line">            Log.i(&quot;TAG&quot;,&quot;HomeBean格式3：&quot; + homeBean.issueList[0].itemList.toString())</span><br><span class="line"></span><br><span class="line">            bannerHomeBean = homeBean //记录第一页是当做 banner 数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            //根据 nextPageUrl 请求下一页数据</span><br><span class="line">            homeModel.loadMoreData(homeBean.nextPageUrl)  //Losped默认最后一行 return</span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line">        //Losped：</span><br><span class="line">        // 匿名内部类，参数→返回值，(new Consumer&lt;MobileAddress&gt;() &#123; @Override public void accept(@NonNull MobileAddress data) throws Exception &#123;&#125;&#125;</span><br><span class="line">        // mRootView?.apply：调用某对象的apply函数，在函数块内可以通过 this 指代该对象。返回值为该对象自己。</span><br><span class="line">        .subscribe(&#123; homeBean-&gt;</span><br><span class="line">            mRootView?.apply &#123;</span><br><span class="line">                dismissLoading()</span><br><span class="line"></span><br><span class="line">                nextPageUrl = homeBean.nextPageUrl</span><br><span class="line">                //过滤掉 Banner2(包含广告,等不需要的 Type), 具体查看接口分析</span><br><span class="line">                val newBannerItemList = homeBean.issueList[0].itemList</span><br><span class="line"></span><br><span class="line">                newBannerItemList.filter &#123; item -&gt;</span><br><span class="line">                    item.type==&quot;banner2&quot;||item.type==&quot;horizontalScrollCard&quot;</span><br><span class="line">                &#125;.forEach&#123; item -&gt;</span><br><span class="line">                    //移除 item</span><br><span class="line">                    newBannerItemList.remove(item)</span><br><span class="line">                &#125;</span><br><span class="line">                // 重新赋值 Banner 长度</span><br><span class="line">                bannerHomeBean!!.issueList[0].count = bannerHomeBean!!.issueList[0].itemList.size</span><br><span class="line"></span><br><span class="line">                //赋值过滤后的数据 + banner 数据</span><br><span class="line">                bannerHomeBean?.issueList!![0].itemList.addAll(newBannerItemList)</span><br><span class="line">                Log.i(&quot;TAG&quot;,&quot;HomeBean格式4：&quot; + bannerHomeBean!!.issueList[0].itemList.size)</span><br><span class="line">                Log.i(&quot;TAG&quot;,&quot;HomeBean格式4：&quot; + bannerHomeBean!!.issueList[0].itemList.toString())</span><br><span class="line"></span><br><span class="line">                setHomeData(bannerHomeBean!!)</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;, &#123; t -&gt;</span><br><span class="line">            mRootView?.apply &#123;</span><br><span class="line">                dismissLoading()</span><br><span class="line">                showError(ExceptionHandle.handleException(t),ExceptionHandle.errorCode)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br></pre></td></tr></table></figure>
-
-<p>这里Kotlin匿名实现了Consumer</p>
-<h3 id="线程调度"><a href="#线程调度" class="headerlink" title="线程调度"></a>线程调度</h3><p>subScribeOn： 用于指定 subscribe() 时所发生的线程，发射事件的线程<br>observeOn：用于指定下游 Observer 回调发生的线程，订阅者接收事件的线程</p>
-<p><strong>内置线程选择</strong><br>Schedulers.io() 代表io操作的线程, 通常用于网络,读写文件等io密集型的操作；<br>Schedulers.computation() 代表CPU计算密集型的操作, 例如需要大量计算的操作；<br>Schedulers.newThread() 代表一个常规的新线程；<br>AndroidSchedulers.mainThread() 代表Android的主线程</p>
-<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h3><h5 id="map"><a href="#map" class="headerlink" title="map"></a>map</h5><p>map函数：对数据进行加工<br>map(new Function&lt;A, B&gt;{}),A表示输入类型，B表示返回类型。<br><strong>网络请求</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">Observable.create(new ObservableOnSubscribe&lt;Response&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void subscribe(@NonNull ObservableEmitter&lt;Response&gt; e) throws Exception &#123;</span><br><span class="line">                Builder builder = new Builder()</span><br><span class="line">                        .url(&quot;http://api.avatardata.cn/MobilePlace/LookUp?key=ec47b85086be4dc8b5d941f5abd37a4e&amp;mobileNumber=13021671512&quot;)</span><br><span class="line">                        .get();</span><br><span class="line">                Request request = builder.build();</span><br><span class="line">                Call call = new OkHttpClient().newCall(request);</span><br><span class="line">                Response response = call.execute();</span><br><span class="line">                e.onNext(response);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).map(new Function&lt;Response, MobileAddress&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public MobileAddress apply(@NonNull Response response) throws Exception &#123;</span><br><span class="line">                        if (response.isSuccessful()) &#123;</span><br><span class="line">                            ResponseBody body = response.body();</span><br><span class="line">                            if (body != null) &#123;</span><br><span class="line">                                Log.e(TAG, &quot;map:转换前:&quot; + response.body());</span><br><span class="line">                                return new Gson().fromJson(body.string(), MobileAddress.class);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        return null;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;).observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">                .doOnNext(new Consumer&lt;MobileAddress&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(@NonNull MobileAddress s) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;doOnNext: 保存成功：&quot; + s.toString() + &quot;\n&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;).subscribeOn(Schedulers.io())</span><br><span class="line">                .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">                .subscribe(new Consumer&lt;MobileAddress&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(@NonNull MobileAddress data) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;成功:&quot; + data.toString() + &quot;\n&quot;);</span><br><span class="line">                &#125;, new Consumer&lt;Throwable&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(@NonNull Throwable throwable) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;失败：&quot; + throwable.getMessage() + &quot;\n&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br></pre></td></tr></table></figure>
-
-<h5 id="concat"><a href="#concat" class="headerlink" title="concat"></a>concat</h5><p>concat函数：按顺序发射Observable，调用 onComplete 后才能订阅下一个 Observable<br><strong>先读取缓存再通过网络请求获取数据</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">Observable&lt;FoodList&gt; cache = Observable.create(new ObservableOnSubscribe&lt;FoodList&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void subscribe(@NonNull ObservableEmitter&lt;FoodList&gt; e) throws Exception &#123;</span><br><span class="line">                Log.e(TAG, &quot;create当前线程:&quot;+Thread.currentThread().getName() );</span><br><span class="line">                FoodList data = CacheManager.getInstance().getFoodListData();</span><br><span class="line"></span><br><span class="line">                // 在操作符 concat 中，只有调用 onComplete 之后才会执行下一个 Observable</span><br><span class="line">                if (data != null)&#123; // 如果缓存数据不为空，则直接读取缓存数据，而不读取网络数据</span><br><span class="line">                    isFromNet = false;</span><br><span class="line">                    Log.e(TAG, &quot;\nsubscribe: 读取缓存数据:&quot; );</span><br><span class="line">                    runOnUiThread(new Runnable() &#123;</span><br><span class="line">                        @Override</span><br><span class="line">                        public void run() &#123;</span><br><span class="line">                            mRxOperatorsText.append(&quot;\nsubscribe: 读取缓存数据:\n&quot;);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line"></span><br><span class="line">                    e.onNext(data);</span><br><span class="line">                &#125;else &#123;</span><br><span class="line">                    isFromNet = true;</span><br><span class="line">                    runOnUiThread(new Runnable() &#123;</span><br><span class="line">                        @Override</span><br><span class="line">                        public void run() &#123;</span><br><span class="line">                            mRxOperatorsText.append(&quot;\nsubscribe: 读取网络数据:\n&quot;);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">                    Log.e(TAG, &quot;\nsubscribe: 读取网络数据:&quot; );</span><br><span class="line">                    e.onComplete();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        Observable&lt;FoodList&gt; network = Rx2AndroidNetworking.get(&quot;http://www.tngou.net/api/food/list&quot;)</span><br><span class="line">                .addQueryParameter(&quot;rows&quot;,10+&quot;&quot;)</span><br><span class="line">                .build()</span><br><span class="line">                .getObjectObservable(FoodList.class);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // 两个 Observable 的泛型应当保持一致</span><br><span class="line"></span><br><span class="line">        Observable.concat(cache,network)</span><br><span class="line">                .subscribeOn(Schedulers.io())</span><br><span class="line">                .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">                .subscribe(new Consumer&lt;FoodList&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(@NonNull FoodList tngouBeen) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;subscribe 成功:&quot;+Thread.currentThread().getName() );</span><br><span class="line">                        if (isFromNet)&#123;</span><br><span class="line">                            mRxOperatorsText.append(&quot;accept : 网络获取数据设置缓存: \n&quot;);</span><br><span class="line">                            Log.e(TAG, &quot;accept : 网络获取数据设置缓存: \n&quot;+tngouBeen.toString() );</span><br><span class="line">                            CacheManager.getInstance().setFoodListData(tngouBeen);</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        mRxOperatorsText.append(&quot;accept: 读取数据成功:&quot; + tngouBeen.toString()+&quot;\n&quot;);</span><br><span class="line">                        Log.e(TAG, &quot;accept: 读取数据成功:&quot; + tngouBeen.toString());</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;, new Consumer&lt;Throwable&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(@NonNull Throwable throwable) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;subscribe 失败:&quot;+Thread.currentThread().getName() );</span><br><span class="line">                        Log.e(TAG, &quot;accept: 读取数据失败：&quot;+throwable.getMessage() );</span><br><span class="line">                        mRxOperatorsText.append(&quot;accept: 读取数据失败：&quot;+throwable.getMessage()+&quot;\n&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br></pre></td></tr></table></figure>
-
-<h5 id="flatMap（懵）"><a href="#flatMap（懵）" class="headerlink" title="flatMap（懵）"></a>flatMap（懵）</h5><p>flatMap函数：可以将一个发射数据的 Observable 变换为多个 Observables ，然后将它们发射的数据合并后放到一个单独的 Observable</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">Rx2AndroidNetworking.get(&quot;http://www.tngou.net/api/food/list&quot;)</span><br><span class="line">                .addQueryParameter(&quot;rows&quot;, 1 + &quot;&quot;)</span><br><span class="line">                .build()</span><br><span class="line">                .getObjectObservable(FoodList.class) // 发起获取食品列表的请求，并解析到FootList</span><br><span class="line">                .subscribeOn(Schedulers.io())        // 在io线程进行网络请求</span><br><span class="line">                .observeOn(AndroidSchedulers.mainThread()) // 在主线程处理获取食品列表的请求结果</span><br><span class="line">                .doOnNext(new Consumer&lt;FoodList&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(@NonNull FoodList foodList) throws Exception &#123;</span><br><span class="line">                        // 先根据获取食品列表的响应结果做一些操作</span><br><span class="line">                        Log.e(TAG, &quot;accept: doOnNext :&quot; + foodList.toString());</span><br><span class="line">                        mRxOperatorsText.append(&quot;accept: doOnNext :&quot; + foodList.toString()+&quot;\n&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .observeOn(Schedulers.io()) // 回到 io 线程去处理获取食品详情的请求</span><br><span class="line">                .flatMap(new Function&lt;FoodList, ObservableSource&lt;FoodDetail&gt;&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public ObservableSource&lt;FoodDetail&gt; apply(@NonNull FoodList foodList) throws Exception &#123;</span><br><span class="line">                        if (foodList != null &amp;&amp; foodList.getTngou() != null &amp;&amp; foodList.getTngou().size() &gt; 0) &#123;</span><br><span class="line">                            return Rx2AndroidNetworking.post(&quot;http://www.tngou.net/api/food/show&quot;)</span><br><span class="line">                                    .addBodyParameter(&quot;id&quot;, foodList.getTngou().get(0).getId() + &quot;&quot;)</span><br><span class="line">                                    .build()</span><br><span class="line">                                    .getObjectObservable(FoodDetail.class);</span><br><span class="line">                        &#125;</span><br><span class="line">                        return null;</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">                .subscribe(new Consumer&lt;FoodDetail&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(@NonNull FoodDetail foodDetail) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;accept: success ：&quot; + foodDetail.toString());</span><br><span class="line">                        mRxOperatorsText.append(&quot;accept: success ：&quot; + foodDetail.toString()+&quot;\n&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;, new Consumer&lt;Throwable&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(@NonNull Throwable throwable) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;accept: error :&quot; + throwable.getMessage());</span><br><span class="line">                        mRxOperatorsText.append(&quot;accept: error :&quot; + throwable.getMessage()+&quot;\n&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br></pre></td></tr></table></figure>
-
-<h5 id="zip"><a href="#zip" class="headerlink" title="zip"></a>zip</h5><p>zip函数：可以将多个来源于不同接口的 Observable 的数据结合为一个数据源再发射出去</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Observable&lt;MobileAddress&gt; observable1 = Rx2AndroidNetworking.get(&quot;http://api.avatardata.cn/MobilePlace/LookUp?key=ec47b85086be4dc8b5d941f5abd37a4e&amp;mobileNumber=13021671512&quot;)</span><br><span class="line">                .build()</span><br><span class="line">                .getObjectObservable(MobileAddress.class);</span><br><span class="line"></span><br><span class="line">        Observable&lt;CategoryResult&gt; observable2 = Network.getGankApi()</span><br><span class="line">                .getCategoryData(&quot;Android&quot;,1,1);</span><br><span class="line"></span><br><span class="line">        Observable.zip(observable1, observable2, new BiFunction&lt;MobileAddress, CategoryResult, String&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public String apply(@NonNull MobileAddress mobileAddress, @NonNull CategoryResult categoryResult) throws Exception &#123;</span><br><span class="line">                return &quot;合并后的数据为：手机归属地：&quot;+mobileAddress.getResult().getMobilearea()+&quot;人名：&quot;+categoryResult.results.get(0).who;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).subscribeOn(Schedulers.io())</span><br><span class="line">                .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">                .subscribe(new Consumer&lt;String&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(@NonNull String s) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;accept: 成功：&quot; + s+&quot;\n&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;, new Consumer&lt;Throwable&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(@NonNull Throwable throwable) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;accept: 失败：&quot; + throwable+&quot;\n&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br></pre></td></tr></table></figure>
-
-<h5 id="interval"><a href="#interval" class="headerlink" title="interval"></a>interval</h5><p>interval函数：轮训，常用于心跳间隔任务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">private Disposable mDisposable;</span><br><span class="line">    @Override</span><br><span class="line">    protected void doSomething() &#123;</span><br><span class="line">        mDisposable = Flowable.interval(1, TimeUnit.SECONDS)</span><br><span class="line">                .doOnNext(new Consumer&lt;Long&gt;() &#123;   //简单订阅，直接调用Consumer.doOnNext发射</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(@NonNull Long aLong) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;accept: doOnNext : &quot;+aLong );</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">                .subscribe(new Consumer&lt;Long&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(@NonNull Long aLong) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;accept: 设置文本 ：&quot;+aLong );</span><br><span class="line">                        mRxOperatorsText.append(&quot;accept: 设置文本 ：&quot;+aLong +&quot;\n&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 销毁时停止心跳</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    protected void onDestroy() &#123;</span><br><span class="line">        super.onDestroy();</span><br><span class="line">        if (mDisposable != null)&#123;</span><br><span class="line">            mDisposable.dispose();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h5><p>链接：<a href="https://www.jianshu.com/p/0cd258eecf60" target="_blank" rel="noopener">https://www.jianshu.com/p/0cd258eecf60</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/31/借Kotlin探索MVP、RxJava（3）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-借Kotlin探索MVP、RxJava（2）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/31/借Kotlin探索MVP、RxJava（2）/">借Kotlin探索MVP、RxJava（2）</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/31/借Kotlin探索MVP、RxJava（2）/" class="archive-article-date">
-  	<time datetime="2018-10-31T06:48:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Kotlin补充"><a href="#Kotlin补充" class="headerlink" title="Kotlin补充"></a>Kotlin补充</h1><h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p>“<strong>Kotlin中没有检验异常</strong>！”</p>
-<p>而抛出异常和try-catch-finally和Java中的类似！但是Kotlin中<strong>throw和try都是表达式</strong>，<br>意味着他们<strong>可以赋值给某个变量</strong>，这一点在处理边界问题的时候很有用！</p>
-<p><strong>比如</strong>：</p>
-<p><img src="/images/%E5%80%9FKotlin%E6%8E%A2%E7%B4%A2MVP%E3%80%81RxJava/Exception.jpg" alt="Exception"></p>
-<p>，输出结果：</p>
-<p><img src="/images/%E5%80%9FKotlin%E6%8E%A2%E7%B4%A2MVP%E3%80%81RxJava/Exception1.jpg" alt="Exception1"></p>
-<h2 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h2><h4 id="局部函数"><a href="#局部函数" class="headerlink" title="局部函数"></a>局部函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fun outter(): Unit &#123;</span><br><span class="line">    val a = 12</span><br><span class="line">    fun inner(): Unit &#123;</span><br><span class="line">        print(&quot;inner&quot; + a )</span><br><span class="line">    &#125;</span><br><span class="line">    //invoke</span><br><span class="line">    inner()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>那么inner函数就是局部函数，对于在outter声明的变量，在inner中可以使用外部函数的局部变量(闭包)</p>
-<h4 id="高阶函数-1"><a href="#高阶函数-1" class="headerlink" title="高阶函数"></a>高阶函数</h4><p>高阶函数就是有一个函数作为参数，或者是返回值是一个函数<br>(parameterType) -&gt; T , 函数类型就是这种格式。在kotlin中所有东西都可以看作是对象。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 函数参数为函数类型，此函数类型为：没有参数，返回值为Unit</span><br><span class="line">fun funType(a: () -&gt; Unit): Unit &#123;</span><br><span class="line"></span><br><span class="line">    //声明一个函数类型的变量，此函数类型为：参数为Int，返回值为Int</span><br><span class="line">    val b: (Int) -&gt; Int</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>使用<strong>::</strong>然后加上函数名就可以将函数以参数的形式传递过去</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">fun funType(a: () -&gt; Unit): Unit &#123;</span><br><span class="line">    //invoke 1</span><br><span class="line">    a()</span><br><span class="line">    //invoke 2</span><br><span class="line">    a.invoke()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun main(args: Array&lt;String&gt;) &#123;</span><br><span class="line"></span><br><span class="line">    //局部函数</span><br><span class="line">    fun inner() = println(&quot;hello world&quot;)//单表达式函数</span><br><span class="line">    funType(::inner)//调用高阶函数</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>::</strong>然后加上函数名就可以将函数以参数的形式传递过去，而作为<strong>函数类型的参数</strong>，调用这个参数也有有如上两种方法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">fun funType(a: () -&gt; Unit): Unit &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun funType1(b: Int, a: (Int) -&gt; Unit): Unit &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun funType2(a: (String) -&gt; Unit): Unit &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun main(args: Array&lt;String&gt;) &#123;</span><br><span class="line"></span><br><span class="line">    val a = 12</span><br><span class="line">    funType(&#123; print(&quot;hello&quot;) &#125;)//Lambda</span><br><span class="line">    funType1(1) &#123; it -&gt; print(it) &#125;//将花括号提到外面</span><br><span class="line">    funType2 &#123; it -&gt; print(it) &#125;//参数只有一个函数类型的时候可以将()省略掉</span><br><span class="line">    funType2 &#123; print(it) &#125;//单一函数类型参数的隐含名称</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>使用时，使用invoke传入作为参数的函数里面的参数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/**VideoDetailActivity</span><br><span class="line">        mAdapter.setOnItemDetailClick &#123; mPresenter.loadVideoInfo(it) &#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/**VideoDetailAdapter</span><br><span class="line">    private var mOnItemClickRelatedVideo: ((item: HomeBean.Issue.Item) -&gt; Unit)? = null</span><br><span class="line"></span><br><span class="line">    fun setOnItemDetailClick(mItemRelatedVideo: (item: HomeBean.Issue.Item) -&gt; Unit) &#123;</span><br><span class="line">        this.mOnItemClickRelatedVideo = mItemRelatedVideo</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">      holder.itemView.setOnClickListener &#123; mOnItemClickRelatedVideo?.invoke(data) &#125;  //Losped?： invoke传入函数里面的参数</span><br></pre></td></tr></table></figure>
-
-<h4 id="内联函数"><a href="#内联函数" class="headerlink" title="内联函数"></a>内联函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">inline fun funType(): Unit &#123;</span><br><span class="line">    println(&quot;inline，不是高阶函数&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun funType1(): Boolean &#123;</span><br><span class="line">    funType()</span><br><span class="line">    funType2 &#123; return true &#125;//直接退出funType1()</span><br><span class="line">    return false //不会执行</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">inline fun funType2(a: () -&gt; Unit): Unit &#123;</span><br><span class="line">    println(&quot;inline 高阶函数&quot;)</span><br><span class="line">    a.invoke()</span><br><span class="line">&#125;   </span><br><span class="line">fun main(args: Array&lt;String&gt;): Unit &#123;</span><br><span class="line">    println(funType1())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>inline函数funType1相当于下面的代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fun funType1(): Boolean &#123;</span><br><span class="line">    println(&quot;inline，不是高阶函数&quot;)</span><br><span class="line">    println(&quot;inline 高阶函数&quot;)</span><br><span class="line">    return true</span><br><span class="line">    return false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>有inline当然也会有noinline，noinline函数只能使用在inline高阶函数中修饰函数类型的参数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">inline fun funType2(a: () -&gt; Unit, noinline b: () -&gt; String): Unit &#123;</span><br><span class="line">    println(&quot;inline 高阶函数&quot;)</span><br><span class="line">    b.invoke()</span><br><span class="line">    a.invoke()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//在funType1中调用</span><br><span class="line">funType2(&#123;</span><br><span class="line">    println(&quot;return true 之前&quot;)</span><br><span class="line">    return true//直接退出funType1()</span><br><span class="line">&#125;, &#123;</span><br><span class="line">    if (true) &quot;df&quot;</span><br><span class="line">    else &quot;df&quot;</span><br><span class="line"></span><br><span class="line">&#125;)</span><br><span class="line">//相当于</span><br><span class="line">fun funType1(): Boolean &#123;</span><br><span class="line">    b()//调用函数</span><br><span class="line">    println(&quot;return true 之前&quot;)</span><br><span class="line">    return true//直接退出funType1()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>所以对于函数类型参数b，它就是不会插入到调用者的函数体中，会存在着函数调用</p>
-<h4 id="五个函数"><a href="#五个函数" class="headerlink" title="五个函数"></a>五个函数</h4><p><strong>run</strong><br>功能：调用run函数块。返回值为函数块最后一行，或者指定return表达式。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">val a = run &#123;</span><br><span class="line">    println(&quot;run&quot;)</span><br><span class="line">    return@run 3</span><br><span class="line">&#125;</span><br><span class="line">println(a)</span><br><span class="line">运行结果：</span><br><span class="line"></span><br><span class="line">run</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
-
-<p><strong>apply</strong><br>功能：调用某对象的apply函数，在函数块内可以通过 this 指代该对象。返回值为该对象自己。</p>
-<p><strong>let</strong><br>功能：调用某对象的let函数，则该对象为函数的参数。在函数块内可以通过 it 指代该对象。返回值为函数块的最后一行或指定return表达式。</p>
-<p><strong>also</strong><br>功能：调用某对象的also函数，则该对象为函数的参数。在函数块内可以通过 it 指代该对象。返回值为该对象自己。</p>
-<p><strong>with</strong><br>功能：with函数和前面的几个函数使用方式略有不同，因为它不是以扩展的形式存在的。它是将某对象作为函数的参数，在函数块内可以通过 this 指代该对象。返回值为函数块的最后一行或指定return表达式。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val a = with(&quot;string&quot;) &#123;</span><br><span class="line">    println(this)   \\输出string</span><br><span class="line">    3</span><br><span class="line">&#125;</span><br><span class="line">println(a)</span><br></pre></td></tr></table></figure>
-
-<h4 id="mapTo函数"><a href="#mapTo函数" class="headerlink" title="mapTo函数"></a>mapTo函数</h4><p>将现有数据转化为其他数据然后加入到目的集合中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(0 until mTitles.size).mapTo(mTabEntities)&#123; TabEntity(mTitles[it], mIconSelectIds[it], mIconUnSelectIds[it]) &#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="kotlin-中-class-、class-java、javaClass、javaClass-kotlin区别"><a href="#kotlin-中-class-、class-java、javaClass、javaClass-kotlin区别" class="headerlink" title="kotlin 中::class 、class.java、javaClass、javaClass.kotlin区别"></a>kotlin 中::class 、class.java、javaClass、javaClass.kotlin区别</h4><p><img src="/images/%E5%80%9FKotlin%E6%8E%A2%E7%B4%A2MVP%E3%80%81RxJava/class.jpg" alt="class"></p>
-<p><img src="/images/%E5%80%9FKotlin%E6%8E%A2%E7%B4%A2MVP%E3%80%81RxJava/class1.jpg" alt="class1"></p>
-<h4 id="集合函数"><a href="#集合函数" class="headerlink" title="集合函数"></a>集合函数</h4><p><strong>filter和forEach</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">newBannerItemList.filter &#123; item -&gt;</span><br><span class="line">    item.type==&quot;banner2&quot;||item.type==&quot;horizontalScrollCard&quot;</span><br><span class="line">&#125;.forEach&#123; item -&gt;</span><br><span class="line">    //移除 item</span><br><span class="line">    newBannerItemList.remove(item)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h5><p><a href="https://www.cnblogs.com/duduhuo/p/6934137.html" target="_blank" rel="noopener">https://www.cnblogs.com/duduhuo/p/6934137.html</a><br><a href="https://www.jianshu.com/p/8d2987c343b5" target="_blank" rel="noopener">https://www.jianshu.com/p/8d2987c343b5</a><br><a href="https://www.jianshu.com/p/29c8b5775663" target="_blank" rel="noopener">https://www.jianshu.com/p/29c8b5775663</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/31/借Kotlin探索MVP、RxJava（2）/">展开全文 >></a>
         </p>
       
 

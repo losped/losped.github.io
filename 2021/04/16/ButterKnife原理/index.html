@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>ButterKnife原理 | Zephyr</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在注解处理器中，我们扫描 java 源文件，源代码中的每一部分都是Element的一个特定类型。换句话说：Element代表程序中的元素，比如说 包，类，方法。每一个元素代表一个静态的，语言级别的结构.BindingClass.addField(…)：添加新类的成员变量BindingClass.addMethod(…)：添加新类的方法… 一.注册注解（注解都是一个接口，这里通过反射调用value(">
+  <meta name="description" content="流程一.注册注解（注解都是一个接口，这里通过反射调用value()等方法）二.注册注解处理器1.查找并处理注解信息，保存到Map&amp;lt;TypeElement, BindingClass&amp;gt;（TypeElement为父节点），查找并处理view注解和listener注解2.利用 BindingClass 遍历集合3.用 javapoet 生成java文件 Tip：在注解处理器中，我们扫描 ja">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ButterKnife原理">
 <meta property="og:url" content="http://yoursite.com/2021/04/16/ButterKnife原理/index.html">
 <meta property="og:site_name" content="Zephyr">
-<meta property="og:description" content="在注解处理器中，我们扫描 java 源文件，源代码中的每一部分都是Element的一个特定类型。换句话说：Element代表程序中的元素，比如说 包，类，方法。每一个元素代表一个静态的，语言级别的结构.BindingClass.addField(…)：添加新类的成员变量BindingClass.addMethod(…)：添加新类的方法… 一.注册注解（注解都是一个接口，这里通过反射调用value(">
+<meta property="og:description" content="流程一.注册注解（注解都是一个接口，这里通过反射调用value()等方法）二.注册注解处理器1.查找并处理注解信息，保存到Map&amp;lt;TypeElement, BindingClass&amp;gt;（TypeElement为父节点），查找并处理view注解和listener注解2.利用 BindingClass 遍历集合3.用 javapoet 生成java文件 Tip：在注解处理器中，我们扫描 ja">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2021-04-16T08:21:04.637Z">
+<meta property="og:updated_time" content="2021-04-19T08:01:34.762Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ButterKnife原理">
-<meta name="twitter:description" content="在注解处理器中，我们扫描 java 源文件，源代码中的每一部分都是Element的一个特定类型。换句话说：Element代表程序中的元素，比如说 包，类，方法。每一个元素代表一个静态的，语言级别的结构.BindingClass.addField(…)：添加新类的成员变量BindingClass.addMethod(…)：添加新类的方法… 一.注册注解（注解都是一个接口，这里通过反射调用value(">
+<meta name="twitter:description" content="流程一.注册注解（注解都是一个接口，这里通过反射调用value()等方法）二.注册注解处理器1.查找并处理注解信息，保存到Map&amp;lt;TypeElement, BindingClass&amp;gt;（TypeElement为父节点），查找并处理view注解和listener注解2.利用 BindingClass 遍历集合3.用 javapoet 生成java文件 Tip：在注解处理器中，我们扫描 ja">
   
     <link rel="alternative" href="/atom.xml" title="Zephyr" type="application/atom+xml">
   
@@ -165,136 +165,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在注解处理器中，我们扫描 java 源文件，源代码中的每一部分都是Element的一个特定类型。换句话说：Element代表程序中的元素，比如说 包，类，方法。每一个元素代表一个静态的，语言级别的结构.<br>BindingClass.addField(…)：添加新类的成员变量<br>BindingClass.addMethod(…)：添加新类的方法<br>…</p>
-<p>一.注册注解（注解都是一个接口，这里通过反射调用value()等方法）<br>二.注册注解处理器<br>1.查找并处理注解信息，保存到Map&lt;TypeElement, BindingClass&gt;（TypeElement为父节点），查找并处理view注解和listener注解<br>2.利用 BindingClass 遍历集合<br>3.用 javapoet 生成java文件</p>
+        <h5 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h5><p>一.注册注解（注解都是一个接口，这里通过反射调用value()等方法）<br>二.注册注解处理器<br>1.查找并处理注解信息，保存到Map&lt;TypeElement, BindingClass&gt;（TypeElement为父节点），查找并处理view注解和listener注解<br>2.利用 BindingClass 遍历集合<br>3.用 javapoet 生成java文件</p>
+<p>Tip：在注解处理器中，我们扫描 java 源文件，源代码中的每一部分都是Element的一个特定类型。换句话说：Element代表程序中的元素，比如说 包，类，方法。每一个元素代表一个静态的，语言级别的结构.<br>BindingClass.addField(…)：添加新类的成员变量<br>BindingClass.addMethod(…)：添加新类的方法<br>…</p>
 <p>参考文章：<a href="https://blog.csdn.net/ta893115871/article/details/52497297" target="_blank" rel="noopener">https://blog.csdn.net/ta893115871/article/details/52497297</a></p>
-<h5 id="何为Accessibility机制"><a href="#何为Accessibility机制" class="headerlink" title="何为Accessibility机制"></a>何为Accessibility机制</h5><p>对于那些由于视力、听力或其它身体原因导致不能方便使用Android智能手机的用户，Android提供了Accessibility功能和服务帮助这些用户更加简单地操作设备，包括文字转语音、触觉反馈、手势操作、轨迹球和手柄操作。开发者可以搭建自己的Accessibility服务，这可以加强应用的可用性，例如声音提示，物理反馈，和其他可选的操作模式。<br>随着Android系统版本的迭代，Accessibility功能也越来越强大。<strong>AccessibilityService运行在后台, 它能实时地获取当前操作应用的窗口元素信息，也能对窗口元素进行操作并双向交互;能获取用户的输入，比如点击按钮;接收焦点改变等等</strong><br><strong>使用条件：</strong></p>
-<ul>
-<li>需要经过用户授权. 设置——辅助功能找到对应的应用名称,然后进行开启</li>
-<li>此机制是免Root的,并且需要API14以上</li>
-</ul>
-<p>常用的方法:</p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>disableSelf()</td>
-<td>禁用当前服务,也就是在服务可以通过该方法停止运行</td>
-</tr>
-<tr>
-<td>findFoucs(int falg)</td>
-<td>查找拥有特定焦点类型的控件</td>
-</tr>
-<tr>
-<td>getRootInActiveWindow()</td>
-<td>如果配置能够获取窗口内容,则会返回当前活动窗口的根结点</td>
-</tr>
-<tr>
-<td>getSeviceInfo()</td>
-<td>获取当前服务的配置信息</td>
-</tr>
-<tr>
-<td>onAccessibilityEvent(AccessibilityEvent event)</td>
-<td>有关AccessibilityEvent事件的回调函数.系统通过sendAccessibiliyEvent()不断的发送AccessibilityEvent到此处</td>
-</tr>
-<tr>
-<td>performGlobalAction(int action)</td>
-<td>执行全局操作,比如返回,回到主页,打开最近等操作</td>
-</tr>
-<tr>
-<td>setServiceInfo(AccessibilityServiceInfo info)</td>
-<td>设置当前服务的配置信息</td>
-</tr>
-<tr>
-<td>getSystemService(String name)</td>
-<td>获取系统服务</td>
-</tr>
-<tr>
-<td>onKeyEvent(KeyEvent event)</td>
-<td>如果允许服务监听按键操作,该方法是按键事件的回调,需要注意,这个过程发生了系统处理按键事件之前</td>
-</tr>
-<tr>
-<td>onServiceConnected()</td>
-<td>系统成功绑定该服务时被触发,也就是当你在设置中开启相应的服务,系统成功的绑定了该服务时会触发,通常我们可以在这里做一些初始化操作</td>
-</tr>
-<tr>
-<td>onInterrupt()</td>
-<td>服务中断时的回调</td>
-</tr>
-</tbody></table>
-<h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><ol>
-<li><p>继承AccessibilityService类</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">package krelve.demo.rob;</span><br><span class="line"></span><br><span class="line">import java.sql.Date;</span><br><span class="line">import java.text.SimpleDateFormat;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">import com.example.bean.DBInfo;</span><br><span class="line">import com.example.db.DatabaseUtil;</span><br><span class="line">import com.example.dbdemo.Add_Date;</span><br><span class="line"></span><br><span class="line">import android.accessibilityservice.AccessibilityService;</span><br><span class="line">import android.annotation.SuppressLint;</span><br><span class="line">import android.content.Intent;</span><br><span class="line">import android.provider.Settings;</span><br><span class="line">import android.util.Log;</span><br><span class="line">import android.view.accessibility.AccessibilityEvent;</span><br><span class="line">import android.view.accessibility.AccessibilityNodeInfo;</span><br><span class="line"></span><br><span class="line">public class RobMoney extends AccessibilityService &#123;</span><br><span class="line"></span><br><span class="line">    private DatabaseUtil mDBUtil;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onServiceConnected() &#123;</span><br><span class="line">        super.onServiceConnected();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @SuppressLint(&quot;NewApi&quot;)</span><br><span class="line">    @Override</span><br><span class="line">    public void onAccessibilityEvent(AccessibilityEvent event) &#123;</span><br><span class="line"></span><br><span class="line">             String strClickData = event.getText().get(0).toString();</span><br><span class="line">             System.out.println(&quot;输入内容&quot; + strClickData);</span><br><span class="line">             AccessibilityNodeInfo rootNode = getRootInActiveWindow();</span><br><span class="line">             // findEditText(rootNode);</span><br><span class="line">             // 获取包名</span><br><span class="line">             String str_package = rootNode.getPackageName().toString();</span><br><span class="line">             String app_name = StringUtil.pkgTransform(RobMoney.this, str_package);  </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>AndroidManifest.xml配置Service</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;service</span><br><span class="line">            android:name=&quot;krelve.demo.rob.RobMoney&quot;</span><br><span class="line">            android:enabled=&quot;true&quot;</span><br><span class="line">            android:exported=&quot;true&quot;</span><br><span class="line">            android:label=&quot;@string/app_name&quot;</span><br><span class="line">            android:permission=&quot;android.permission.BIND_ACCESSIBILITY_SERVICE&quot; &gt;</span><br><span class="line">            &lt;intent-filter&gt;</span><br><span class="line">                &lt;action android:name=&quot;android.accessibilityservice.AccessibilityService&quot; /&gt;</span><br><span class="line">            &lt;/intent-filter&gt;</span><br><span class="line"></span><br><span class="line">            &lt;meta-data</span><br><span class="line">                android:name=&quot;android.accessibilityservice&quot;</span><br><span class="line">                android:resource=&quot;@xml/accessibility&quot; /&gt;</span><br><span class="line">        &lt;/service&gt;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<p>其中，<action android:name="android.accessibilityservice.AccessibilityService">是需要申请的权限</action></p>
-<ol start="3">
-<li><strong>核心配置</strong> xml/accessibility是做了初始化的工作，具体实现如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;accessibility-service xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    android:accessibilityEventTypes=&quot;typeViewFocused|typeViewTextChanged&quot;</span><br><span class="line">    android:accessibilityFeedbackType=&quot;feedbackVisual&quot;</span><br><span class="line">    android:canRetrieveWindowContent=&quot;true&quot;</span><br><span class="line">    android:description=&quot;@string/stenographer_service_description&quot;</span><br><span class="line">    android:notificationTimeout=&quot;100&quot; /&gt;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<p>这里我们看到有很多选项,我们看一下常用的几个属性：</p>
-<ul>
-<li><p>android:accessibilityEventTypes=”xxxxxxxx”<br>设置响应事件的类型, 属性如下：<br>typeAllMask：接收所有事件。</p>
-</li>
-<li><p>——窗口事件相关（常用）———<br>typeWindowStateChanged：监听窗口状态变化，比如打开一个popupWindow，dialog，Activity切换等等。<br>typeWindowContentChanged：监听窗口内容改变，比如根布局子view的变化。<br>typeWindowsChanged：监听屏幕上显示的系统窗口中的事件更改。 此事件类型只应由系统分派。<br>typeNotificationStateChanged：监听通知变化，比如notifacation和toast。</p>
-</li>
-<li><p>———-View事件相关————–<br>typeViewClicked：监听view点击事件。<br>typeViewLongClicked：监听view长按事件。<br>typeViewFocused：监听view焦点事件。<br>typeViewSelected：监听AdapterView中的上下文选择事件。<br>typeViewTextChanged：监听EditText的文本改变事件。<br>typeViewHoverEnter、typeViewHoverExit：监听view的视图悬停进入和退出事件。<br>typeViewScrolled：监听view滚动，此类事件通常不直接发送。<br>typeViewTextSelectionChanged：监听EditText选择改变事件。<br>typeViewAccessibilityFocused：监听view获得可访问性焦点事件。<br>typeViewAccessibilityFocusCleared：监听view清除可访问性焦点事件。</p>
-</li>
-<li><p>———–手势事件相关—————<br>typeGestureDetectionStart、typeGestureDetectionEnd：监听手势开始和结束事件。<br>typeTouchInteractionStart、typeTouchInteractionEnd：监听用户触摸屏幕事件的开始和结束。<br>typeTouchExplorationGestureStart、typeTouchExplorationGestureEnd：监听触摸探索手势的开始和结束。</p>
-</li>
-<li><p>android:accessibilityFeedbackType=”xxxxxxxx”<br>设置回馈给用户的方式，有语音播出和振动。可以配置一些TTS引擎，让它实现发音。属性如下：<br>feedbackAllMask、feedbackGeneric、feedbackAudible、feedbackSpoken、feedbackHaptic、feedbackVisual</p>
-</li>
-<li><p>canRetrieveWindowContent<br>是否希望能够检索活动窗口内容。此设置无法在运行时更改。属性如下：<br>true or false</p>
-</li>
-<li><p>android:notificationTimeout=”100”<br>两个相同类型的可访问性事件之间的最短间隔时间（以毫秒为单位）</p>
-</li>
-<li><p>canPerformGestures 是否可以执行手势（api 24新增）属性如下：<br>true or false</p>
-</li>
-<li><p>android:packageNames=”com.xxx.xxx”<br>可以指定响应某个应用的事件，这里因为要响应所有应用的事件，所以不填，默认就是响应所有应用的事件。比如我们写一个微信抢红包的辅助程序，就可以在这里填写微信的包名，便可以监听微信产生的事件了。我们这些配置信息除了在xml中定义，同样也可以在代码中定义，我们一般都是在onServiceConnected()方法里进行</p>
-</li>
-</ul>
-<p>另外也可使用代码配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">override fun onServiceConnected() &#123;</span><br><span class="line">    val serviceInfo = AccessibilityServiceInfo().apply &#123;</span><br><span class="line">        eventTypes = AccessibilityEvent.TYPES_ALL_MASK</span><br><span class="line">        feedbackType = AccessibilityServiceInfo.FEEDBACK_ALL_MASK</span><br><span class="line">        packageNames = arrayOf(&quot;com.eg.android.AlipayGphone&quot;)//支付宝包名，可以多个</span><br><span class="line">        notificationTimeout = 10</span><br><span class="line">    &#125;</span><br><span class="line">    setServiceInfo(serviceInfo)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>指引用户去手动打开该服务<br>首先判断该服务是否为开启状态：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public static boolean isAccessibilitySettingsOn(Context mContext, Class&lt;? extends AccessibilityService&gt; clazz) &#123;</span><br><span class="line">    int accessibilityEnabled = 0;</span><br><span class="line">    final String service = mContext.getPackageName() + &quot;/&quot; + clazz.getCanonicalName();</span><br><span class="line">    try &#123;</span><br><span class="line">        accessibilityEnabled = Settings.Secure.getInt(mContext.getApplicationContext().getContentResolver(),</span><br><span class="line">                Settings.Secure.ACCESSIBILITY_ENABLED);</span><br><span class="line">    &#125; catch (Settings.SettingNotFoundException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(&apos;:&apos;);</span><br><span class="line">    if (accessibilityEnabled == 1) &#123;</span><br><span class="line">        String settingValue = Settings.Secure.getString(mContext.getApplicationContext().getContentResolver(),</span><br><span class="line">                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);</span><br><span class="line">        if (settingValue != null) &#123;</span><br><span class="line">            mStringColonSplitter.setString(settingValue);</span><br><span class="line">            while (mStringColonSplitter.hasNext()) &#123;</span><br><span class="line">                String accessibilityService = mStringColonSplitter.next();</span><br><span class="line">                if (accessibilityService.equalsIgnoreCase(service)) &#123;</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<p>没有开启的话则跳转到该服务的开启页面，由用户手动开启</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))</span><br></pre></td></tr></table></figure>
-
-<h5 id="检索窗口内容（获取节点）"><a href="#检索窗口内容（获取节点）" class="headerlink" title="检索窗口内容（获取节点）"></a>检索窗口内容（获取节点）</h5><p>允许服务检索窗口内容</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:canRetrieveWindowContent=&quot;true&quot;</span><br></pre></td></tr></table></figure>
-
-<p>通过getWindows获取屏幕上的可以看见的窗口，它返回一个列表，按降序的方式，排在第一个的就是最顶层的窗口。<br>我们可以通过以下方法来检索当前活动窗口其中的控件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val root = rootInActiveWindow //获取当前活动窗口的根节点</span><br><span class="line">val node = root.findAccessibilityNodeInfosByViewId(&quot;com.alipay.mobile.payee:id/payee_NextBtn&quot;) //通过控件id来获取某个控件</span><br><span class="line">val node = root.findAccessibilityNodeInfosByText(&quot;确定&quot;) //通过text来获取某个控件</span><br><span class="line">val node = root.findFoucs(int falg) //寻找拥有特殊焦点的控件（FOCUS_INPUT 或 FOCUS_ACCESSIBILITY）</span><br></pre></td></tr></table></figure>
-
-<p>viewId的获取，可以通过android Device Monitor工具来查看，3.0之后的android studio，可通过命令行进入sdk的tools目录，运行下面命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">monitor</span><br></pre></td></tr></table></figure>
-
-<h5 id="事件交互"><a href="#事件交互" class="headerlink" title="事件交互"></a>事件交互</h5><p>拿到AccessibilityNodeInfo对象后，我们可以进行一些列的操作，包括getChild()、getParent()、getBoundsInScreen()、isClickable等等一些列获取属性的操作，当然也可以进行交互性的操作，比如点击（当然前提是这个控件的clickable为true）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node[0].performAction(AccessibilityNodeInfo.ACTION_CLICK)</span><br></pre></td></tr></table></figure>
-
-<p>除了操作界面内控件之外，我们还可以通过performGlobalAction(int action)执行一些全局操作，比如点击back键、home键等等。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">performGlobalAction(GLOBAL_ACTION_BACK)</span><br><span class="line">performGlobalAction(GLOBAL_ACTION_HOME)</span><br><span class="line">performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)</span><br><span class="line">performGlobalAction(GLOBAL_ACTION_RECENTS)</span><br></pre></td></tr></table></figure>
-
-<h5 id="手势交互"><a href="#手势交互" class="headerlink" title="手势交互"></a>手势交互</h5><p>除了Action交互之外，我们还可以模拟人的手势进行操作，这是在Android 24中新加的一个api：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dispatchGesture(gesture, callback, handler)</span><br></pre></td></tr></table></figure>
-
-<p>它接收一个GestureDescription（手势描述）、一个GestureResultCallback（结果回调）和一个Handler。简单封装一下大概是这样的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 通过AccessibilityService在屏幕上模拟手势</span><br><span class="line"> * @param path 手势路径</span><br><span class="line"> */</span><br><span class="line">@RequiresApi(Build.VERSION_CODES.N)</span><br><span class="line">fun AccessibilityService.gestureOnScreen(</span><br><span class="line">        path: Path,</span><br><span class="line">        startTime:Long = 0,</span><br><span class="line">        duration:Long = 100,</span><br><span class="line">        callback:AccessibilityService.GestureResultCallback,</span><br><span class="line">        handler: Handler? = null</span><br><span class="line">)&#123;</span><br><span class="line">    val builder = GestureDescription.Builder()</span><br><span class="line">    builder.addStroke(GestureDescription.StrokeDescription(path, startTime, duration))</span><br><span class="line">    val gesture = builder.build()</span><br><span class="line">    dispatchGesture(gesture, callback, handler)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 通过AccessibilityService在屏幕上某个位置单击</span><br><span class="line"> */</span><br><span class="line">@RequiresApi(Build.VERSION_CODES.N)</span><br><span class="line">fun AccessibilityService.clickOnScreen(</span><br><span class="line">        x:Float,</span><br><span class="line">        y:Float,</span><br><span class="line">        callback:AccessibilityService.GestureResultCallback,</span><br><span class="line">        handler: Handler? = null</span><br><span class="line">)&#123;</span><br><span class="line">    val p = Path()</span><br><span class="line">    p.moveTo(x,y)</span><br><span class="line">    gestureOnScreen(p,callback = callback,handler = handler)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>————————————————<br>整理修改自：<br><a href="https://blog.csdn.net/chaozhung_no_l/article/details/53556100" target="_blank" rel="noopener">https://blog.csdn.net/chaozhung_no_l/article/details/53556100</a><br><a href="https://www.jianshu.com/p/7b91e3702328" target="_blank" rel="noopener">https://www.jianshu.com/p/7b91e3702328</a></p>
 
       
 
@@ -388,6 +261,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2021/04/25/MIUI12.5 Toast问题/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          MIUI12.5 Toast问题
+        
+      </div>
+    </a>
   
   
     <a href="/2020/09/15/Android-Framework层-总成（1）/" id="article-nav-older" class="article-nav-link-wrap">

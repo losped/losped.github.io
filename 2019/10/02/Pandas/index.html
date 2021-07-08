@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Pandas | Zephyr</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一. 数据填充1.apply()apply()同属处理两列数据 1df14[&amp;apos;Bulges数量&amp;apos;] = df14.apply(lambda row: row[&amp;apos;Bulges数量&amp;apos;] if row[&amp;apos;Bulges提报&amp;apos;] &amp;gt; 0 else 0, axis=1)  关于axis简单的来记就是axis=0代表往跨行（down)，而axis">
+  <meta name="description" content="一. 数据填充1.apply()apply()对多列数据计算处理 1df14[&amp;apos;Bulges数量&amp;apos;] = df14.apply(lambda row: row[&amp;apos;Bulges数量&amp;apos;] if row[&amp;apos;Bulges提报&amp;apos;] &amp;gt; 0 else 0, axis=1)  关于axis简单的来记就是axis=0代表往跨行（down)，而axi">
 <meta name="keywords" content="Py">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Pandas">
 <meta property="og:url" content="http://yoursite.com/2019/10/02/Pandas/index.html">
 <meta property="og:site_name" content="Zephyr">
-<meta property="og:description" content="一. 数据填充1.apply()apply()同属处理两列数据 1df14[&amp;apos;Bulges数量&amp;apos;] = df14.apply(lambda row: row[&amp;apos;Bulges数量&amp;apos;] if row[&amp;apos;Bulges提报&amp;apos;] &amp;gt; 0 else 0, axis=1)  关于axis简单的来记就是axis=0代表往跨行（down)，而axis">
+<meta property="og:description" content="一. 数据填充1.apply()apply()对多列数据计算处理 1df14[&amp;apos;Bulges数量&amp;apos;] = df14.apply(lambda row: row[&amp;apos;Bulges数量&amp;apos;] if row[&amp;apos;Bulges提报&amp;apos;] &amp;gt; 0 else 0, axis=1)  关于axis简单的来记就是axis=0代表往跨行（down)，而axi">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2019-10-18T06:01:59.114Z">
+<meta property="og:updated_time" content="2021-06-28T06:28:42.152Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Pandas">
-<meta name="twitter:description" content="一. 数据填充1.apply()apply()同属处理两列数据 1df14[&amp;apos;Bulges数量&amp;apos;] = df14.apply(lambda row: row[&amp;apos;Bulges数量&amp;apos;] if row[&amp;apos;Bulges提报&amp;apos;] &amp;gt; 0 else 0, axis=1)  关于axis简单的来记就是axis=0代表往跨行（down)，而axis">
+<meta name="twitter:description" content="一. 数据填充1.apply()apply()对多列数据计算处理 1df14[&amp;apos;Bulges数量&amp;apos;] = df14.apply(lambda row: row[&amp;apos;Bulges数量&amp;apos;] if row[&amp;apos;Bulges提报&amp;apos;] &amp;gt; 0 else 0, axis=1)  关于axis简单的来记就是axis=0代表往跨行（down)，而axi">
   
     <link rel="alternative" href="/atom.xml" title="Zephyr" type="application/atom+xml">
   
@@ -165,12 +165,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一-数据填充"><a href="#一-数据填充" class="headerlink" title="一. 数据填充"></a>一. 数据填充</h2><h5 id="1-apply"><a href="#1-apply" class="headerlink" title="1.apply()"></a>1.apply()</h5><p>apply()同属处理两列数据</p>
+        <h2 id="一-数据填充"><a href="#一-数据填充" class="headerlink" title="一. 数据填充"></a>一. 数据填充</h2><h5 id="1-apply"><a href="#1-apply" class="headerlink" title="1.apply()"></a>1.apply()</h5><p>apply()对多列数据计算处理</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df14[&apos;Bulges数量&apos;] = df14.apply(lambda row: row[&apos;Bulges数量&apos;] if row[&apos;Bulges提报&apos;] &gt; 0 else 0, axis=1)</span><br></pre></td></tr></table></figure>
 
 <p><strong>关于axis</strong><br>简单的来记就是axis=0代表往跨行（down)，而axis=1代表跨列（across)</p>
 <h5 id="2-applymap"><a href="#2-applymap" class="headerlink" title="2.applymap()"></a>2.applymap()</h5><h5 id="3-map"><a href="#3-map" class="headerlink" title="3.map()"></a>3.map()</h5><p>总的来说就是apply()是一种让函数作用于列或者行操作，applymap()是一种让函数作用于DataFrame每一个元素的操作，而map是一种让函数作用于Series每一个元素的操作**</p>
 <h5 id="4-eval"><a href="#4-eval" class="headerlink" title="4.eval()"></a>4.eval()</h5><p>python数据科学生态环境的强大力量在Numpy和Pandas的基础之上，并通过直观的语法将基本操作转化为c语言：在Numpy里是向量化/广播运算，在pandas里是分组型的运算。虽然这些抽象功能可以简洁高效的解决很多问题，但是他们经常需要创建临时对象，这样会占用很大的计算时间和内存。<br>Pandas为了解决性能问题，引入了eval()和query()函数，他们可以让用户直接运行C语言速度的操作，不需要费力的配置中间数组，它们都依赖于Numexpr程序包</p>
+<h5 id="5-agg"><a href="#5-agg" class="headerlink" title="5.agg()"></a>5.agg()</h5><p>多用于groupby处理后的列聚合</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df1[COMMON_VALUE[&apos;SUMMARY_CLOUMNS1&apos;]] = df2.groupby(groupby_list).agg(&#123;&apos;ID&apos;:&apos;count&apos;, &apos;Score&apos;:np.mean,&apos;Score1&apos;:np.mean,&apos;Score2&apos;:np.mean,&apos;Score3&apos;:np.mean,&apos;Score4&apos;:np.mean,&apos;Fail3&apos;:np.mean,&apos;jug6_copy&apos;:np.mean,&apos;SKUnum&apos;:np.mean,&apos;A5h1&apos;:np.mean,&apos;A5h2&apos;:np.mean,&apos;jug1&apos;:&apos;sum&apos;,&apos;jug1_copy&apos;:np.mean,&apos;jug2&apos;:&apos;sum&apos;,&apos;jug2_copy&apos;:np.mean,&apos;jug3&apos;:&apos;sum&apos;,&apos;jug3_copy&apos;:np.mean,&apos;jug5&apos;:&apos;sum&apos;,&apos;jug5_copy&apos;:np.mean,&apos;jug4&apos;:&apos;sum&apos;,&apos;jug4_copy&apos;:np.mean&#125;)</span><br></pre></td></tr></table></figure>
+
 <p><strong>DataFrame.eval()实现列间运算</strong></p>
 <ul>
 <li><p>新增列</p>

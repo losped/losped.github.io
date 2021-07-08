@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Zephyr">
 <meta property="og:description" content="最近想抽出个OPPO的系统应用来试着反编译研究下代码，发现.apk里并没有代码可执行文件(.dex)，oat文件夹多了一个odex和vdex。查了以下资料发现，如今许多Android手机的Rom包在生成过程进行了优化，将apk/jar文件的dex 文件删除，在同目录下生成oat/odex和vdex文件。odex是优化后的dex文件，odex文件依赖系统中已经编译好的系统模块，一般是/system/">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2019-12-30T02:04:18.736Z">
+<meta property="og:updated_time" content="2021-04-19T07:37:51.386Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="APK反编译">
 <meta name="twitter:description" content="最近想抽出个OPPO的系统应用来试着反编译研究下代码，发现.apk里并没有代码可执行文件(.dex)，oat文件夹多了一个odex和vdex。查了以下资料发现，如今许多Android手机的Rom包在生成过程进行了优化，将apk/jar文件的dex 文件删除，在同目录下生成oat/odex和vdex文件。odex是优化后的dex文件，odex文件依赖系统中已经编译好的系统模块，一般是/system/">
@@ -170,30 +170,22 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">START u0 &#123;act=com.coloros.notificationmanager.app.detail cmp=com.coloros.notificationmanager/.AppNotificationSettingsActivity (has extras)&#125; from uid 1000 and from pid 14251</span><br></pre></td></tr></table></figure>
 
 <p>得到一个系统应用的Activity：com.coloros.notificationmanager/.AppNotificationSettingsActivity<br>接着凭推敲或者手机下载包名查看器, 查看该Activity的应用名.</p>
-<p>一.smali方式<br><a href="https://bitbucket.org/JesusFreke/smali/downloads" target="_blank" rel="noopener">下载地址</a></p>
-<ol>
-<li>创建一个APK文件夹</li>
-<li>下载baksmali-x.x.x.jar、smali-x.x.x.jar、baksmali和smali四个文件。将四个文件放在我们的APK文件夹中。</li>
-<li>adb查看系统应用<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb shell</span><br><span class="line">cd /system/app/</span><br><span class="line">ls</span><br></pre></td></tr></table></figure>
+<h5 id="一-smali方式"><a href="#一-smali方式" class="headerlink" title="一.smali方式"></a>一.smali方式</h5><p><a href="https://bitbucket.org/JesusFreke/smali/downloads" target="_blank" rel="noopener">下载地址</a><br>1.创建一个APK文件夹<br>2.下载baksmali-x.x.x.jar、smali-x.x.x.jar、baksmali和smali四个文件。将四个文件放在我们的APK文件夹中。<br>3.adb查看系统应用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb shell</span><br><span class="line">cd /system/app/</span><br><span class="line">ls</span><br></pre></td></tr></table></figure>
 
-</li>
-</ol>
-<p>找到文件夹为NotificationCenter<br>4. 将应用文件pull出来，NotificationCenter中有一个NotificationCenter.apk和/oat/arm64/NotificationCenter.odex和/oat/arm64/NotificationCenter.vdex。<br>将NotificationCenter.odex和NotificationCenter.vdex放到我们的APK文件夹中。</p>
+<p>找到文件夹为NotificationCenter<br>4.将应用文件pull出来，NotificationCenter中有一个NotificationCenter.apk和/oat/arm64/NotificationCenter.odex和/oat/arm64/NotificationCenter.vdex。<br>将NotificationCenter.odex和NotificationCenter.vdex放到我们的APK文件夹中。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb pull /system/app/NotificationCenter D:/NotificationCenter</span><br></pre></td></tr></table></figure>
 
-<ol start="5">
-<li><p>将相关boot的依赖pull到我们的APK文件夹中。</p>
+<p>5.将相关boot的依赖pull到我们的APK文件夹中。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb pull /system/framework/arm64/* D:/APK</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>反编译odex成smail</p>
+
+<p>6.反编译odex成smail</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd APK</span><br><span class="line">java -jar baksmali-2.3.4.jar x NotificationCenter.odex</span><br></pre></td></tr></table></figure>
 
-</li>
-</ol>
-<p>生成out目录，反编译出来的代码为smail格式<br>7. 编译smail成dex</p>
+<p>生成out目录，反编译出来的代码为smail格式<br>7.编译smail成dex</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar smali-2.3.4.jar as out/ -o NotificationCenter.dex</span><br></pre></td></tr></table></figure>
 
-<p>生成dex文件<br>8. dex2jar<br><a href="https://github.com/pxb1988/dex2jar" target="_blank" rel="noopener">源码地址</a>，需要自己动手打包jar<br><a href="https://sourceforge.net/projects/dex2jar/files/" target="_blank" rel="noopener">脚本地址</a></p>
+<p>生成dex文件<br>8.dex2jar<br><a href="https://github.com/pxb1988/dex2jar" target="_blank" rel="noopener">源码地址</a>，需要自己动手打包jar<br><a href="https://sourceforge.net/projects/dex2jar/files/" target="_blank" rel="noopener">脚本地址</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">直接拖动dex到bat</span><br><span class="line"># java -jar def2jar.jar NotificationCenter.dex #若清单有入口，可直接运行</span><br><span class="line"># java def2jar.jar com.googlecode.dex2jar.tools.Dex2jarCmd NotificationCenter.dex #若清单无入口，可指定入口</span><br></pre></td></tr></table></figure>
 
 <p>查看代码</p>
@@ -206,8 +198,7 @@
 <p><a href="http://java-decompiler.github.io/" target="_blank" rel="noopener">可使用jar包可视化工具</a></p>
 <p>*. 将dex编译成odex<br>dex编译成odex是在手机上进行的，所以生成了dex文件以后，我们把am.dex推到手机：<br>adb push am.dex /data/local/tmp<br>让手机连接到电脑，打开USB调试，在命令行执行adb shell，接着输入下面的命令进行编译：<br>export ANDROID_DATA=/data<br>export ANDROID_ROOT=/system</p>
 <p>dex2oat –dex-file=/data/local/tmp/am.dex –oat-file=/data/local/tmp/am.odex  –instruction-set=arm64 –runtime-arg -Xms64m –runtime-arg -Xmx128m<br>–dex-file 指定要编译的dex文件<br>–oat-file 指定要输出的odex/oat文件<br>–instruction-set 指定cpu架构<br>–runtime-arg 指定dex2oat运行时的参数，如果编译时发生内存不足，可以把Xms和Xmx调大<br>编译成功后，会在/data/local/tmp目录生成odex/oat和vdex文件</p>
-<p>二. 使用010Editor工具打开odex文件，删除dex.035之前的字段。(尚未尝试)</p>
-<p>参考文章：<br><a href="https://www.cnblogs.com/luoyesiqiu/p/11802947.html" target="_blank" rel="noopener">https://www.cnblogs.com/luoyesiqiu/p/11802947.html</a><br><a href="https://blog.csdn.net/codebob/article/details/52848688" target="_blank" rel="noopener">https://blog.csdn.net/codebob/article/details/52848688</a></p>
+<h5 id="二-使用010Editor工具打开odex文件，删除dex-035之前的字段。-尚未尝试"><a href="#二-使用010Editor工具打开odex文件，删除dex-035之前的字段。-尚未尝试" class="headerlink" title="二. 使用010Editor工具打开odex文件，删除dex.035之前的字段。(尚未尝试)"></a>二. 使用010Editor工具打开odex文件，删除dex.035之前的字段。(尚未尝试)</h5><p>参考文章：<br><a href="https://www.cnblogs.com/luoyesiqiu/p/11802947.html" target="_blank" rel="noopener">https://www.cnblogs.com/luoyesiqiu/p/11802947.html</a><br><a href="https://blog.csdn.net/codebob/article/details/52848688" target="_blank" rel="noopener">https://blog.csdn.net/codebob/article/details/52848688</a></p>
 
       
 

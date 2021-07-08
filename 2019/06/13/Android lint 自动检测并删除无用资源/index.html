@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Android lint 自动检测并删除无用资源 | Zephyr</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="检测过程（注意：使用反射获取的资源还是会出现在清单中）  build文件配置 1234567lintOptions &amp;#123;    //build release 版本 时 开启lint 检测    checkReleaseBuilds true    //lint 遇到 error 时继续 构建    abortOnError false&amp;#125;  第三方资源文件过滤 123456789">
+  <meta name="description" content="检测过程（注意：使用反射获取的资源还是会出现在清单中）1.build文件配置 1234567lintOptions &amp;#123;    //build release 版本 时 开启lint 检测    checkReleaseBuilds true    //lint 遇到 error 时继续 构建    abortOnError false&amp;#125;  2.忽略检索警告 1234567891">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android lint 自动检测并删除无用资源">
 <meta property="og:url" content="http://yoursite.com/2019/06/13/Android lint 自动检测并删除无用资源/index.html">
 <meta property="og:site_name" content="Zephyr">
-<meta property="og:description" content="检测过程（注意：使用反射获取的资源还是会出现在清单中）  build文件配置 1234567lintOptions &amp;#123;    //build release 版本 时 开启lint 检测    checkReleaseBuilds true    //lint 遇到 error 时继续 构建    abortOnError false&amp;#125;  第三方资源文件过滤 123456789">
+<meta property="og:description" content="检测过程（注意：使用反射获取的资源还是会出现在清单中）1.build文件配置 1234567lintOptions &amp;#123;    //build release 版本 时 开启lint 检测    checkReleaseBuilds true    //lint 遇到 error 时继续 构建    abortOnError false&amp;#125;  2.忽略检索警告 1234567891">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2019-10-18T07:20:26.723Z">
+<meta property="og:updated_time" content="2021-04-19T06:41:10.583Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android lint 自动检测并删除无用资源">
-<meta name="twitter:description" content="检测过程（注意：使用反射获取的资源还是会出现在清单中）  build文件配置 1234567lintOptions &amp;#123;    //build release 版本 时 开启lint 检测    checkReleaseBuilds true    //lint 遇到 error 时继续 构建    abortOnError false&amp;#125;  第三方资源文件过滤 123456789">
+<meta name="twitter:description" content="检测过程（注意：使用反射获取的资源还是会出现在清单中）1.build文件配置 1234567lintOptions &amp;#123;    //build release 版本 时 开启lint 检测    checkReleaseBuilds true    //lint 遇到 error 时继续 构建    abortOnError false&amp;#125;  2.忽略检索警告 1234567891">
   
     <link rel="alternative" href="/atom.xml" title="Zephyr" type="application/atom+xml">
   
@@ -165,25 +165,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>检测过程（注意：使用反射获取的资源还是会出现在清单中）</p>
-<ol>
-<li><p>build文件配置</p>
+        <p>检测过程（注意：使用反射获取的资源还是会出现在清单中）<br>1.build文件配置</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lintOptions &#123;</span><br><span class="line">    //build release 版本 时 开启lint 检测</span><br><span class="line">    checkReleaseBuilds true</span><br><span class="line">    //lint 遇到 error 时继续 构建</span><br><span class="line">    abortOnError false</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>第三方资源文件过滤</p>
+
+<p>2.忽略检索警告</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    xmlns:wheel=&quot;http://schemas.android.com/apk/res-auto&quot;</span><br><span class="line">    xmlns:tools=&quot;http://schemas.android.com/tools&quot;</span><br><span class="line">    tools:ignore=&quot;all&quot;  &lt;!-- 关键属性。或可用 tools:ignore=&quot;UnUsedResource&quot;--&gt;</span><br><span class="line">    android:id=&quot;@+id/loading&quot;</span><br><span class="line">    android:layout_width=&quot;@dimen/alert_width&quot;</span><br><span class="line">    android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">    android:theme=&quot;@style/alert_dialog&quot;&gt;</span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在 Android Studio 终端选项下 执行 命令</p>
+
+<p>3.在 Android Studio 终端选项下 执行 命令</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gradle lint</span><br></pre></td></tr></table></figure>
 
-</li>
-</ol>
 <p>在 yoru_project_dirctory/build/outputs/ 会生成 两个文件 lint-result.xml, lint-result.html 和文件夹 lint-result-files. 最重要的是 lint-result.xml 文件，里面包含了我们要解析的信息，包含项目中不再使用的资源文件信息。</p>
-<ol start="4">
-<li>执行 命令<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android-resource-remover --xml lint-result.xml</span><br></pre></td></tr></table></figure>
+<p>4.执行 命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android-resource-remover --xml lint-result.xml</span><br></pre></td></tr></table></figure>
 
-</li>
-</ol>
 <p>执行完这个命令,项目中除第三方资源外不再使用的资源文件，包含 string ，color ,value等，全都被删除掉</p>
 
       

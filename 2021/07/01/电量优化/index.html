@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>JW-log4j | Zephyr</title>
+  <title>电量优化 | Zephyr</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="log4j 日志记录插件引入jar包 1234&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;org.slf4j&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;slf4j-log4j12&amp;lt;/artifactId&amp;gt;&amp;lt;/dependency&amp;gt;  log4j.properties 123456789101112131415#打印INFO,">
-<meta name="keywords" content="JW">
+  <meta name="description" content="参考链接：详解Android电量优化">
+<meta name="keywords" content="Android">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JW-log4j">
-<meta property="og:url" content="http://yoursite.com/2019/04/19/JW-log4j/index.html">
+<meta property="og:title" content="电量优化">
+<meta property="og:url" content="http://yoursite.com/2021/07/01/电量优化/index.html">
 <meta property="og:site_name" content="Zephyr">
-<meta property="og:description" content="log4j 日志记录插件引入jar包 1234&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;org.slf4j&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;slf4j-log4j12&amp;lt;/artifactId&amp;gt;&amp;lt;/dependency&amp;gt;  log4j.properties 123456789101112131415#打印INFO,">
+<meta property="og:description" content="参考链接：详解Android电量优化">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2021-04-19T03:47:48.126Z">
+<meta property="og:updated_time" content="2021-07-02T07:38:14.282Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JW-log4j">
-<meta name="twitter:description" content="log4j 日志记录插件引入jar包 1234&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;org.slf4j&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;slf4j-log4j12&amp;lt;/artifactId&amp;gt;&amp;lt;/dependency&amp;gt;  log4j.properties 123456789101112131415#打印INFO,">
+<meta name="twitter:title" content="电量优化">
+<meta name="twitter:description" content="参考链接：详解Android电量优化">
   
     <link rel="alternative" href="/atom.xml" title="Zephyr" type="application/atom+xml">
   
@@ -145,38 +145,27 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-JW-log4j" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-电量优化" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      JW-log4j
+      电量优化
     </h1>
   
 
         
-        <a href="/2019/04/19/JW-log4j/" class="archive-article-date">
-  	<time datetime="2019-04-19T09:20:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
+        <a href="/2021/07/01/电量优化/" class="archive-article-date">
+  	<time datetime="2021-07-01T05:51:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-01</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h5 id="log4j-日志记录插件"><a href="#log4j-日志记录插件" class="headerlink" title="log4j 日志记录插件"></a>log4j 日志记录插件</h5><p>引入jar包</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.slf4j&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;slf4j-log4j12&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-
-<p>log4j.properties</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#打印INFO,A3,STDOUT信息</span><br><span class="line">log4j.rootLogger=INFO,A3,STDOUT</span><br><span class="line"></span><br><span class="line">#不写入文件</span><br><span class="line">log4j.appender.STDOUT=org.apache.log4j.ConsoleAppender</span><br><span class="line">log4j.appender.STDOUT.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.STDOUT.layout.ConversionPattern=[%p] [%l] %10.10c - %m%n</span><br><span class="line"></span><br><span class="line">#写入文件</span><br><span class="line">log4j.appender.A3=org.apache.log4j.RollingFileAppender</span><br><span class="line">log4j.appender.A3.file=logs/server.log</span><br><span class="line">log4j.appender.A3.MaxFileSize=1024KB</span><br><span class="line">log4j.appender.A3.MaxBackupIndex=10</span><br><span class="line">log4j.appender.A3.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.A3.layout.ConversionPattern=\n\n[%-5p] %d&#123;yyyy-MM-dd HH\:mm\:ss,SSS&#125; method\:%l%n%m%n</span><br></pre></td></tr></table></figure>
-
-<p>GlobalExceptionResolver.java</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 全局异常处理器</span><br><span class="line"> * &lt;p&gt;Title: GlobalExceptionResolver&lt;/p&gt;</span><br><span class="line"> * &lt;p&gt;Description: &lt;/p&gt;</span><br><span class="line"> * &lt;p&gt;Company: www.itcast.cn&lt;/p&gt;</span><br><span class="line"> * @version 1.0</span><br><span class="line"> */</span><br><span class="line">public class GlobalExceptionResolver implements HandlerExceptionResolver &#123;</span><br><span class="line"></span><br><span class="line">	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionResolver.class);</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,</span><br><span class="line">			Exception ex) &#123;</span><br><span class="line">		//打印控制台</span><br><span class="line">		ex.printStackTrace();</span><br><span class="line">		//写日志</span><br><span class="line">		logger.debug(&quot;测试输出的日志。。。。。。。&quot;);</span><br><span class="line">		logger.info(&quot;系统发生异常了。。。。。。。&quot;);</span><br><span class="line">		logger.error(&quot;系统发生异常&quot;, ex);</span><br><span class="line">		//发邮件、发短信</span><br><span class="line">		//使用jmail工具包。发短信使用第三方的Webservice。</span><br><span class="line">		//显示错误页面</span><br><span class="line">		ModelAndView modelAndView = new ModelAndView();</span><br><span class="line">		modelAndView.setViewName(&quot;error/exception&quot;);</span><br><span class="line">		return modelAndView;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>springmvc.xml</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 全局异常处理器 --&gt;</span><br><span class="line">&lt;bean class=&quot;cn.e3mall.search.exception.GlobalExceptionResolver&quot;/&gt;</span><br></pre></td></tr></table></figure>
-
+        <p>参考链接：<br><a href="https://blog.csdn.net/JArchie520/article/details/106909824/" target="_blank" rel="noopener">详解Android电量优化</a></p>
 
       
 
@@ -190,7 +179,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">JW</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
         		</li>
       		
 		</ul>
@@ -202,7 +191,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/JW//" class="article-tag-list-link color3">JW</a>
+        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
         		</li>
       		
 		</ul>
@@ -257,7 +246,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/04/19/JW-log4j/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2021/07/01/电量优化/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -271,18 +260,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/22/JW-freemarker/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2021/07/01/Wifi模块&BLE模块/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          JW-freemarker
+          Wifi模块&amp;BLE模块
         
       </div>
     </a>
   
   
-    <a href="/2019/04/19/JW-Redis/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">JW-Redis</div>
+    <a href="/2021/04/25/MIUI12.5 Toast问题/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MIUI12.5 Toast问题</div>
       <i class="icon-circle-right"></i>
     </a>
   

@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://yoursite.com/images/%E6%8E%A2%E7%B4%A2SSM%EF%BC%88%E4%BA%8C%EF%BC%89-Spring/spring.jpg">
 <meta property="og:image" content="http://yoursite.com/images/%E6%8E%A2%E7%B4%A2SSM%EF%BC%88%E4%BA%8C%EF%BC%89-Spring/spring1.jpg">
 <meta property="og:image" content="http://yoursite.com/images/%E6%8E%A2%E7%B4%A2SSM%EF%BC%88%E4%BA%8C%EF%BC%89-Spring/spring2.jpg">
-<meta property="og:updated_time" content="2019-12-30T01:56:40.040Z">
+<meta property="og:updated_time" content="2021-04-19T03:39:42.381Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="探索SSM（二）-Spring">
 <meta name="twitter:description" content="Spring注意~~①必须在所有使用了dao的地方,包括调用它的servcie都要进行@Autowired注入,否则之后的注入就会失败..②注解静态实例对象在Springframework里，我们是不能@Autowired一个静态变量。类加载后静态成员是在内存的共享区，因为当类加载器加载静态变量时，Spring上下文尚未加载。所以类加载器不会在bean中正确注入静态类，并且会失败。解决方法：方式一">
@@ -181,7 +181,7 @@
 <p>getBean操作</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">WebApplicationContext applicationContext = WebApplicationContextUtils. getWebApplicationContext (ServletActionContext. getServletContext());</span><br><span class="line">CustomerService customerService = (CustomerService) applicationContext .getBean( &quot;customerService&quot; );</span><br></pre></td></tr></table></figure>
 
-<h2 id="3-5-5-applicationContext-service-xml"><a href="#3-5-5-applicationContext-service-xml" class="headerlink" title="3.5.5. applicationContext-service.xml"></a>3.5.5. applicationContext-service.xml</h2><p><strong>配置注解扫描</strong></p>
+<h2 id="applicationContext-service-xml"><a href="#applicationContext-service-xml" class="headerlink" title="applicationContext-service.xml"></a>applicationContext-service.xml</h2><p><strong>配置注解扫描</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;! -- Spring 的注解开发 :组件扫描 (类上注解 : 可以直接使用属性注入的解 可以直接使用属性注入的解 ) -- &gt;</span><br><span class="line">&lt;context:component -scan base -package=&quot;com.itheima.spring.demo1&quot;/&gt;</span><br></pre></td></tr></table></figure>
 
 <p><strong>引入外部属性文件</strong></p>

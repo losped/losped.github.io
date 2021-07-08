@@ -6,20 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>ROOT | Zephyr</title>
+  <title>Archives: 2021/7 | Zephyr</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Android底层是Linux内核，因此这里的ROOT就是获取Linux中的最高级别用户ROOT使用权限。了解Linux系统的都知道，$代表普通用户，#代表ROOT级别用户。ROOT用户才能运行Linux的所有命令，功能完整的同时安全系数会相应降低。Android系统一般有三个BOOT引导模式：System，bootloader和recovery。一般ROOT包括以下几个流程：  OEM解锁(1)">
-<meta name="keywords" content="Android">
-<meta property="og:type" content="article">
-<meta property="og:title" content="ROOT">
-<meta property="og:url" content="http://yoursite.com/2019/12/19/ROOT/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Zephyr">
+<meta property="og:url" content="http://yoursite.com/archives/2021/07/index.html">
 <meta property="og:site_name" content="Zephyr">
-<meta property="og:description" content="Android底层是Linux内核，因此这里的ROOT就是获取Linux中的最高级别用户ROOT使用权限。了解Linux系统的都知道，$代表普通用户，#代表ROOT级别用户。ROOT用户才能运行Linux的所有命令，功能完整的同时安全系数会相应降低。Android系统一般有三个BOOT引导模式：System，bootloader和recovery。一般ROOT包括以下几个流程：  OEM解锁(1)">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2019-12-30T01:56:40.038Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ROOT">
-<meta name="twitter:description" content="Android底层是Linux内核，因此这里的ROOT就是获取Linux中的最高级别用户ROOT使用权限。了解Linux系统的都知道，$代表普通用户，#代表ROOT级别用户。ROOT用户才能运行Linux的所有命令，功能完整的同时安全系数会相应降低。Android系统一般有三个BOOT引导模式：System，bootloader和recovery。一般ROOT包括以下几个流程：  OEM解锁(1)">
+<meta name="twitter:title" content="Zephyr">
   
     <link rel="alternative" href="/atom.xml" title="Zephyr" type="application/atom+xml">
   
@@ -145,49 +140,36 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-ROOT" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      ROOT
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2021" class="archive-year">2021</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2021/07/01/Wifi模块&BLE模块/" class="archive-article-date">
+  	<time datetime="2021-07-01T05:51:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-01</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2021/07/01/Wifi模块&BLE模块/">Wifi模块&amp;BLE模块</a>
     </h1>
   
 
-        
-        <a href="/2019/12/19/ROOT/" class="archive-article-date">
-  	<time datetime="2019-12-19T07:19:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Android底层是Linux内核，因此这里的ROOT就是获取Linux中的最高级别用户ROOT使用权限。了解Linux系统的都知道，$代表普通用户，#代表ROOT级别用户。<br>ROOT用户才能运行Linux的所有命令，功能完整的同时安全系数会相应降低。<br>Android系统一般有三个BOOT引导模式：System，bootloader和recovery。<br>一般ROOT包括以下几个流程：</p>
-<ol>
-<li>OEM解锁<br>(1) 开发者选项里打开oem解锁<br>(2) ADB调试模式下执行 adb  reboot bootloader。进入bootloader模式。（或者关机状态下，按住音量下建不放，然后按住开关键不放进入bootloader页面）<br>(3) 解锁bootloader<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastboot flashing unlock</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<p>旧版本命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fastboot oem unlock</span><br><span class="line">\\或者</span><br><span class="line">fastboot flashing unlock_critical</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li><p>安装Rom<br>传闻需要安装开发版的Android系统才能开启ROOT权限，其实未必。主要还是看ROOT的方式来决定。<br>选择安装第三方自带ROOT的Rom的方式，TWRP+Magisk的方式似乎都不硬性重新安装开发版Android系统<br>主要有官方镜像和OTA固件升级两种方式。<br>(1) <a href="https://developers.google.com/android/images" target="_blank" rel="noopener">安装官方镜像</a><br>a. adb reboot bootloader，进入bootloader模式<br>b. 解压rom包<br>c. 进入根目录，执行flash-all.bat/flash-all.sh<br>(2) <a href="https://developers.google.com/android/ota" target="_blank" rel="noopener">OTA升级</a><br>固件升级只能低版本升到高版本，并且需要在recovery模式运行。<br>a. adb reboot recovery，进入 recovery 模式（在bootloader中也可通过上下选择进入）<br>b. adb sideload xxx/ota_file.zip</p>
-</li>
-<li><p>ROOT<br>如果安装的不是第三方自带ROOT的Rom，可通过TWRP+Magisk获取ROOT。目前的情况Android 10不能挂载/system和/，也许TWRP后续版本会修复此问题。<br>(1) <a href="https://twrp.me/Devices/" target="_blank" rel="noopener">下载TWRP</a><br>TWRP其实就是一个第三方的Recovery。进去输入设备-选择版本, 下载版本对应的img文件和zip文件，一般下载最新的版本。例如：twrp-3.3.0-0-sailfish.img和twrp-pixel-installer-sailfish-3.3.0-0.zip。<br>(2) <a href="https://magiskmanager.com/" target="_blank" rel="noopener">下载Magisk</a><br>Magisk是一个ROOT管家类框架，类似Xposed的模式提供了可嵌入模块。现在功能越来越强大。<br>(3) 安装TWRP和Magisk<br>a. adb push twrp-pixel-installer-sailfish-3.3.0-0.zip xxx，放到手机xxx目录<br>b. adb push Magisk-v20.1.zip xxx，放到手机xxx目录<br>c. adb reboot bootloader，进入bootloader模式；fastboot boot xxx/twrp-3.3.0-0-sailfish.img，进入临时TWRP的recovery模式。<br>d. install，选择twrp-pixel-installer-sailfish-3.3.0-0.zip安装；<strong>返回键退回到主页，不需要重启</strong>；install，选择Magisk-v20.1.zip安装<br>e. 重启系统完成刷机，使用MagiskManager可管理ROOT权限。</p>
-</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -199,7 +181,7 @@
 		</ul>
 	</div>
 
-      
+          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -212,113 +194,66 @@
 	</div>
 
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/12/19/ROOT/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
   
-<nav id="article-nav">
-  
-    <a href="/2019/12/19/Android Support库各版本/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Android Support库各版本
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2019/12/19/自动化测试-Appium/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">自动化测试-Appium</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2021/07/01/电量优化/" class="archive-article-date">
+  	<time datetime="2021-07-01T05:51:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-01</time>
+</a>
         </div>
-        
-        
-    </div>
-</aside>
-
-
-
+    	 
   
-  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2021/07/01/电量优化/">电量优化</a>
+    </h1>
   
 
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+          
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+  
+    </div></section>
   
 
-  
-
-  
+    
 
 
           </div>
@@ -341,8 +276,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

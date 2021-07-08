@@ -8,13 +8,13 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Java实现全文检索-Solr | Zephyr</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="全文检索技术分析 使用Lucene实现单独使用Lucene实现站内搜索需要开发的工作量较大，主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。 使用solr实现基于Solr实现站内搜索扩展性较好并且可以减少程序员的工作量，因为Solr提供了较为完备的搜索引擎解决方案，因此在门户、论坛等系统中常用此方案。 Solr采用Java开发，它是基于Lucene的全文搜索服务器。Solr提供">
+  <meta name="description" content="全文检索技术分析使用Lucene实现单独使用Lucene实现站内搜索需要开发的工作量较大，主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。 使用solr实现基于Solr实现站内搜索扩展性较好并且可以减少程序员的工作量，因为Solr提供了较为完备的搜索引擎解决方案，因此在门户、论坛等系统中常用此方案。 Solr采用Java开发，它是基于Lucene的全文搜索服务器。Solr提供了">
 <meta name="keywords" content="JW">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java实现全文检索-Solr">
 <meta property="og:url" content="http://yoursite.com/2019/02/12/Java实现全文检索-Solr/index.html">
 <meta property="og:site_name" content="Zephyr">
-<meta property="og:description" content="全文检索技术分析 使用Lucene实现单独使用Lucene实现站内搜索需要开发的工作量较大，主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。 使用solr实现基于Solr实现站内搜索扩展性较好并且可以减少程序员的工作量，因为Solr提供了较为完备的搜索引擎解决方案，因此在门户、论坛等系统中常用此方案。 Solr采用Java开发，它是基于Lucene的全文搜索服务器。Solr提供">
+<meta property="og:description" content="全文检索技术分析使用Lucene实现单独使用Lucene实现站内搜索需要开发的工作量较大，主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。 使用solr实现基于Solr实现站内搜索扩展性较好并且可以减少程序员的工作量，因为Solr提供了较为完备的搜索引擎解决方案，因此在门户、论坛等系统中常用此方案。 Solr采用Java开发，它是基于Lucene的全文搜索服务器。Solr提供了">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="http://yoursite.com/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr.jpg">
 <meta property="og:image" content="http://yoursite.com/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr1.jpg">
@@ -28,10 +28,10 @@
 <meta property="og:image" content="http://yoursite.com/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr9.jpg">
 <meta property="og:image" content="http://yoursite.com/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr10.jpg">
 <meta property="og:image" content="http://yoursite.com/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr11.jpg">
-<meta property="og:updated_time" content="2019-10-21T05:58:48.067Z">
+<meta property="og:updated_time" content="2021-04-19T03:36:29.208Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java实现全文检索-Solr">
-<meta name="twitter:description" content="全文检索技术分析 使用Lucene实现单独使用Lucene实现站内搜索需要开发的工作量较大，主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。 使用solr实现基于Solr实现站内搜索扩展性较好并且可以减少程序员的工作量，因为Solr提供了较为完备的搜索引擎解决方案，因此在门户、论坛等系统中常用此方案。 Solr采用Java开发，它是基于Lucene的全文搜索服务器。Solr提供">
+<meta name="twitter:description" content="全文检索技术分析使用Lucene实现单独使用Lucene实现站内搜索需要开发的工作量较大，主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。 使用solr实现基于Solr实现站内搜索扩展性较好并且可以减少程序员的工作量，因为Solr提供了较为完备的搜索引擎解决方案，因此在门户、论坛等系统中常用此方案。 Solr采用Java开发，它是基于Lucene的全文搜索服务器。Solr提供了">
 <meta name="twitter:image" content="http://yoursite.com/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Zephyr" type="application/atom+xml">
@@ -178,8 +178,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>全文检索技术分析</strong></p>
-<p><strong>使用Lucene实现</strong><br>单独使用Lucene实现站内搜索需要开发的工作量较大，主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。</p>
+        <h5 id="全文检索技术分析"><a href="#全文检索技术分析" class="headerlink" title="全文检索技术分析"></a>全文检索技术分析</h5><p><strong>使用Lucene实现</strong><br>单独使用Lucene实现站内搜索需要开发的工作量较大，主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。</p>
 <p><strong>使用solr实现</strong><br>基于Solr实现站内搜索扩展性较好并且可以减少程序员的工作量，因为Solr提供了较为完备的搜索引擎解决方案，因此在门户、论坛等系统中常用此方案。</p>
 <h5 id="Solr"><a href="#Solr" class="headerlink" title="Solr"></a>Solr</h5><p>采用Java开发，它是基于Lucene的全文搜索服务器。Solr提供了比Lucene更为丰富的查询语言，同时实现了可配置、可扩展，并对索引、搜索性能进行了优化。<br>Solr可以独立运行在Jetty、Tomcat等这些<strong>Servlet容器</strong>中<br>实现方法：用 POST 方法向 Solr 服务器发送一个描述 Field 及其内容的 XML 文档，Solr根据xml文档添加、删除、更新索引 。Solr 搜索只需要发送 HTTP GET 请求，然后对 Solr 返回Xml、json等格式的查询结果进行解析，组织页面布局。<br>Solr不提供构建UI的功能，Solr提供了一个管理界面，通过管理界面可以查询Solr的配置和运行情况。</p>
 <p><strong>4.1    Solr的下载</strong><br>从Solr官方网站（<a href="http://lucene.apache.org/solr/" target="_blank" rel="noopener">http://lucene.apache.org/solr/</a> ）下载Solr4.10.3，根据Solr的运行环境，Linux下需要下载lucene-4.10.3.tgz，windows下需要下载lucene-4.10.3.zip。<br>Solr使用指南可参考：<a href="https://wiki.apache.org/solr/FrontPage。" target="_blank" rel="noopener">https://wiki.apache.org/solr/FrontPage。</a></p>
@@ -210,9 +209,11 @@
 <p>第七步：启动tomcat</p>
 <p>第八步：访问<a href="http://localhost:8080/solr/" target="_blank" rel="noopener">http://localhost:8080/solr/</a></p>
 <p><strong>4.6.    配置中文分析器</strong></p>
-<h3 id="1-1-1-Schema-xml"><a href="#1-1-1-Schema-xml" class="headerlink" title="1.1.1. Schema.xml"></a>1.1.1. Schema.xml</h3><p>schema.xml，在SolrCore的conf目录下，它是Solr数据表配置文件，它定义了加入索引的数据的数据类型的。主要包括FieldTypes、Fields和其他的一些缺省设置。</p>
+<p><strong>1.1.1. Schema.xml</strong></p>
+<p>schema.xml，在SolrCore的conf目录下，它是Solr数据表配置文件，它定义了加入索引的数据的数据类型的。主要包括FieldTypes、Fields和其他的一些缺省设置。</p>
 <p><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr6.jpg" alt="Solr6"></p>
-<h4 id="1-1-1-1-FieldType域类型定义"><a href="#1-1-1-1-FieldType域类型定义" class="headerlink" title="1.1.1.1 FieldType域类型定义"></a>1.1.1.1 FieldType域类型定义</h4><p>下边“text_general”是Solr默认提供的FieldType，通过它说明FieldType定义的内容：</p>
+<p><strong>1.1.1.1 FieldType</strong></p>
+<p>下边“text_general”是Solr默认提供的FieldType，通过它说明FieldType定义的内容：</p>
 <p><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr7.jpg" alt="Solr7"></p>
 <p>FieldType子结点包括：name,class,positionIncrementGap等一些参数：</p>
 <p>name：是这个FieldType的名称</p>
@@ -221,7 +222,8 @@
 <p>在FieldType定义的时候最重要的就是定义这个类型的数据在建立索引和进行查询的时候要使用的分析器analyzer,包括分词和过滤</p>
 <p>索引分析器中：使用solr.StandardTokenizerFactory标准分词器，solr.StopFilterFactory停用词过滤器，solr.LowerCaseFilterFactory小写过滤器。</p>
 <p>搜索分析器中：使用solr.StandardTokenizerFactory标准分词器，solr.StopFilterFactory停用词过滤器，这里还用到了solr.SynonymFilterFactory同义词过滤器。</p>
-<h4 id="1-1-1-2-Field定义"><a href="#1-1-1-2-Field定义" class="headerlink" title="1.1.1.2 Field定义"></a>1.1.1.2 Field定义</h4><p>在fields结点内定义具体的Field，filed定义包括name,type（为之前定义过的各种FieldType）,indexed（是否被索引）,stored（是否被储存），multiValued（是否存储多个值）等属性。</p>
+<p><strong>1.1.1.2 Field定义</strong></p>
+<p>在fields结点内定义具体的Field，filed定义包括name,type（为之前定义过的各种FieldType）,indexed（是否被索引）,stored（是否被储存），multiValued（是否存储多个值）等属性。</p>
 <p>如下：</p>
 <field name="name" type="text_general" indexed="true" stored="true">
 
@@ -229,12 +231,14 @@
 
 <p>multiValued：该Field如果要存储多个值时设置为true，solr允许一个Field存储多个值，比如存储一个用户的好友id（多个），商品的图片（多个，大图和小图），通过使用solr查询要看出返回给客户端是数组：</p>
 <p><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr8.jpg" alt="Solr8"></p>
-<h4 id="1-1-1-3-uniqueKey"><a href="#1-1-1-3-uniqueKey" class="headerlink" title="1.1.1.3 uniqueKey"></a>1.1.1.3 uniqueKey</h4><p>Solr中默认定义唯一主键key为id域，如下：</p>
+<p><strong>1.1.1.3 uniqueKey</strong></p>
+<p>Solr中默认定义唯一主键key为id域，如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uniqueKey&gt;id&lt;/uniqueKey&gt;</span><br></pre></td></tr></table></figure>
 
 <p>Solr在删除、更新索引时使用id域进行判断，也可以自定义唯一主键。</p>
 <p>注意在创建索引时必须指定唯一约束。</p>
-<h4 id="1-1-1-4-copyField复制域"><a href="#1-1-1-4-copyField复制域" class="headerlink" title="1.1.1.4 copyField复制域"></a>1.1.1.4 copyField复制域</h4><p>copyField复制域，可以将多个Field复制到一个Field中，以便进行统一的检索：</p>
+<p><strong>1.1.1.4 copyField复制域</strong></p>
+<p>copyField复制域，可以将多个Field复制到一个Field中，以便进行统一的检索：</p>
 <p>比如，输入关键字搜索title标题内容content，</p>
 <p>定义title、content、text的域：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;field name=&quot;title&quot; type=&quot;text_general&quot; indexed=&quot;true&quot; stored=&quot;true&quot; multiValued=&quot;true&quot;&gt;</span><br><span class="line">&lt;field name=&quot;content&quot; type=&quot;text_general&quot; indexed=&quot;false&quot; stored=&quot;true&quot; multiValued=&quot;true&quot;&gt;</span><br><span class="line">&lt;field name=&quot;text&quot; type=&quot;text_general&quot; indexed=&quot;true&quot; stored=&quot;false&quot; multiValued=&quot;true&quot;&gt;</span><br></pre></td></tr></table></figure>
@@ -242,14 +246,16 @@
 <p>根据关键字只搜索text域的内容就相当于搜索title和content，将title和content复制到text中，如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;copyField source=&quot;title&quot; dest=&quot;text&quot;&gt;</span><br><span class="line">&lt;copyField source=&quot;author&quot; dest=&quot;text&quot;&gt;</span><br><span class="line">&lt;copyField source=&quot;description&quot; dest=&quot;text&quot;&gt;</span><br><span class="line">&lt;copyField source=&quot;keywords&quot; dest=&quot;text&quot;&gt;</span><br><span class="line">&lt;copyField source=&quot;content&quot; dest=&quot;text&quot;&gt;</span><br></pre></td></tr></table></figure>
 
-<h4 id="1-1-1-6-dynamicField（动态字段）"><a href="#1-1-1-6-dynamicField（动态字段）" class="headerlink" title="1.1.1.6 dynamicField（动态字段）"></a>1.1.1.6 dynamicField（动态字段）</h4><p>动态字段就是不用指定具体的名称，只要定义字段名称的规则，例如定义一个 dynamicField，name 为*_i，定义它的type为text，那么在使用这个字段的时候，任何以_i结尾的字段都被认为是符合这个定义的，例如：name_i，gender_i，school_i等。</p>
+<p><strong>1.1.1.6 dynamicField（动态字段）</strong></p>
+<p>动态字段就是不用指定具体的名称，只要定义字段名称的规则，例如定义一个 dynamicField，name 为*_i，定义它的type为text，那么在使用这个字段的时候，任何以_i结尾的字段都被认为是符合这个定义的，例如：name_i，gender_i，school_i等。</p>
 <p>自定义Field名为：product_title_t，“product_title_t”和scheam.xml中的dynamicField规则匹配成功，如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;dynamicField name=&quot;*_t&quot; type=&quot;text_general&quot; indexed=&quot;true&quot; stored=&quot;true&quot;&gt;</span><br></pre></td></tr></table></figure>
 
 <p>“product_title_t”是以“_t”结尾。</p>
 <p>创建索引：<br><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr9.jpg" alt="Solr9"></p>
 <p>搜索索引：<br><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr10.jpg" alt="Solr10"></p>
-<h3 id="1-1-1-7-安装中文分词器"><a href="#1-1-1-7-安装中文分词器" class="headerlink" title="1.1.1.7 安装中文分词器"></a>1.1.1.7 安装中文分词器</h3><p>使用IKAnalyzer中文分析器。<br>第一步：把IKAnalyzer2012FF_u1.jar添加到solr/WEB-INF/lib目录下。<br>第二步：复制IKAnalyzer的配置文件和自定义词典和停用词词典到solr的classpath下。<br>第三步：在schema.xml中添加一个自定义的fieldType，使用中文分析器。</p>
+<p><strong>1.1.1.7 安装中文分词器</strong></p>
+<p>使用IKAnalyzer中文分析器。<br>第一步：把IKAnalyzer2012FF_u1.jar添加到solr/WEB-INF/lib目录下。<br>第二步：复制IKAnalyzer的配置文件和自定义词典和停用词词典到solr的classpath下。<br>第三步：在schema.xml中添加一个自定义的fieldType，使用中文分析器。</p>
 <!-- IKAnalyzer-->
  <fieldtype name="text_ik" class="solr.TextField">
  <analyzer class="org.wltea.analyzer.lucene.IKAnalyzer">
@@ -262,7 +268,8 @@
 
 <p>第五步：重启tomcat</p>
 <p>测试：<br><img src="/images/Java%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-Solr/Solr11.jpg" alt="Solr11"></p>
-<h2 id="1-2-设置业务系统Field"><a href="#1-2-设置业务系统Field" class="headerlink" title="1.2. 设置业务系统Field"></a>1.2. 设置业务系统Field</h2><p>如果不使用Solr提供的Field可以针对具体的业务需要自定义一套Field，如下是商品信息Field：</p>
+<p><strong>1.2. 设置业务系统Field</strong></p>
+<p>如果不使用Solr提供的Field可以针对具体的业务需要自定义一套Field，如下是商品信息Field：</p>
 <!--product-->
  <field name="product_name" type="text_ik" indexed="true" stored="true">
  <field name="product_price" type="float" indexed="true" stored="true">
