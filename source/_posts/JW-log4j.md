@@ -8,6 +8,7 @@ categories: JW
 
 ##### log4j 日志记录插件
 
+
 引入jar包
 ```
 		<dependency>
@@ -15,6 +16,7 @@ categories: JW
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 ```
+
 
 log4j.properties
 ```
@@ -34,6 +36,7 @@ log4j.appender.A3.MaxBackupIndex=10
 log4j.appender.A3.layout=org.apache.log4j.PatternLayout
 log4j.appender.A3.layout.ConversionPattern=\n\n[%-5p] %d{yyyy-MM-dd HH\:mm\:ss,SSS} method\:%l%n%m%n
 ```
+
 
 GlobalExceptionResolver.java
 ```
@@ -67,6 +70,7 @@ public class GlobalExceptionResolver implements HandlerExceptionResolver {
 
 }
 ```
+
 
 springmvc.xml
 ```

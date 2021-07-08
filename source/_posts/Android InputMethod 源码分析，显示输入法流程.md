@@ -325,7 +325,7 @@ public final class ViewRootImpl implements ViewParent,
     }
 ```
 
-## 一.1 焦点View向IMMS请求绑定输入法
+## 5.1 焦点View向IMMS请求绑定输入法
 **6.1 之后的流程**
 ![request_input](/images/AndroidInputMethod/request_input.jpg)
 ```
@@ -699,7 +699,7 @@ public final class ViewRootImpl implements ViewParent,
     }
 ```
 
-## 一.2 IMMS处理view绑定输入法事件
+## 5.2 IMMS处理view绑定输入法事件
 ![request_input2](/images/AndroidInputMethod/request_input2.jpg)
 ```
 // InputMethodManagerService.java
@@ -1219,7 +1219,7 @@ public final class ViewRootImpl implements ViewParent,
     }
 ```
 
-## 二. 显示输入法
+## 6. 显示输入法
 **6.2 onPostWindowFocus() 之后的流程**
  ![show_focus](/images/AndroidInputMethod/show_focus.jpg)
  ```
@@ -1678,7 +1678,7 @@ public final class ViewRootImpl implements ViewParent,
     }
 ```
 
-## 5. 用户单击输入框显示输入法
+## 7. 用户单击输入框显示输入法
 http://blog.csdn.net/huangyabin001/article/details/28435093 中 作者从 InputEventReceiver.dispatchInputEvent()开始分析的，本文从 TextView.onTouchEvent()开始写。
  ![click](/images/AndroidInputMethod/click.png)
  ```

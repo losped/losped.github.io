@@ -18,7 +18,8 @@ JS能够跨域加载JS文件，如果请求时自定义一个Funtion放入callba
 
 jQuery封装了定义Funtion的方法，因此不用自己创建方法。
 
-Ajax请求
+
+**Ajax请求**
 ```
 var E3MALL = {
 	checkLogin : function(){
@@ -47,7 +48,8 @@ $(function(){
 });
 ```
 
-Controller
+
+**Controller**
 ```
 @Controller
 public class TokenController {

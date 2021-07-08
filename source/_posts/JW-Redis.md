@@ -23,7 +23,7 @@ Redis是用C语言开发的高性能键值对数据库。一个redis实例可以
 4. 集合类型
 5. 有序集合类型
 
-## Redis的启动
+##### Redis的启动
 **前端模式**
 使用bin/redis-server启动，启动完成后不能再进行其他操作 - -。不推荐使用
 **后端模式**
@@ -35,16 +35,16 @@ cd /usr/local/redis/
 ./bin/redis-server ./redis.conf
 ```
 
-## Redis停止
+##### Redis停止
 ```
 cd /usr/local/redis
 ./bin/redis-cli shutdown
 ```
 
-## 连接客户端
+##### 连接客户端
 ![redis](/images/JW-Redis/redis.jpg)
 
-## redis客户端命令
+##### redis客户端命令
 
 选择数据库
 ![redis1](/images/JW-Redis/redis1.jpg)
@@ -60,7 +60,7 @@ del
 
 key*，获取当前库中所有key值
 
-## 数据类型相关命令
+##### 数据类型相关命令
 **存储String**
 字符串类型的Value中最多可容纳的数据长度为512M，二进制安全
 赋值：set key value
@@ -98,11 +98,11 @@ Sorted-Set和Set类型极为相似，差别是Sorted-Set每个成员都有一个
 ![redis10](/images/JW-Redis/redis10.jpg)
 ![redis11](/images/JW-Redis/redis11.jpg)
 
-## 消息订阅和发布
+##### 消息订阅和发布
 ![redis12](/images/JW-Redis/redis12.jpg)
 ![redis13](/images/JW-Redis/redis13.jpg)
 
-## Jedis
+##### Jedis
 **单实例示例**
 ```
 public void testJedisSingle(){

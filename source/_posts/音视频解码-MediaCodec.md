@@ -243,7 +243,7 @@ private class DecodeThread extends Thread {
 }
 ```
 
-    MediaCodec还可以处理视频解码，由此也接触到十分强大的C类库FFmpeg。基于此库能实现音视频剪切，合成，转码，混音，水印，滤镜，转gif乃至直播处理等功能。有机会一定要研究下orz..
+  MediaCodec还可以处理视频解码，由此也接触到十分强大的C类库FFmpeg。基于此库能实现音视频剪切，合成，转码，混音，水印，滤镜，转gif乃至直播处理等功能。有机会一定要研究下orz.
 
 参考资料：
 硬编码之MediaCodec:https://www.jianshu.com/p/f116b6f81ab3

@@ -9,7 +9,7 @@ categories: Py
 ## 一. 数据填充
 
 ##### 1.apply()
-apply()同属处理两列数据
+apply()对多列数据计算处理
 ```
 df14['Bulges数量'] = df14.apply(lambda row: row['Bulges数量'] if row['Bulges提报'] > 0 else 0, axis=1)
 ```
@@ -23,6 +23,11 @@ df14['Bulges数量'] = df14.apply(lambda row: row['Bulges数量'] if row['Bulges
 python数据科学生态环境的强大力量在Numpy和Pandas的基础之上，并通过直观的语法将基本操作转化为c语言：在Numpy里是向量化/广播运算，在pandas里是分组型的运算。虽然这些抽象功能可以简洁高效的解决很多问题，但是他们经常需要创建临时对象，这样会占用很大的计算时间和内存。
 Pandas为了解决性能问题，引入了eval()和query()函数，他们可以让用户直接运行C语言速度的操作，不需要费力的配置中间数组，它们都依赖于Numexpr程序包
 
+##### 5.agg()
+多用于groupby处理后的列聚合
+```
+df1[COMMON_VALUE['SUMMARY_CLOUMNS1']] = df2.groupby(groupby_list).agg({'ID':'count', 'Score':np.mean,'Score1':np.mean,'Score2':np.mean,'Score3':np.mean,'Score4':np.mean,'Fail3':np.mean,'jug6_copy':np.mean,'SKUnum':np.mean,'A5h1':np.mean,'A5h2':np.mean,'jug1':'sum','jug1_copy':np.mean,'jug2':'sum','jug2_copy':np.mean,'jug3':'sum','jug3_copy':np.mean,'jug5':'sum','jug5_copy':np.mean,'jug4':'sum','jug4_copy':np.mean})
+```
 
 **DataFrame.eval()实现列间运算**
 

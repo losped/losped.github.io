@@ -8,8 +8,8 @@ categories: Android
 UiAutomator是Google提供的用来做安卓自动化测试的一个Java库，基于Accessibility服务，可以获取屏幕任意APP的页面控件信息，并对控件进行操作。
 图形化界面：sdk\\tools\\bin\\uiautomatorviewer.bat
 脚本形式如下：
-1. 创建java脚本项目，导入android.jar、uiautomator.jar。（在SDK/platforms/可找到对应版本的jar包）
-2. 创建类并编写脚本
+1.创建java脚本项目，导入android.jar、uiautomator.jar。（在SDK/platforms/可找到对应版本的jar包）
+2.创建类并编写脚本
 ```
 package com.test;
 public class Test extends UiAutomatorTestCase {
@@ -35,10 +35,10 @@ public class Test extends UiAutomatorTestCase {
     }
 }
 ```
-3. 将项目打包成jar包
+3.将项目打包成jar包
 (1)使用CMD打包。javac编译java文件得到class文件，新建manifest文件，jar -cvfm main.jar manifest -C test .
 (2)使用IDE打包
-4. push并执行.
+4.push并执行.
 adb push ./test.jar /data/local/tmp/
 adb shell uiautomator runtest /data/local/tmp/test.jar -c com.test.TestClass -e x 50 -e y 18
 

@@ -6,7 +6,7 @@ categories: JW
 ---
 
 
-1. WebService：基于SOAP,远程调用技术。使用xml形式。
+1.WebService：基于SOAP,远程调用技术。使用xml形式。
 
 2.接口形式Resful：Http+Json。使用Json形式。
 

@@ -31,21 +31,31 @@ dataDir 
 
 ##### 启动
 在Windows环境下，直接双击zkServer.cmd即可。在Linux环境下，进入bin目录，执行命令
-```./zkServer.sh start```
+```
+./zkServer.sh start
+```
 这个命令使得zk服务进程在后台进行。如果想在前台中运行以便查看服务器进程的输出日志，可以通过以下命令运行：
-```./zkServer.sh start-foreground```
+```
+./zkServer.sh start-foreground
+```
 关闭：
-```[root@localhost bin]# ./[zkServer.sh](https://links.jianshu.com/go?to=http%3A%2F%2FzkServer.sh) stop```
+```
+[root@localhost bin]# ./[zkServer.sh](https://links.jianshu.com/go?to=http%3A%2F%2FzkServer.sh) stop
+```
 查看状态：
-```[root@localhost bin]# ./[zkServer.sh](https://links.jianshu.com/go?to=http%3A%2F%2FzkServer.sh) status```
+```
+[root@localhost bin]# ./[zkServer.sh](https://links.jianshu.com/go?to=http%3A%2F%2FzkServer.sh) status
+```
 
-#####本地连接
+##### 本地连接
 如果是连接同一台主机上的zk进程，那么直接运行bin/目录下的zkCli.cmd（Windows环境下）或者zkCli.sh（Linux环境下），即可连接上zk。 
 直接执行zkCli.cmd或者zkCli.sh命令默认以主机号 127.0.0.1，端口号 2181 来连接zk，如果要连接不同机器上的zk，可以使用 -server 参数，例如：
-```bin/zkCli.sh -server 192.168.0.1:2181```
+```
+bin/zkCli.sh -server 192.168.0.1:2181
+```
 
-##集群模式
-#####运行配置
+## 集群模式
+##### 运行配置
 ```
 注意 
 在集群模式下，建议至少部署3个zk进程，或者部署奇数个zk进程。如果只部署2个zk进程，当其中一个zk进程挂掉后，剩下的一个进程并不能构成一个[quorum](http://baike.baidu.com/link?url=pqWrzgH-_VhMLnscR1iRTpPjovfyhxG-8Qs9HxGutiGi5bhnA_lX_pmabLQ-3MiDeigcHRFMYSbFg90RAYVAta)的大多数。因此，部署2个进程甚至比单机模式更不可靠，因为2个进程其中一个不可用的可能性比一个进程不可用的可能性还大。

@@ -189,8 +189,8 @@ dependencies {
 ##### 远程bundle
 远程bundle不会打包进apk。可编译生成.so文件，放入指定目录即可调用。
 编译.so文件
-1. Build-Make Project
-2. gradlew clean assembleDebug publish
+1.Build-Make Project
+2.gradlew clean assembleDebug publish
 .so文件读取路径为 Android/data/mmc.atlastest/cache
 
 远程bundle build.gradle(:loadingbundle)配置示例
@@ -238,11 +238,11 @@ dependencies {
 
 ##### 差异补丁
 打差异补丁用于版本更新
-1. gradlew assembleDebug：打包初始版本的apk和基线包ap(同步更新到maven，补丁生成时会根据maven的历史文件来生成差异补丁)
-2. 代码内容更新，注意要修改"versionName"（举例versionName由初始1.1.0更新到1.1.1再更新到1.1.2）
-3. gradlew assembleDebug -DapVersion=1.1.0 -DversionName=1.1.2。
+1.gradlew assembleDebug：打包初始版本的apk和基线包ap(同步更新到maven，补丁生成时会根据maven的历史文件来生成差异补丁)
+2.代码内容更新，注意要修改"versionName"（举例versionName由初始1.1.0更新到1.1.1再更新到1.1.2）
+3.gradlew assembleDebug -DapVersion=1.1.0 -DversionName=1.1.2。
 **注意该命令会生成两个补丁文件1.1.0-1.1.2和1.1.1-1.1.2，修复补丁的时候，服务端需要根据用户当前的版本号来下发相应的补丁。**
-4. 补丁包放入手机指定路径，加载补丁包重启更新。
+4.补丁包放入手机指定路径，加载补丁包重启更新。
 
 加载补丁包代码
 MainActivity.java

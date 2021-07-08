@@ -18,38 +18,38 @@ START u0 {act=com.coloros.notificationmanager.app.detail cmp=com.coloros.notific
 得到一个系统应用的Activity：com.coloros.notificationmanager/.AppNotificationSettingsActivity
 接着凭推敲或者手机下载包名查看器, 查看该Activity的应用名.
 
-一.smali方式
+##### 一.smali方式
 [下载地址](https://bitbucket.org/JesusFreke/smali/downloads)
-1. 创建一个APK文件夹
-2. 下载baksmali-x.x.x.jar、smali-x.x.x.jar、baksmali和smali四个文件。将四个文件放在我们的APK文件夹中。
-3. adb查看系统应用
+1.创建一个APK文件夹
+2.下载baksmali-x.x.x.jar、smali-x.x.x.jar、baksmali和smali四个文件。将四个文件放在我们的APK文件夹中。
+3.adb查看系统应用
 ```
 adb shell
 cd /system/app/
 ls
 ```
 找到文件夹为NotificationCenter
-4. 将应用文件pull出来，NotificationCenter中有一个NotificationCenter.apk和/oat/arm64/NotificationCenter.odex和/oat/arm64/NotificationCenter.vdex。
+4.将应用文件pull出来，NotificationCenter中有一个NotificationCenter.apk和/oat/arm64/NotificationCenter.odex和/oat/arm64/NotificationCenter.vdex。
 将NotificationCenter.odex和NotificationCenter.vdex放到我们的APK文件夹中。
 ```
 adb pull /system/app/NotificationCenter D:/NotificationCenter
 ```
-5. 将相关boot的依赖pull到我们的APK文件夹中。
+5.将相关boot的依赖pull到我们的APK文件夹中。
 ```
 adb pull /system/framework/arm64/* D:/APK
 ```
-6. 反编译odex成smail
+6.反编译odex成smail
 ```
 cd APK
 java -jar baksmali-2.3.4.jar x NotificationCenter.odex
 ```
 生成out目录，反编译出来的代码为smail格式
-7. 编译smail成dex
+7.编译smail成dex
 ```
 java -jar smali-2.3.4.jar as out/ -o NotificationCenter.dex
 ```
 生成dex文件
-8. dex2jar
+8.dex2jar
 [源码地址](https://github.com/pxb1988/dex2jar)，需要自己动手打包jar
 [脚本地址](https://sourceforge.net/projects/dex2jar/files/)
 ```
@@ -153,7 +153,7 @@ dex2oat --dex-file=/data/local/tmp/am.dex --oat-file=/data/local/tmp/am.odex  --
 编译成功后，会在/data/local/tmp目录生成odex/oat和vdex文件
 
 
-二. 使用010Editor工具打开odex文件，删除dex.035之前的字段。(尚未尝试)
+##### 二. 使用010Editor工具打开odex文件，删除dex.035之前的字段。(尚未尝试)
 
 
 参考文章：

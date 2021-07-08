@@ -8,11 +8,11 @@ categories: Android
 
   利用NDK生成.so主流的有两种方法，传统的基于 Android.mk、Application.mk 来构建项目的方式和从 AS 2.2 之后便开始采用的 CMake 这种方式。
 
-  ##### 一. Android.mk 方式
+##### 一. Android.mk 方式
 可以通过Android Studio，也可以通过命令ndk-build来自己手动生成。
-1. 下载NDK并配置环境变量
+1.下载NDK并配置环境变量
 [Android官方NDK](https://developer.android.com/ndk/downloads/index.html)
-2. 在需要编译的文件目录中创建**Android.mk**配置文件
+2.在需要编译的文件目录中创建**Android.mk**配置文件
 Android.mk
 ```
 # 设置工作目录，而my-dir则会返回Android.mk文件所在的目录
@@ -28,7 +28,7 @@ LOCAL_SRC_FILES := $(LAME_LIBMP3_DIR)/bitstream.c $(LAME_LIBMP3_DIR)/fft.c $(LAM
 # 指定生成的静态库或者共享库在运行时依赖的共享库模块列表
 include $(BUILD_SHARED_LIBRARY)
 ```
-3. 在需要编译的文件目录中创建**Application.mk**配置文件。非必需，可以用来配置编译平台相关内容。
+3.在需要编译的文件目录中创建**Application.mk**配置文件。非必需，可以用来配置编译平台相关内容。
 Application.mk
 ```
 # 指定我们需要基于哪些CPU架构的.so文件,默认为all
@@ -39,7 +39,7 @@ APP_CFLAGS += -DSTDC_HEADERS
 APP_BUILD_SCRIPT := Android.mk
 ```
 
-4. cmd进入该目录，执行命令
+4.cmd进入该目录，执行命令
 ndk-build: 直接使用根目录下的Android.mk和Application.mk编译
 ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=Android.mk: 指定Android.mk编译，NDK_PROJECT_PATH参数为项目目录
 ndk-build NDK_PROJECT_PATH=. NDK_APPLICATION_MK=Application.mk: 指定Application.mk编译，NDK_PROJECT_PATH参数为项目目录
@@ -47,10 +47,10 @@ ndk-build NDK_PROJECT_PATH=. NDK_APPLICATION_MK=Application.mk: 指定Applicatio
 编译成功后在同级目录的libs/obj文件夹中可找到你需要的.so文件.
 
 
-  ##### 二. Cmake 方式
+##### 二. Cmake 方式
 CMake 是一个跨平台的安装（编译）工具，相比与传统 Android.mk 方便了不少。AS跟IDEA均有CMake插件支持。
-1. 同样需要NDK和配置环境变量
-2. 一般在项目根目录下(AS-C++ Support项目同级于app的build.gradle)下创建CMakeLists.txt配置文件
+1 同样需要NDK和配置环境变量
+2.一般在项目根目录下(AS-C++ Support项目同级于app的build.gradle)下创建CMakeLists.txt配置文件
 ```
 # For more information about using CMake with Android Studio, read the
 # documentation: https://d.android.com/studio/projects/add-native-code.html
@@ -190,7 +190,7 @@ INSTALL (TARGETS hello hello_static LIBRARY DESTINATION lib ARCHIVE DESTINATION 
 # 将hello.h安装到<prefix>/include/hello目录。
 INSTALL (FILES hello.h DESTINATION include/hello)
 ```
-3. 在CmakeList.txt同级目录下，建立一个build目录。在build目录中cmd执行cmake ..，可以自动生成Makefile等文件。cmd执行make命令,即可生成可执行文件。（AS-C++ Support项目编译即可根据CmakeList.txt生成可执行文件）
+3.在CmakeList.txt同级目录下，建立一个build目录。在build目录中cmd执行cmake ..，可以自动生成Makefile等文件。cmd执行make命令,即可生成可执行文件。（AS-C++ Support项目编译即可根据CmakeList.txt生成可执行文件）
 运用实例
 ![cmake](/images/NKD-Cmake与Android.mk/cmake.png)
 

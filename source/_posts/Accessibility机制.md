@@ -30,7 +30,7 @@ onServiceConnected()	| 系统成功绑定该服务时被触发,也就是当你�
 onInterrupt() | 服务中断时的回调 |
 
 ##### 示例
-1. 继承AccessibilityService类
+1.继承AccessibilityService类
 ```
 package krelve.demo.rob;
 
@@ -76,7 +76,7 @@ public class RobMoney extends AccessibilityService {
 }
 ```
 
-2. AndroidManifest.xml配置Service
+2.AndroidManifest.xml配置Service
 ```
 <service
             android:name="krelve.demo.rob.RobMoney"
@@ -95,7 +95,7 @@ public class RobMoney extends AccessibilityService {
 ```
 其中，<action android:name="android.accessibilityservice.AccessibilityService" />是需要申请的权限
 
-3. **核心配置** xml/accessibility是做了初始化的工作，具体实现如下：
+3.**核心配置** xml/accessibility是做了初始化的工作，具体实现如下：
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
@@ -161,7 +161,7 @@ override fun onServiceConnected() {
 }
 ```
 
-4. 指引用户去手动打开该服务
+4.指引用户去手动打开该服务
 首先判断该服务是否为开启状态：
 ```
 public static boolean isAccessibilitySettingsOn(Context mContext, Class<? extends AccessibilityService> clazz) {

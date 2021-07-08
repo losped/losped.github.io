@@ -6,7 +6,7 @@ categories: JW
 ---
 
 
-**全文检索技术分析**
+##### 全文检索技术分析
 
 **使用Lucene实现**
 单独使用Lucene实现站内搜索需要开发的工作量较大，主要表现在：索引维护、索引性能优化、搜索性能优化等，因此不建议采用。
@@ -92,14 +92,14 @@ i. 在solrcore中有一个文件夹叫做conf，包含了索引solr实例的配�
 
 **4.6.	配置中文分析器**
 
-### 1.1.1. Schema.xml
+**1.1.1. Schema.xml**
 
 schema.xml，在SolrCore的conf目录下，它是Solr数据表配置文件，它定义了加入索引的数据的数据类型的。主要包括FieldTypes、Fields和其他的一些缺省设置。
 
 ![Solr6](/images/Java实现全文检索-Solr/Solr6.jpg)
 
 
-#### 1.1.1.1 FieldType域类型定义
+**1.1.1.1 FieldType**
 
 下边“text_general”是Solr默认提供的FieldType，通过它说明FieldType定义的内容：
 
@@ -120,7 +120,7 @@ positionIncrementGap：可选属性，定义在同一个文档中此类型数据
 
 搜索分析器中：使用solr.StandardTokenizerFactory标准分词器，solr.StopFilterFactory停用词过滤器，这里还用到了solr.SynonymFilterFactory同义词过滤器。
 
-#### 1.1.1.2 Field定义
+**1.1.1.2 Field定义**
 
 在fields结点内定义具体的Field，filed定义包括name,type（为之前定义过的各种FieldType）,indexed（是否被索引）,stored（是否被储存），multiValued（是否存储多个值）等属性。
 
@@ -134,7 +134,7 @@ multiValued：该Field如果要存储多个值时设置为true，solr允许一�
 
 ![Solr8](/images/Java实现全文检索-Solr/Solr8.jpg)
 
-#### 1.1.1.3 uniqueKey
+**1.1.1.3 uniqueKey**
 
 Solr中默认定义唯一主键key为id域，如下：
 
@@ -146,7 +146,7 @@ Solr在删除、更新索引时使用id域进行判断，也可以自定义唯�
 
 注意在创建索引时必须指定唯一约束。
 
-#### 1.1.1.4 copyField复制域
+**1.1.1.4 copyField复制域**
 
 copyField复制域，可以将多个Field复制到一个Field中，以便进行统一的检索：
 
@@ -169,7 +169,7 @@ copyField复制域，可以将多个Field复制到一个Field中，以便进行�
 <copyField source="content" dest="text">
 ```
 
-#### 1.1.1.6 dynamicField（动态字段）
+**1.1.1.6 dynamicField（动态字段）**
 
 动态字段就是不用指定具体的名称，只要定义字段名称的规则，例如定义一个 dynamicField，name 为*_i，定义它的type为text，那么在使用这个字段的时候，任何以_i结尾的字段都被认为是符合这个定义的，例如：name_i，gender_i，school_i等。
 
@@ -187,7 +187,7 @@ copyField复制域，可以将多个Field复制到一个Field中，以便进行�
 搜索索引：
 ![Solr10](/images/Java实现全文检索-Solr/Solr10.jpg)
 
-### 1.1.1.7 安装中文分词器
+**1.1.1.7 安装中文分词器**
 
 使用IKAnalyzer中文分析器。
 第一步：把IKAnalyzer2012FF_u1.jar添加到solr/WEB-INF/lib目录下。
@@ -210,7 +210,7 @@ copyField复制域，可以将多个Field复制到一个Field中，以便进行�
 ![Solr11](/images/Java实现全文检索-Solr/Solr11.jpg)
 
 
-## 1.2. 设置业务系统Field
+**1.2. 设置业务系统Field**
 
 如果不使用Solr提供的Field可以针对具体的业务需要自定义一套Field，如下是商品信息Field：
 

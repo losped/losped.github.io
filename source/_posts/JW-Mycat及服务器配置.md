@@ -6,7 +6,7 @@ categories: JW
 ---
 
 
-##### 数据库分片
+## 数据库分片
 指通过某种特定的条件，将我们存放在同一个数据库中的数据分散存放到多个数据库（主机）上面，以达到分散单台设备负载的效果。
 两种切分模式
 （1）一种是按照不同的表（或者Schema）来切分到不同的数据库（主机）之上，这种切可以称之为数据的垂直（纵向）切分
@@ -116,7 +116,7 @@ Datanode3：10000001~15000000
 3、主DB server开启二进制日志,主DB server和从DB server的server_id都必须唯一
 
 **Mysql主服务器配置**
-1. 修改my.conf文件
+1.修改my.conf文件
 ```
 binlog-do-db=db1
 binlog-ignore-db=mysql
@@ -125,8 +125,8 @@ log-bin=mysql-bin
 #服务器唯一ID，一般取IP最后一段
 server-id=134
 ```
-2. 重启mysql服务：service mysqld restart
-3. 建立帐户并授权slave
+2.重启mysql服务：service mysqld restart
+3.建立帐户并授权slave
 mysql>GRANT FILE ON *.* TO 'backup'@'%' IDENTIFIED BY '123456';
 mysql>GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* to 'backup'@'%' identified by '123456';
 **一般不用root帐号，“%”表示所有客户端都可能连，只要帐号，密码正确，此处可用具体客户端IP代替，如192.168.145.226，加强安全。**
@@ -134,7 +134,7 @@ mysql>GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* to 'backup'@'%' identif
 mysql> FLUSH PRIVILEGES;
 查看mysql现在有哪些用户
 mysql>select user,host from mysql.user;
-4. 查询master的状态
+4.查询master的状态
 ```
 mysql> show master status;
 +------------------+----------+--------------+------------------+-------------------+
@@ -146,17 +146,17 @@ mysql> show master status;
 ```
 
 **Mysql从服务器配置**
-1. 修改my.conf文件
+1.修改my.conf文件
 ```
 [mysqld]
 server-id=166
 ```
-2.  配置从服务器
+2.配置从服务器
 mysql>change master to master_host='192.168.25.134',master_port=3306,master_user='backup',master_password='123456',master_log_file='mysql-bin.000001',master_log_pos=120
 注意语句中间不要断开，master_port为mysql服务器端口号(无引号)，master_user为执行同步操作的数据库账户，master_log_pos的值就是show master status 中看到的position的值，这里的mysql-bin.000001就是file对应的值。
-3. 启动从服务器复制功能
+3.启动从服务器复制功能
 Mysql>start slave;
-4. 检查从服务器复制功能状态：
+4.检查从服务器复制功能状态：
 mysql> show slave status
 ……………………(省略部分)
 Slave_IO_Running: Yes //此状态必须YES
@@ -226,7 +226,7 @@ switchType 目前有三种选择：
 2.重新启动tomcat
 
 （二）使用maven实现热部署，工程随tomcat启动而部署。
-1. 修改工程的pom.xml文件，引入tomcat插件。注意不同工程不同Ip需配置不同端口
+1.修改工程的pom.xml文件，引入tomcat插件。注意不同工程不同Ip需配置不同端口
 ```
 <project>
 	<!-- 配置tomcat插件 -->
@@ -247,7 +247,7 @@ switchType 目前有三种选择：
 	</build>
 </project>
 ```
-2. 执行Maven热部署
+2.执行Maven热部署
 ![deploy](/images/JW-Mycat及服务器配置/deploy.jpg)
 ![deploy1](/images/JW-Mycat及服务器配置/deploy1.jpg)
 

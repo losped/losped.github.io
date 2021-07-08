@@ -15,7 +15,8 @@ A： 留一台session服务器，使用redis存储，统一管理session。√
 SSO是一种使用单点登录的解决方案。其实就是另外搭建一台服务器用于单点登录，没什么特别的。
 以下是示例：
 
-Controller
+
+**Controller**
 ```
 @Controller
 public class LoginController {
@@ -69,7 +70,8 @@ public class TokenController {
 }
 ```
 
-ServiceImpl
+
+**ServiceImpl**
 ```
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -117,7 +119,7 @@ public class LoginServiceImpl implements LoginService {
 ```
 
 
-CookieUtils
+**CookieUtils**
 ```
 /**
  *

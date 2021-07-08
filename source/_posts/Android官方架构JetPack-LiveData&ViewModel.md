@@ -14,7 +14,7 @@ LiveData的观察者模式似乎与RxJava有异曲同工之妙，ViewModel则与
 
 - 创建ViewModel的方式
 
-1. 直接创建
+1.直接创建
 如果没有定义Factory，内部会默认使用AndroidViewModelFactory；
 这个Factory只能创建构造参数为空的ViewModel和AndroidViewModel
 因此只能创建构造参数为空的ViewModel
@@ -34,7 +34,7 @@ class MasterFragment : Fragment() {
 }
 ```
 
-2. 通过ViewModelFactory创建
+2.通过ViewModelFactory创建
 通过ViewModelFactory，可以创建携带构造参数的ViewModel
 
 ActorCollectionFragment.kt

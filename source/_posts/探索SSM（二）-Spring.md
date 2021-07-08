@@ -78,7 +78,7 @@ CustomerService customerService = (CustomerService) applicationContext .getBean(
 ```
 
 
-## 3.5.5. applicationContext-service.xml
+## applicationContext-service.xml
 **配置注解扫描**
 ```
 <! -- Spring 的注解开发 :组件扫描 (类上注解 : 可以直接使用属性注入的解 可以直接使用属性注入的解 ) -- >

@@ -7,7 +7,7 @@ categories: Android
 
 
 检测过程（注意：使用反射获取的资源还是会出现在清单中）
-1. build文件配置
+1.build文件配置
 ```
 lintOptions {
     //build release 版本 时 开启lint 检测
@@ -18,7 +18,7 @@ lintOptions {
 }
 ```
 
-2. 第三方资源文件过滤
+2.忽略检索警告
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,13 +32,13 @@ lintOptions {
 </LinearLayout>
 ```
 
-3. 在 Android Studio 终端选项下 执行 命令
+3.在 Android Studio 终端选项下 执行 命令
 ```
 gradle lint
 ```
 在 yoru_project_dirctory/build/outputs/ 会生成 两个文件 lint-result.xml, lint-result.html 和文件夹 lint-result-files. 最重要的是 lint-result.xml 文件，里面包含了我们要解析的信息，包含项目中不再使用的资源文件信息。
 
-4. 执行 命令
+4.执行 命令
 ```
 android-resource-remover --xml lint-result.xml
 ```
